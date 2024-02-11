@@ -13,25 +13,6 @@ public class UserController {
     public String getNewUser(){
         return "user/UserForm";
     }
-    @PostMapping("/new")
-    public String PostNewUser(){
-        return "redirect:/";
-    }
-    @GetMapping("/login")
-    public String getLogin(){
-        return "user/UserLogin";
-    }
-
-    @PostMapping("/login")
-    public String postLogin(){
-
-        return "redirect:/";
-    }
-    @GetMapping("/login/error")
-    public String getLoginError(){
-        return "user/UserLogin";
-    }
-
 
 
 }

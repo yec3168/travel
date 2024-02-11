@@ -3,19 +3,19 @@ package com.busan.travel.entity;
 import com.busan.travel.status.Gender;
 import com.busan.travel.status.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -39,7 +39,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+
     @Builder
-    public User(String )
+    private User(String email, String password ,String name,
+                 String nickName, String address, Gender gender){
+        this.email =email;
+        this.password = password;
+        this.name = name;
+        this.nickName =nickName;
+        this.address =address;
+        this.gender =gender;
+        this.userRole = UserRole.USER;
+        this.createDate= LocalDateTime.now();
+    }
+
 
 }
