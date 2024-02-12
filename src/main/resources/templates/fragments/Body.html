@@ -15,7 +15,7 @@
                     </button>
                 </div>
                 <div class="logout">
-                    <button type="button" th:onclick="|location.href='@{/user/new}'|">
+                    <button type="button" th:onclick="|location.href='@{/user/login}'|">
                         <span class="skip_info">회원가입</span>
                         <i class="fas fa-solid fa-user-plus"></i>
                     </button>
@@ -46,7 +46,7 @@
                     <li class="has_sub"><a href="javascript: void(0);"><span>회원 관리</span></a>
                         <ul>
                             <li><a href="/user/login" sec:authorize="isAnonymous()" class="on">로그인</a></li>
-                            <li><a href="/user/new" sec:authorize="isAnonymous()"  >회원가입</a></li>
+                            <li><a href="/user/login" sec:authorize="isAnonymous()"  >회원가입</a></li>
                             <li><a href="javascript: alert('준비 중입니다.');" sec:authorize="isAuthenticated()"  >로그아웃</a></li>
                             <li><a href="javascript: alert('준비 중입니다.');"  sec:authorize="isAuthenticated()" >마이페이지</a></li>
                         </ul>
