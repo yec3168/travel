@@ -1,22 +1,59 @@
 package com.busan.travel.controller;
 
+import com.busan.travel.dto.UserFormDto;
+import com.busan.travel.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
+
     @GetMapping("/new")
-    public String getNewUser(){
+    public String getNewUser( ){
+        return "user/UserLogin";
+    }
+    @PostMapping("/new")
+    public String postNewUser(@ModelAttribute UserFormDto userFormDto ){
+        userService.createUser(userFormDto);
+        return "redirect:/";
+    }
+
+
+
+    @GetMapping("/login")
+    public String getLogin(Model model){
+        model.addAttribute("userFormDto", new UserFormDto());
+        return "user/UserLogin";
+    }
+    @PostMapping("/login")
+    public String postLogin(HttpServletRequest request ){
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        System.out.println("email :      " +email);
+        System.out.println("password :      "+ password);
+        return "redirect:/";
+    }
+
+
+
+    @GetMapping("/login/error")
+    public String getLoginError(Model model){
+        model.addAttribute("userFormDto", new UserFormDto());
         return "user/UserLogin";
     }
 
-    @GetMapping("/login")
-    public String getLogin(){
-        return "user/UserLogin";
-    }
+
 
 
 }

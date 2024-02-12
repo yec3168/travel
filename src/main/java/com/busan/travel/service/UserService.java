@@ -1,14 +1,12 @@
 package com.busan.travel.service;
 
-import com.busan.travel.dto.UserDto;
+import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.entity.User;
 import com.busan.travel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -19,17 +17,17 @@ public class UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public void createUser(UserDto userDto){
-        Optional<User> op= userRepository.findByEmail(userDto.getEmail());
+    public void createUser(UserFormDto userFormDto){
+        Optional<User> op= userRepository.findByEmail(userFormDto.getEmail());
         if(op.isPresent()) {
 
             User user = User.builder()
-                    .email(userDto.getEmail())
-                    .password(passwordEncoder.encode(userDto.getPassword()))
-                    .name(userDto.getName())
-                    .nickName(userDto.getNickName())
-                    .address(userDto.getAddress())
-                    .gender(userDto.getGender())
+                    .email(userFormDto.getEmail())
+                    .password(passwordEncoder.encode(userFormDto.getPassword()))
+                    .name(userFormDto.getName())
+                    .nickName(userFormDto.getNickName())
+                    .address(userFormDto.getAddress())
+                    .gender(userFormDto.getGender())
                     .build();
 
             userRepository.save(user);
