@@ -130,8 +130,8 @@
                       </tbody>
                   </table>
                   <p class="btn_set">
-                    <button type="submit" class="btns btn_st2" id="send">가입</button>
-                    <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
+                    <button type="submit" class="btns btn_st2" onclick="onsubmitclick" id="send">가입</button>
+                    <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup">취소</button>
                   </p>
               </form>
            </div>
@@ -225,22 +225,23 @@
             for(let i = 0; i < formInput.length; i++){
                 params[formInput[i].id] = formInput[i].value;
             }
-            if(params ==null)
-                return
+            return params;
         }
 
 
         /*회원정보 저장*/
         const signupform = document.getElementById("signupForm");
         const send = document.getElementById("send");
-        send.addEventListener("click", (e)=>{
+        const onsubmitclick = (e)=>{
             e.preventDefault();
-            validationCheck(signupform);
-
+            let params = validationCheck(signupform);
+            if(params ==null)
+                return
             confirm("회원가입을 진행하시겠습니까?")
             alert('가입을 축하드립니다!\n로그인 후 서비스를 이용해 주세요.');
             closeSignupPopup();
-        });
+            signupform.submit();
+        }
 
 
     </script>
