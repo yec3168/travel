@@ -53,7 +53,7 @@
                             </li>
                         </ul>
                         <button type="submit" class="login_btn">로그인</button>
-                        <button type="button" class="signup_btn" onclick="openPop()">회원가입</button>
+                        <button type="button" class="signup_btn" onclick="openPop();">회원가입</button>
                     </form>
 
                 </div>
@@ -89,7 +89,7 @@
                                  <img src="/images/default_profile.png" id="image">
                               </td>
                               <td colspan="3">
-                                  <input name="userImg" type="file" class="form-control" onchange="changeImage(this)">
+                                  <input name="userImg" type="file" class="form-control" onchange="changeImage();">
                                   <p style="text-align: left">이미지는 나중에 수정할 수 있습니다. <br>jpg, jpeg, png파일을 넣어주세요.</p>
                               </td>
                           </tr>
@@ -130,8 +130,8 @@
                       </tbody>
                   </table>
                   <p class="btn_set">
-                    <button type="submit" class="btns btn_st2" onclick="onsubmitclick" id="send">가입</button>
-                    <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup">취소</button>
+                    <button type="button" class="btns btn_st2" id="send">가입</button>
+                    <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
                   </p>
               </form>
            </div>
@@ -223,7 +223,7 @@
             }
             let params ={}
             for(let i = 0; i < formInput.length; i++){
-                params[formInput[i].id] = formInput[i].value;
+                params[formInput[i].name] = formInput[i].value;
             }
             return params;
         }
@@ -232,16 +232,19 @@
         /*회원정보 저장*/
         const signupform = document.getElementById("signupForm");
         const send = document.getElementById("send");
-        const onsubmitclick = (e)=>{
+
+        send.addEventListener("click", (e)=>{
             e.preventDefault();
             let params = validationCheck(signupform);
             if(params ==null)
                 return
-            confirm("회원가입을 진행하시겠습니까?")
-            alert('가입을 축하드립니다!\n로그인 후 서비스를 이용해 주세요.');
-            closeSignupPopup();
-            signupform.submit();
-        }
+            if(confirm("회원가입을 진행하시겠습니까?")){
+                alert('가입을 축하드립니다!\n로그인 후 서비스를 이용해 주세요.');
+                closeSignupPopup();
+                signupform.submit();
+            }
+
+        });
 
 
     </script>
