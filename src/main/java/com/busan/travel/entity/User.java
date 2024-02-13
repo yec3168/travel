@@ -1,5 +1,6 @@
 package com.busan.travel.entity;
 
+import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.status.Gender;
 import com.busan.travel.status.UserRole;
 import jakarta.persistence.*;
@@ -42,15 +43,30 @@ public class User {
 
     @Builder
     private User(String email, String password ,String name,
-                 String nickName, String address, Gender gender){
+                 String nickName, String address, Gender gender,
+                 UserRole userRole, LocalDateTime createDate){
         this.email =email;
         this.password = password;
         this.name = name;
         this.nickName =nickName;
         this.address =address;
         this.gender =gender;
-        this.userRole = UserRole.USER;
-        this.createDate= LocalDateTime.now();
+        this.userRole = userRole;
+        this.createDate= createDate;
+    }
+
+    public static User createUser(UserFormDto userFormDto, PasswordEncoder passwordEncoder){
+        User user = User.builder()
+                .name(userFormDto.getName())
+                .nickName(userFormDto.getNickName())
+                .email(userFormDto.getEmail())
+                .password(passwordEncoder.encode(userFormDto.getPassword()))
+                .address(userFormDto.getAddress())
+                .gender(userFormDto.getGender())
+                .userRole(UserRole.USER)
+                .createDate(LocalDateTime.now()).build();
+
+        return user;
     }
 
 

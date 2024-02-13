@@ -19,17 +19,8 @@ public class UserService{
     private PasswordEncoder passwordEncoder;
     public void createUser(UserFormDto userFormDto){
         Optional<User> op= userRepository.findByEmail(userFormDto.getEmail());
-        if(op.isPresent()) {
-
-            User user = User.builder()
-                    .email(userFormDto.getEmail())
-                    .password(passwordEncoder.encode(userFormDto.getPassword()))
-                    .name(userFormDto.getName())
-                    .nickName(userFormDto.getNickName())
-                    .address(userFormDto.getAddress())
-                    .gender(userFormDto.getGender())
-                    .build();
-
+        if(!op.isPresent()) {
+            User user = User.createUser(userFormDto, passwordEncoder);
             userRepository.save(user);
         }
         else{

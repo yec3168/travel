@@ -1,6 +1,8 @@
 package com.busan.travel.controller;
 
 import com.busan.travel.dto.UserFormDto;
+import com.busan.travel.entity.User;
+import com.busan.travel.repository.UserRepository;
 import com.busan.travel.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -11,25 +13,29 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
 
 
     @PostMapping("/new")
-    @ResponseBody
-    public String postNewUser(@ModelAttribute UserFormDto userFormDto, MultipartFile multipartFile, Model model ){
+    public String postNewUser(UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
 
-
-        try{
+        try {
             userService.createUser(userFormDto);
-        }catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-        return userFormDto.toString();
+
+        return "redirect:/user/login";
 
     }
 
@@ -38,22 +44,10 @@ public class UserController {
         model.addAttribute("userFormDto", new UserFormDto());
         return "user/UserLogin";
     }
-    @PostMapping("/login")
-
-    public String postLogin(HttpServletRequest request ){
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        System.out.println("email :      " +email);
-        System.out.println("password :      "+ password);
-        return "redirect:/";
-    }
-
-
 
     @GetMapping("/login/error")
     public String getLoginError(Model model){
-        model.addAttribute("userFormDto", new UserFormDto());
+        model.addAttribute("errorMsg", "아이디 혹은 비밀번호를 확인해주세요.");
         return "user/UserLogin";
     }
 

@@ -4,7 +4,7 @@
 <head th:replace="~{fragments/Header :: main-head}"> </head>
 
 <th:block layout:fragment="title">
-    <title>회원가입</title>
+    <title>로그인</title>
 </th:block>
 
 <th:block layout:fragment="css">
@@ -44,15 +44,15 @@
                     <form method="post" role="form" th:action="@{/user/login}" id="loginForm">
                         <ul>
                             <li>
-                                <label for="email" class="skip_info">아이디</label>
-                                <input type="email" name="email" id="email" placeholder="Email">
+                                <label th:for="email" class="skip_info">아이디</label>
+                                <input type="email" name="email"  placeholder="Email">
                             </li>
                             <li>
-                                <label for="password" class="skip_info">아이디</label>
-                                <input type="password" name="password" id="password" placeholder="Password">
+                                <label th:for="password" class="skip_info">아이디</label>
+                                <input type="password" name="password"  placeholder="Password">
                             </li>
                         </ul>
-                        <button type="submit" class="login_btn" onclick="login()">로그인</button>
+                        <button type="button" class="login_btn" onclick="login()">로그인</button>
                         <button type="button" class="signup_btn" onclick="openPop()">회원가입</button>
                     </form>
 
@@ -90,7 +90,7 @@
                                  <img src="/images/default_profile.png" id="image">
                               </td>
                               <td colspan="3">
-                                  <input type="file" class="form-control" onchange="changeImage(this)">
+                                  <input name="userImg" type="file" class="form-control" onchange="changeImage(this)">
                                   <p style="text-align: left">이미지는 나중에 수정할 수 있습니다. <br>jpg, jpeg, png파일을 넣어주세요.</p>
                               </td>
                           </tr>
@@ -131,7 +131,7 @@
                       </tbody>
                   </table>
                   <p class="btn_set">
-                    <button type="button" class="btns btn_st2" onclick="saveUser()">가입</button>
+                    <button type="button" class="btns btn_st2"  onclick="saveUser()">가입</button>
                     <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
                   </p>
               </form>
@@ -226,6 +226,7 @@
 
         /*회원정보 저장*/
         function saveUser(){
+            confirm("회원가입을 진행하시겠습니까?")
             const form = document.getElementById("signupForm");
             const params = validationCheck(form);
 
