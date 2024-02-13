@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/new")
     public String postNewUser(UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
-
+        System.out.println("post됨~~~~~~~~~~~~~~~~~~~~~" + userFormDto.getPassword());
         try {
             userService.createUser(userFormDto);
         } catch (Exception e) {
