@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="login_input">
-                    <form method="post" role="form" th:action="@{/user/login}" id="loginForm">
+                    <form method="post" role="form" th:action="@{/user/login}" id="loginForm" onsubmit="return false;">
                         <ul>
                             <li>
                                 <label th:for="email" class="skip_info">아이디</label>
@@ -52,7 +52,7 @@
                                 <input type="password" name="password"  placeholder="Password">
                             </li>
                         </ul>
-                        <button type="submit" class="login_btn">로그인</button>
+                        <button class="login_btn" id="loginSend">로그인</button>
                         <button type="button" class="signup_btn" onclick="openPop();">회원가입</button>
                     </form>
 
@@ -61,11 +61,15 @@
         </div>
     </div> <!--login_wrap-->
 
+
+
+
     <div id="singUpPop" class="popLayer">
         <h3>회원가입</h3>
         <div id="popup_wrap">
            <div class="pop_container" th:object="${userFormDto}">
-              <form id="signupForm" method="post" role="form" th:action="@{/user/new}" enctype="multipart/form-data">
+
+              <form id="signupForm" th:action="@{/user/new}" method="post" role="form" enctype="multipart/form-data"  onsubmit="return saveUser();">
                   <table class="tb tb_col">
                       <colgroup>
                           <col style="width:15%;" /><col style="width:35%;" /><col style="width:15%;" /><col style="width:35%;" />
@@ -130,7 +134,7 @@
                       </tbody>
                   </table>
                   <p class="btn_set">
-                    <button type="button" class="btns btn_st2" id="send">가입</button>
+                    <button type="submit" class="btns btn_st2" >가입</button>
                     <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
                   </p>
               </form>
@@ -174,7 +178,12 @@
         /*로그인*/
 
         const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener("submit", (e)=>{
+        const loginSend = document.getElementById('loginSend');
+        loginSend.addEventListener('click', (e)=>{
+
+        })
+
+        loginForm.addEventListener("submit", function (){
             if(!form.email.value || !form.password.value ){
                 alert("아이디 혹은 비밀번호를 입력해주세요.")
             }
@@ -230,21 +239,22 @@
 
 
         /*회원정보 저장*/
-        const signupform = document.getElementById("signupForm");
-        const send = document.getElementById("send");
-
-        send.addEventListener("click", (e)=>{
-            e.preventDefault();
-            let params = validationCheck(signupform);
+       function saveUser(){
+            const signUpForm = document.getElementById("signupForm");
+            let params = validationCheck(signUpForm);
             if(params ==null)
                 return
             if(confirm("회원가입을 진행하시겠습니까?")){
                 alert('가입을 축하드립니다!\n로그인 후 서비스를 이용해 주세요.');
+                return true;
                 closeSignupPopup();
-                signupform.submit();
             }
-
-        });
+            else{
+                alert('회원가입이 취소되었습니다.');
+                closeSignupPopup();
+                return false;
+            }
+        }
 
 
     </script>

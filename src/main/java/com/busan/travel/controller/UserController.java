@@ -26,6 +26,12 @@ public class UserController {
     private UserService userService;
 
 
+    @GetMapping("/new")
+    public String getNewUser(UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
+
+        return "redirect:/user/login";
+
+    }
     @PostMapping("/new")
     public String postNewUser(UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
         System.out.println("post됨~~~~~~~~~~~~~~~~~~~~~" + userFormDto.getPassword());
