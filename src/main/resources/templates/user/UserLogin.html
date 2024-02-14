@@ -41,18 +41,19 @@
                 </div>
 
                 <div class="login_input">
-                    <form method="post" role="form" th:action="@{/user/login}" id="loginForm" onsubmit="return false;">
+                    <form method="post" role="form" action="/user/login" id="loginForm" onsubmit="return login();">
                         <ul>
                             <li>
                                 <label th:for="email" class="skip_info">아이디</label>
                                 <input type="email" name="email"  placeholder="Email">
                             </li>
                             <li>
-                                <label th:for="password" class="skip_info">아이디</label>
+                                <label th:for="password" class="skip_info">비밀번호</label>
                                 <input type="password" name="password"  placeholder="Password">
                             </li>
                         </ul>
-                        <button class="login_btn" id="loginSend">로그인</button>
+
+                        <button type="submit" class="login_btn">로그인</button>
                         <button type="button" class="signup_btn" onclick="openPop();">회원가입</button>
                     </form>
 
@@ -62,12 +63,10 @@
     </div> <!--login_wrap-->
 
 
-
-
     <div id="singUpPop" class="popLayer">
         <h3>회원가입</h3>
         <div id="popup_wrap">
-           <div class="pop_container" th:object="${userFormDto}">
+           <div class="pop_container" >
 
               <form id="signupForm" th:action="@{/user/new}" method="post" role="form" enctype="multipart/form-data"  onsubmit="return saveUser();">
                   <table class="tb tb_col">
@@ -78,12 +77,12 @@
                           <tr>
                               <th>이름 <span class="es">필수 입력</span></th>
                               <td >
-                                  <input type="text" th:field="*{name}" placeholder="이름을 입력해 주세요." />
+                                  <input type="text" name="name" placeholder="이름을 입력해 주세요." />
                               </td>
 
                               <th >닉네임 <span class="es">필수 입력</span></th>
                               <td >
-                                  <input type="text" th:field="*{nickName}" placeholder="닉네임을 입력해 주세요." />
+                                  <input type="text" name="nickName" placeholder="닉네임을 입력해 주세요." />
                               </td>
 
                           </tr>
@@ -100,26 +99,26 @@
                           <tr>
                               <th>이메일 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <input type="email" th:field="*{email}" placeholder="이메일을 입력해주세요.">
+                                  <input type="email" name="email" placeholder="이메일을 입력해주세요.">
                               </td>
                           </tr>
 
                           <tr>
                               <th>비밀번호 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <input type="password" th:field="*{password}" placeholder="비밀번호를 입력해주세요." />
+                                  <input type="password" name="password" placeholder="비밀번호를 입력해주세요." />
                               </td>
                           </tr>
                           <tr>
                               <th scope="row">주소 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <input type="text" th:field="*{address}" placeholder="주소를 입력해주세요."/>
+                                  <input type="text" name="address" placeholder="주소를 입력해주세요."/>
                               </td>
                           </tr>
                           <tr>
                               <th scope="row">성별 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <div class="radio_group" th:field="*{gender}">
+                                  <div class="radio_group" name="gender">
                                       <p class="radios">
                                           <input type="radio" id="male" name="gender" value="MAN" checked />
                                           <label for="male">남</label><span class="check"></span>
@@ -175,20 +174,17 @@
                 layerPopClose()
             }
         })
+
+
         /*로그인*/
-
-        const loginForm = document.getElementById('loginForm');
-        const loginSend = document.getElementById('loginSend');
-        loginSend.addEventListener('click', (e)=>{
-
-        })
-
-        loginForm.addEventListener("submit", function (){
-            if(!form.email.value || !form.password.value ){
+        function login(){
+            const loginForm = document.getElementById('loginForm');
+            if(!loginForm.email.value || !loginForm.password.value ){
                 alert("아이디 혹은 비밀번호를 입력해주세요.")
+                return false;
             }
-        });
-
+            return true
+        }
 
 
        <!-- ------------------------------------------------------------- -->
@@ -203,8 +199,6 @@
             document.getElementById("image").src = "/images/default_profile.png"
             layerPopClose()
         }
-
-
 
        /*대표 이미지 변경*/
         function changeImage(event){

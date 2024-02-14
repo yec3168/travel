@@ -3,7 +3,9 @@ package com.busan.travel.service;
 import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.entity.User;
 import com.busan.travel.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     public void createUser(UserFormDto userFormDto){
         Optional<User> op= userRepository.findByEmail(userFormDto.getEmail());
         if(!op.isPresent()) {
