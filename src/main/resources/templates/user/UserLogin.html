@@ -45,7 +45,7 @@
                         <ul>
                             <li>
                                 <label th:for="email" class="skip_info">아이디</label>
-                                <input type="email" name="email"  placeholder="Email">
+                                <input type="text" name="email"  placeholder="Email">
                             </li>
                             <li>
                                 <label th:for="password" class="skip_info">비밀번호</label>
@@ -53,7 +53,7 @@
                             </li>
                         </ul>
 
-                        <button type="submit" class="login_btn">로그인</button>
+                        <button class="login_btn">로그인</button>
                         <button type="button" class="signup_btn" onclick="openPop();">회원가입</button>
                     </form>
 
@@ -99,7 +99,7 @@
                           <tr>
                               <th>이메일 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <input type="email" name="email" placeholder="이메일을 입력해주세요.">
+                                  <input type="text" name="email" placeholder="이메일을 입력해주세요.">
                               </td>
                           </tr>
 

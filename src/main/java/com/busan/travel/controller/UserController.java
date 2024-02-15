@@ -11,15 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = "/user")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+
     @PostMapping("/new")
-    public String postNewUser(UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
-        System.out.println("post됨~~~~~~~~~~~~~~~~~~~~~" + userFormDto.getPassword());
+    public String postNewUser(@ModelAttribute UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
         try {
             userService.createUser(userFormDto);
         } catch (Exception e) {
@@ -34,6 +34,7 @@ public class UserController {
     public String getLogin(){
         return "user/UserLogin";
     }
+
 
     @GetMapping("/login/error")
     @ResponseBody
