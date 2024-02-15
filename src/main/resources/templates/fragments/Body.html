@@ -21,7 +21,7 @@
                     </button>
                 </div>
                 <div class="logout" sec:authorize="isAuthenticated()">
-                    <button type="button" th:onclick="|location.href='@{/user/logout}'|" onclick="return check()">
+                    <button type="button" onclick="javascript:check()">
                         <span class="skip_info">로그아웃</span>
                         <i class="fas fa-solid fa-sign-out-alt"></i>
                     </button>
@@ -53,7 +53,7 @@
                         <ul>
                             <li><a href="/user/login" sec:authorize="isAnonymous()" class="on">로그인</a></li>
                             <li><a href="/user/login" sec:authorize="isAnonymous()"  >회원가입</a></li>
-                            <li><a href="javascript: alert('준비 중입니다.');" sec:authorize="isAuthenticated()"  >로그아웃</a></li>
+                            <li><a href="javascript: check()" sec:authorize="isAuthenticated()" >로그아웃</a></li>
                             <li><a href="javascript: alert('준비 중입니다.');"  sec:authorize="isAuthenticated()" >마이페이지</a></li>
                         </ul>
                     </li>
@@ -84,10 +84,14 @@
 <th:block layout:fragment="script">
     <script>
         function check(){
-            if(confirm("로그아웃 하시겠습니까?"))
+            if(confirm("로그아웃 하시겠습니까?")) {
+                alert("로그아웃 되었습니다!")
+                location.href = '/user/logout';
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
     </script>
 </th:block>
