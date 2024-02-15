@@ -56,7 +56,6 @@
                         <button class="login_btn">로그인</button>
                         <button type="button" class="signup_btn" onclick="openPop();">회원가입</button>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -67,7 +66,6 @@
         <h3>회원가입</h3>
         <div id="popup_wrap">
            <div class="pop_container" >
-
               <form id="signupForm" th:action="@{/user/new}" method="post" role="form" enctype="multipart/form-data"  onsubmit="return saveUser();">
                   <table class="tb tb_col">
                       <colgroup>
@@ -92,14 +90,18 @@
                                  <img src="/images/default_profile.png" id="image">
                               </td>
                               <td colspan="3">
-                                  <input name="userImg" type="file" class="form-control" onchange="changeImage();">
+                                  <input name="userImg" type="file" class="form-control" onchange="changeImage(this);">
                                   <p style="text-align: left">이미지는 나중에 수정할 수 있습니다. <br>jpg, jpeg, png파일을 넣어주세요.</p>
                               </td>
                           </tr>
+                          <colgroup>
+                              <col style="width:30%;" /><col style="width:70%;" />
+                          </colgroup>
                           <tr>
                               <th>이메일 <span class="es">필수 입력</span></th>
                               <td colspan="3">
-                                  <input type="text" name="email" placeholder="이메일을 입력해주세요.">
+                                  <input type="text" name="email" placeholder="이메일을 입력해주세요." style="width: 80%;">
+                                  <button type="button" id="idCheckBtn" class="btns btn_st5" style="width: 20%; height: 40px; float: right;">중복 확인</button>
                               </td>
                           </tr>
 
@@ -156,6 +158,13 @@
 
 <th:block layout:fragment="script">
     <script>
+        $(document).ready(function() {
+            let message = "[[${msg}]]";
+            if (message != "") {
+                alert(message);
+            }else {
+            }
+        })
         window.onload = () => {
             document.querySelectorAll('#emailId, #password').forEach(element => {
                 element.addEventListener('keyup', (e) => {
@@ -210,6 +219,30 @@
             };
             reader.readAsDataURL(event.files[0]);
         }
+
+        /*아이디 중복 체크*/
+        $('#idCheckBtn').click(function (){
+            const emailInput =document.querySelector('#signupForm input[name="email"]')
+            console.log(emailInput.value)
+            const email = emailInput.value;
+            $.ajax({
+                type:"get",
+                async:false,
+                url:'/user/idCheck',
+                data:{
+                    email : email
+                },
+                success:function (result){
+                    if(result == 1){
+                        alert("이미 사용중인 ID입니다.")
+                    }
+                    else{
+                        alert("사용 가능한 ID입니다.")
+                    }
+                }
+            });
+
+        })
 
         <!-- form input 값 제대로 입력했는지 확인.-->
         function validationCheck(form){

@@ -6,13 +6,17 @@ import com.busan.travel.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -21,12 +25,29 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    public void createUser(UserFormDto userFormDto){
+    @Autowired
+    private FileService fileService;
+
+    @Value("${imgSave.location}")
+    private String uploadImage; //file:///C:/travel/
+
+    public void createUser(UserFormDto userFormDto, MultipartFile multipartFile){
         Optional<User> op= userRepository.findByEmail(userFormDto.getEmail());
         if(!op.isPresent()) {
-            User user = User.createUser(userFormDto, passwordEncoder);
+            String filename;
+            String dbUrl;
+            if(multipartFile.isEmpty()){
+                dbUrl = "/images/default_profile.png";
+                filename = "default_profile.png";
+            }else{
+                filename =fileService.uuidFileName(multipartFile);
+                imageSave(multipartFile, filename);
+                dbUrl = "/image/user/"+filename;
+            }
+
+            User user = User.createUser(userFormDto, passwordEncoder, filename, dbUrl);
             System.out.println(user.getPassword());
             userRepository.save(user);
         }
@@ -35,6 +56,18 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public void imageSave(MultipartFile multipartFile, String filename){
+        String checkUser = uploadImage+"/user/"; // file:///C:/travel/user 저장위치
+        fileService.makeFile(checkUser); //폴더없으면 생성
+
+        String uploadUrl =checkUser+filename; // t
+        try{
+            fileService.saveFile(multipartFile, uploadUrl);
+        }catch (Exception e) {
+            throw new IllegalStateException("파일을 생성할 수 없습니다.");
+        }
+
+    }
     // 로그인시 이메일 매핑.
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

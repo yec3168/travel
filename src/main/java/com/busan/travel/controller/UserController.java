@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping("/new")
     public String postNewUser(@ModelAttribute UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
         try {
-            userService.createUser(userFormDto);
+            userService.createUser(userFormDto, multipartFile);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -35,13 +35,12 @@ public class UserController {
         return "user/UserLogin";
     }
 
-
     @GetMapping("/login/error")
-    @ResponseBody
     public String getLoginError(@RequestParam("msg") String msg, Model model){
+
         model.addAttribute("msg", msg);
 
-        return msg;
+        return "user/UserLogin";
     }
 
 

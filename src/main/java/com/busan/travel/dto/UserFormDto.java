@@ -25,6 +25,9 @@ public class UserFormDto {
 
     private LocalDateTime createDate; //회원생성날짜.
 
+    private String filename;
+
+    private String url;
 
 
 }
