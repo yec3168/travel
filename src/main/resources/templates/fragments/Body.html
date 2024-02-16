@@ -23,10 +23,11 @@
                 </div>
             </div>
             <div class="top_menu"sec:authorize="isAuthenticated()">
-                <div class="login_user">
-                    <strong>
-                        <i class="far fa-user-circle"></i>
-
+                <div class="login_user" th:if="${userFormDto != null}">
+                    <strong >
+                        <i th:if="${userFormDto.filename =='default_profile.png'}" class="far fa-user-circle"></i>
+                        <img th:if="${userFormDto.filename !='default_profile.png'}" th:src="${userFormDto.url}">
+                        [[${userFormDto.nickName}]]
                     </strong>님 반갑습니다.
                 </div>
 
@@ -80,7 +81,7 @@
 
         </div>
     </div> <!--/* // #container */-->
-    <footer>Copyright(c)네임즈.All rights reserved.</footer>
+    <footer>Copyright(c)네임즈 부산 여행 Project</footer>
 </div>
 
 <script th:src="@{/js/function.js}"></script>

@@ -23,4 +23,6 @@ public class Board {
     private LocalDateTime updateDate;
 
     private int view; // 조회수
+
+    private boolean notice_yn;
 }

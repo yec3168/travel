@@ -27,7 +27,7 @@ header .head .top_menu > div button {background:#434b53; border:0; border-radius
 header .head .top_menu > div.login_user {margin-right:20px;}
 header .head .top_menu > div.login_user strong, header .head .top_menu > div.login_user strong i {color:#333;}
 header .head .top_menu > div.login_user strong i {font-size:16px; vertical-align:bottom;}
-
+header .head .top_menu > div.login_user strong img{width: 16px; height: 16px; border-radius: 50%; border: 1px solid lightgray; vertical-align:bottom;}
 /* nav메뉴 */
 nav * {box-sizing:border-box;}
 nav > ul > li {border-bottom:1px solid #363c43; position:relative;}

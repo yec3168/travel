@@ -30,7 +30,18 @@ public class UserController {
         return "redirect:/user/login";
 
     }
+    @GetMapping("/idCheck")
+    @ResponseBody
+    public int idCheck(@RequestParam("email") String email){
+        Optional<User> userOptional = userService.getUser(email);
+        if (userOptional.isPresent()) {
+            return 1;
 
+        } else {
+            return 0;
+        }
+    }
+    /*로그인 관련 controller*/
     @GetMapping("/login")
     public String getLogin(){
         return "user/UserLogin";
@@ -45,17 +56,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/idCheck")
-    @ResponseBody
-    public int idCheck(@RequestParam("email") String email){
-        Optional<User> userOptional = userService.getUser(email);
-        if (userOptional.isPresent()) {
-           return 1;
 
-        } else {
-            return 0;
-        }
-    }
 
 
 }
