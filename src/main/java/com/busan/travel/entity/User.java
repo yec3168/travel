@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -38,11 +40,16 @@ public class User  {
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-
     // 대표이미지.
     private String filename;
 
     private String url;
+
+
+    //사용자가 작성한 자유게시판 게시글.
+    @OneToMany(mappedBy = "writer",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Board> boardList;
+
 
     @Builder
     public User(String email, String password ,String name,

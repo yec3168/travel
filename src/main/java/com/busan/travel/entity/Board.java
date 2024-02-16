@@ -1,14 +1,17 @@
 package com.busan.travel.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 
 @Entity
 @Getter
-public class Board {
+@NoArgsConstructor
+public class Board extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -18,11 +21,16 @@ public class Board {
 
     private String content;
 
-    private LocalDateTime createDate;
-
-    private LocalDateTime updateDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User writer;
 
     private int view; // 조회수
 
-    private boolean notice_yn;
+    private boolean noticeYn;
+
+    @Builder
+    public Board(String subject, String content, String view){
+
+    }
 }

@@ -12,10 +12,9 @@
             <h3>게시판 관리</h3>
             <p class="path"><strong>현재 위치 :</strong> <span>게시판 관리</span> <span>자유게시판</span> <span>글작성</span></p>
         </div>
-    <div class="content">
+    <div class="content" th:object="${userFormDto}">
         <section>
             <form id="saveForm" method="post" autocomplete="off">
-
 
 
                 <!--/* 서버로 전달할 공지글 여부 */-->
@@ -39,8 +38,8 @@
                     </tr>
 
                     <tr>
-                        <th>이름 <span class="es">필수 입력</span></th>
-                        <td colspan="3"><input type="text" maxlength="10" placeholder="이름을 입력해 주세요." /></td>
+                        <th>작성자
+                        <td colspan="3"><input type="text" th:field="*{nickName}" disabled></td>
                     </tr>
 
                     <tr>
