@@ -1,6 +1,7 @@
 package com.busan.travel.controller;
 
 import com.busan.travel.dto.UserFormDto;
+import com.busan.travel.entity.User;
 import com.busan.travel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,17 @@ public class UserController {
     }
 
 
+    @GetMapping("/idCheck")
+    @ResponseBody
+    public int idCheck(@RequestParam("email") String email){
+        Optional<User> userOptional = userService.getUser(email);
+        if (userOptional.isPresent()) {
+           return 1;
+
+        } else {
+            return 0;
+        }
+    }
 
 
 }

@@ -6,22 +6,31 @@
 <body th:fragment="main-body">
 <div id="adm_wrap">
     <header>
-        <div class="head">
+        <div class="head" >
             <h1><a href="/">Travel</a></h1>
-            <div class="top_menu">
-                <div class="login" sec:authorize="isAnonymous()">
+            <div class="top_menu" sec:authorize="isAnonymous()">
+                <div class="login" >
                     <button type="button" th:onclick="|location.href='@{/user/login}'|">
                         <span class="skip_info">로그인</span>
                         <i class="fas fa-sign-in-alt"></i>
                     </button>
                 </div>
-                <div class="signup" sec:authorize="isAnonymous()">
+                <div class="signup" >
                     <button type="button" th:onclick="|location.href='@{/user/login}'|">
                         <span class="skip_info">회원가입</span>
                         <i class="fas fa-solid fa-user-plus"></i>
                     </button>
                 </div>
-                <div class="logout" sec:authorize="isAuthenticated()">
+            </div>
+            <div class="top_menu"sec:authorize="isAuthenticated()">
+                <div class="login_user">
+                    <strong>
+                        <i class="far fa-user-circle"></i>
+
+                    </strong>님 반갑습니다.
+                </div>
+
+                <div class="logout" >
                     <button type="button" onclick="javascript:check()">
                         <span class="skip_info">로그아웃</span>
                         <i class="fas fa-solid fa-sign-out-alt"></i>

@@ -68,6 +68,11 @@ public class UserService implements UserDetailsService {
         }
 
     }
+
+    public Optional<User> getUser(String email){
+        return userRepository.findByEmail(email);
+    }
+
     // 로그인시 이메일 매핑.
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
