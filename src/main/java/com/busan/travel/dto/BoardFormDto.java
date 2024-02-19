@@ -24,4 +24,8 @@ public class BoardFormDto {
     private int view; // 조회수
 
     private boolean noticeYn;
+
+    private String fileName;
+
+    private String url;
 }

@@ -1,5 +1,6 @@
 package com.busan.travel.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,8 @@ public class FileService {
         }
     }
 
-    @Transactional
-    public void saveFile(MultipartFile multipartFile, String url) throws Exception{
+
+    public static void saveFile(MultipartFile multipartFile, String url) throws Exception{
         FileOutputStream fos = new FileOutputStream(url);
         fos.write(multipartFile.getBytes());
         fos.close();
@@ -32,4 +33,6 @@ public class FileService {
 
         return filename;
     }
+
+
 }
