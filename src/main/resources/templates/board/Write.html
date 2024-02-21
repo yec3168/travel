@@ -12,12 +12,12 @@
             <h3>게시판 관리</h3>
             <p class="path"><strong>현재 위치 :</strong> <span>게시판 관리</span> <span>자유게시판</span> <span>글작성</span></p>
         </div>
-    <div class="content" th:object="${user}">
+    <div class="content" th:object="${boardFormDto}">
         <section>
 
             <form id="saveForm" method="post" role="form" action="/board/write" enctype="multipart/form-data" onsubmit=" return sumbitListener();">
                 <!--/* 서버로 전달할 공지글 여부 */-->
-                <input type="hidden"  name="noticeYn" />
+                <input type="hidden" id="noticeYn" name="noticeYn" />
                 <table class="tb tb_row">
                     <colgroup>
                         <col style="width:15%;" /><col style="width:35%;" /><col style="width:15%;" /><col style="width:35%;" />
@@ -27,28 +27,21 @@
                         <th scope="row">공지글</th>
                         <td>
                             <span class="chkbox">
-                                <input type="checkbox" id="noticeYn" name="noticeYn" class="chk" />
+                                <input type="checkbox" id="isNotice" name="isNotice" class="chk" />
                                 <i></i>
-                                <label for="noticeYn"> 설정</label>
+                                <label for="isNotice"> 설정</label>
                             </span>
                         </td>
 
                         <th scope="row">등록일</th>
-                        <td colspan="3"><input type="text" readonly /></td>
+                        <td colspan="3"><input type="text" id="createdDate" readonly /></td>
                     </tr>
 
                     <tr>
                         <th>제목 <span class="es">필수 입력</span></th>
                         <td colspan="3">
-                            <input type="text" name="subject" maxlength="50" placeholder="제목을 입력해 주세요." />
+                            <input type="text" th:field="*{subject}" maxlength="50" placeholder="제목을 입력해 주세요." />
                         </td>
-                    </tr>
-
-                    <tr>
-                        <th>작성자
-                        <td colspan="3">
-                        <input type="text" th:name="${user}" th:text="*{nickName}" readonly>
-                    </td>
                     </tr>
 
                     <tr>
@@ -58,7 +51,7 @@
 
                     <tr>
                         <th>내용 <span class="es">필수 입력</span></th>
-                        <td colspan="3"><textarea id="content" name="content" cols="50" rows="10" placeholder="내용을 입력해 주세요."></textarea></td>
+                        <td colspan="3"><textarea id="content" th:field="*{content}" cols="50" rows="10" placeholder="내용을 입력해 주세요."></textarea></td>
                     </tr>
                     </tbody>
                 </table>

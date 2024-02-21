@@ -50,8 +50,8 @@
                     <tr th:each="board, loop: ${boardlist}">
                         <td th:text="${board.id}"></td>
                         <td><a th:text="${board.subject}"></a></td>
-                        <td th:text="${board.member.nickname}"></td>
-                        <td th:text="${#temporals.format(board.updateDate, 'yyy-MM-dd HH:mm') }"></td>
+                        <td th:text="${board.writer.nickName}"></td>
+                        <td th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd HH:mm') }"></td>
                         <td th:text="${board.view}"></td>
                     </tr>
                 </tbody>

@@ -22,8 +22,8 @@ public class MainController {
             return "layout/MainLayout";
         Optional<User> op =userService.getUser(principal.getName());
         if(op.isPresent()){
-            UserFormDto userFormDto = UserFormDto.toDto(op.get());
-            model.addAttribute("userFormDto", userFormDto);
+           User user = op.get();
+            model.addAttribute("user", user);
         }
         return "layout/MainLayout";
     }

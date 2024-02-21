@@ -4,17 +4,16 @@ import com.busan.travel.dto.BoardFormDto;
 import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.User;
+import com.busan.travel.repository.BoardRepository;
 import com.busan.travel.service.BoardService;
 import com.busan.travel.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -29,43 +28,49 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("/list")
-    public String getBoardList(){
-        return "board/List";
-    }
+    @Autowired
+    private BoardRepository boardRepository;
 
     @GetMapping("/write")
-    public String getBoardWrite(Model model, Principal principal){
-
-        if(principal == null){
+    public String getBoardWrite(Model model, Principal principal, BoardFormDto boardFormDto) {
+        if (principal == null) {
             model.addAttribute("msg", "로그인후 이용해 주세요.");
             return "user/UserLogin";
         }
-        Optional<User> op =userService.getUser(principal.getName());
-        if(op.isPresent()){
-            User user = op.get();
-
-            model.addAttribute("user", user);
-        }
+        model.addAttribute("boardFormDto", boardFormDto);
         return "board/Write";
 
     }
 
     @PostMapping("/write")
-    public String postBoardWirte(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
-                                 User user, @RequestParam("boardFile") MultipartFile multipartFile,
-                                 Model model){
-        if(bindingResult.hasErrors())
+    public String postBoardWrite(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
+                                 @RequestParam("boardFile") MultipartFile multipartFile, Model model,
+                                 Principal principal) {
+        if (bindingResult.hasErrors()) {
             return "board/Write";
-
-        try{
-            Board board = boardService.savePost(user, boardFormDto, multipartFile);
-            if(board ==null){
-                model.addAttribute("errorMsg", "게시글을 생성할 수 없습니다.");
-            }
-        }catch (Exception e){
-            model.addAttribute("errorMsg", e.getMessage());
         }
-        return "redirect:/board/list";
+        try {
+            if (principal != null) {
+                Optional<User> op = userService.getUser(principal.getName());
+                if (op.isPresent()) {
+                    User writer = op.get();
+                    Board board = boardService.save(writer, boardFormDto);
+                    if (board != null){
+                        boardService.saveFile(board, multipartFile);
+                        return "redirect:/board/list";
+                    }
+                }
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMsg", "게시글을 등록하지 못하였습니다.");
+        }
+        return "board/Write";
     }
+
+    @GetMapping("/list")
+    public String getBoardList(Model model) {
+        model.addAttribute("boardlist", boardRepository.findAll());
+        return "board/List";
+    }
+
 }

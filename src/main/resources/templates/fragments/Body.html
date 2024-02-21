@@ -22,12 +22,13 @@
                     </button>
                 </div>
             </div>
-            <div class="top_menu"sec:authorize="isAuthenticated()">
-                <div class="login_user" th:if="${userFormDto != null}">
+            <div class="top_menu"sec:authorize="isAuthenticated()" >
+
+                <div class="login_user" th:if="${user != null}">
                     <strong >
-                        <i th:if="${userFormDto.filename =='default_profile.png'}" class="far fa-user-circle"></i>
-                        <img th:if="${userFormDto.filename !='default_profile.png'}" th:src="${userFormDto.url}">
-                        [[${userFormDto.nickName}]]
+                        <i th:if="${user.filename =='default_profile.png'}" class="far fa-user-circle"></i>
+                        <img th:if="${user.filename !='default_profile.png'}" th:src="${user.url}">
+                        [[${user.nickName}]]
                     </strong>님 반갑습니다.
                 </div>
 

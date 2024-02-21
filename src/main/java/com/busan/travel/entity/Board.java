@@ -28,7 +28,7 @@ public class Board extends BaseTimeEntity{
 
     private int view; // 조회수
 
-    private boolean noticeYn;
+    private Boolean noticeYn;
 
     private String fileName;
 
@@ -36,7 +36,7 @@ public class Board extends BaseTimeEntity{
 
     @Builder
     public Board(String subject, String content, int view,
-                 User writer, boolean noticeYn, String fileName,
+                 User writer, Boolean  noticeYn, String fileName,
                  String url){
         this.subject = subject;
         this.content =content;
@@ -47,18 +47,19 @@ public class Board extends BaseTimeEntity{
         this.url =url;
     }
 
-    public static Board createBoard(BoardFormDto boardFormDto, User writer,
-                             String fileName, String url){
+    public static Board createBoard(BoardFormDto boardFormDto, User writer){
         Board board = Board.builder()
                 .subject(boardFormDto.getSubject())
                 .content(boardFormDto.getContent())
-                .view(boardFormDto.getView())
                 .writer(writer)
-                .noticeYn(boardFormDto.isNoticeYn())
-                .fileName(fileName)
-                .url(url)
+                .noticeYn(boardFormDto.getNoticeYn())
                 .build();
 
         return board;
+    }
+
+    public void updateFile(String fileName, String url){
+        this.fileName = fileName;
+        this.url = url;
     }
 }
