@@ -73,4 +73,11 @@ public class BoardController {
         return "board/List";
     }
 
+    @GetMapping("/detail/{id}")
+    public String boardDetail(@PathVariable("id")Long id, Model model,
+                              Principal principal){
+        model.addAttribute("board", boardService.getBoard(id));
+        return "board/detail";
+    }
+
 }
