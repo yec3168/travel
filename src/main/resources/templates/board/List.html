@@ -47,7 +47,7 @@
 
 
                 <tbody id="list">
-                    <tr th:each="board, loop: ${boardlist}">
+                    <tr th:each="board, loop: ${paging}">
                         <td th:if="${board.noticeYn}" th:text="공지"></td>
                         <td th:unless="${board.noticeYn}" th:text="자유"></td>
                         <td th:text="${board.id}"></td>
@@ -58,7 +58,31 @@
                     </tr>
                 </tbody>
             </table>
-
+            <div class="btn_set">
+                <!-- 페이징처리 시작 -->
+                <div th:if="${!paging.isEmpty()}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{|?page=${paging.number-1}|}">
+                                <span>이전</span>
+                            </a>
+                        </li>
+                        <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
+                            th:if="${page >= paging.number-4 and page <= paging.number+4}"
+                            th:classappend="${page == paging.number+1} ? 'active'"
+                            class="page-item">
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page == 1 ? 0 : page - 1}|}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                                <span>다음</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 페이징처리 끝 -->
+            </div>
             <p class="btn_set tr">
                 <a th:href="@{/board/write}" class="btns btn_st3 btn_mid">글쓰기</a>
             </p>

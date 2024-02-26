@@ -7,9 +7,12 @@ import com.busan.travel.entity.User;
 import com.busan.travel.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.Optional;
 
@@ -29,7 +32,10 @@ public class BoardService {
 
 
     public Board save(User user, BoardFormDto boardFormDto){
-
+        if(boardFormDto.getNoticeYn())
+            boardFormDto.setNoticeYn(false);
+        else
+            boardFormDto.setNoticeYn(true);
         Board board = Board.createBoard(boardFormDto, user);
         boardRepository.save(board);
 
@@ -61,6 +67,11 @@ public class BoardService {
             return op.get();
         else
             throw new  DataNotFoundException("작성한 게시물을 찾을 수 없습니다.");
+    }
+
+    public Page<Board> getList(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        return boardRepository.findAll(pageable);
     }
 
 }

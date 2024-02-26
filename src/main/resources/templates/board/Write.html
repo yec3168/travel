@@ -17,7 +17,7 @@
 
             <form id="saveForm" method="post" role="form" action="/board/write" enctype="multipart/form-data" onsubmit=" return sumbitListener();">
                 <!--/* 서버로 전달할 공지글 여부 */-->
-                <input type="hidden" id="noticeYn" name="noticeYn" />
+
                 <table class="tb tb_row">
                     <colgroup>
                         <col style="width:15%;" /><col style="width:35%;" /><col style="width:15%;" /><col style="width:35%;" />
@@ -26,11 +26,9 @@
                     <tr>
                         <th scope="row">공지글</th>
                         <td>
-                            <span class="chkbox">
-                                <input type="checkbox" id="isNotice" name="isNotice" class="chk" />
-                                <i></i>
-                                <label for="isNotice"> 설정</label>
-                            </span>
+                            <input type="checkbox" th:field="*{noticeYn}" class="chk" />
+                            <label th:for="noticeYn"> 설정</label>
+
                         </td>
 
                         <th scope="row">등록일</th>

@@ -9,6 +9,8 @@ import com.busan.travel.service.BoardService;
 import com.busan.travel.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,7 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
     public String getBoardWrite(Model model, Principal principal, BoardFormDto boardFormDto) {
         if (principal == null) {
@@ -42,6 +45,7 @@ public class BoardController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String postBoardWrite(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
                                  @RequestParam("boardFile") MultipartFile multipartFile, Model model,
@@ -50,16 +54,11 @@ public class BoardController {
             return "board/Write";
         }
         try {
-            if (principal != null) {
-                Optional<User> op = userService.getUser(principal.getName());
-                if (op.isPresent()) {
-                    User writer = op.get();
-                    Board board = boardService.save(writer, boardFormDto);
-                    if (board != null){
-                        boardService.saveFile(board, multipartFile);
-                        return "redirect:/board/list";
-                    }
-                }
+            User writer = userService.getUserByEmail(principal.getName());
+            Board board = boardService.save(writer, boardFormDto);
+            if (board != null){
+                boardService.saveFile(board, multipartFile);
+                return "redirect:/board/list";
             }
         } catch (Exception e) {
             model.addAttribute("errorMsg", "게시글을 등록하지 못하였습니다.");
@@ -68,8 +67,9 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public String getBoardList(Model model) {
-        model.addAttribute("boardlist", boardRepository.findAll());
+    public String getBoardList(Model model, @RequestParam(value = "page", defaultValue = "0")int page) {
+        Page<Board> paging = boardService.getList(page);
+        model.addAttribute("paging", paging);
         return "board/List";
     }
 
