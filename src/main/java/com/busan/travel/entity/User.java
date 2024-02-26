@@ -68,7 +68,8 @@ public class User  {
             this.url = url;
         }
 
-    public static User createUser(UserFormDto userFormDto,PasswordEncoder passwordEncoder, String filename, String url) {
+    public static User createUser(UserFormDto userFormDto,PasswordEncoder passwordEncoder,
+                                  String filename, String url, UserRole role) {
         String password = passwordEncoder.encode(userFormDto.getPassword());
         User user = User.builder()
                 .name(userFormDto.getName())
@@ -77,7 +78,7 @@ public class User  {
                 .password(password)
                 .address(userFormDto.getAddress())
                 .gender(userFormDto.getGender())
-                .userRole(UserRole.USER)
+                .userRole(role)
                 .filename(filename)
                 .url(url)
                 .createDate(LocalDateTime.now()).build();

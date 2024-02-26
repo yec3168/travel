@@ -1,5 +1,6 @@
 package com.busan.travel.service;
 
+import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.BoardFormDto;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.User;
@@ -54,6 +55,12 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-
+    public Board getBoard(Long id){
+        Optional<Board> op = boardRepository.findById(id);
+        if(op.isPresent())
+            return op.get();
+        else
+            throw new  DataNotFoundException("작성한 게시물을 찾을 수 없습니다.");
+    }
 
 }

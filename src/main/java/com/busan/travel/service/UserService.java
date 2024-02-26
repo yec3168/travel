@@ -1,12 +1,16 @@
 package com.busan.travel.service;
 
+import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.entity.User;
 import com.busan.travel.repository.UserRepository;
 
+import com.busan.travel.status.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,8 +52,13 @@ public class UserService implements UserDetailsService {
                 imageSave(multipartFile, filename);
                 dbUrl = "/image/user/"+filename;
             }
+            UserRole role;
+            if(userFormDto.getEmail().toLowerCase().equals("admin"))
+                role = UserRole.ADMIN;
+            else
+                role = UserRole.USER;
+                User user = User.createUser(userFormDto, passwordEncoder, filename, dbUrl, role);
 
-            User user = User.createUser(userFormDto, passwordEncoder, filename, dbUrl);
             System.out.println(user.getPassword());
             userRepository.save(user);
         }
@@ -67,6 +78,14 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("파일을 생성할 수 없습니다.");
         }
 
+    }
+
+    public User getUserByEmail(String email){
+        Optional<User> op = userRepository.findByEmail(email);
+        if(op.isPresent())
+            return op.get();
+        else
+            throw new DataNotFoundException("User Not Found");
     }
 
     public Optional<User> getUser(String email){
