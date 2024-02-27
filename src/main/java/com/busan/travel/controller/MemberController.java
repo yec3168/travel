@@ -1,8 +1,8 @@
 package com.busan.travel.controller;
 
-import com.busan.travel.dto.UserFormDto;
-import com.busan.travel.entity.User;
-import com.busan.travel.service.UserService;
+import com.busan.travel.dto.MemberFormDto;
+import com.busan.travel.entity.Member;
+import com.busan.travel.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,16 +13,16 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class MemberController {
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
 
     @PostMapping("/new")
-    public String postNewUser(@ModelAttribute UserFormDto userFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
+    public String postNewUser(@ModelAttribute MemberFormDto memberFormDto, @RequestParam("userImg") MultipartFile multipartFile, Model model ){
         try {
-            userService.createUser(userFormDto, multipartFile);
+            memberService.createUser(memberFormDto, multipartFile);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/idCheck")
     @ResponseBody
     public int idCheck(@RequestParam("email") String email){
-        Optional<User> userOptional = userService.getUser(email);
+        Optional<Member> userOptional = memberService.getUser(email);
         if (userOptional.isPresent()) {
             return 1;
 

@@ -1,8 +1,7 @@
 package com.busan.travel.controller;
 
-import com.busan.travel.dto.UserFormDto;
-import com.busan.travel.entity.User;
-import com.busan.travel.service.UserService;
+import com.busan.travel.entity.Member;
+import com.busan.travel.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +13,15 @@ import java.util.Optional;
 @Controller
 public class MainController {
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @GetMapping("/")
     public String home(Principal principal, Model model){
         if(principal == null)
             return "layout/MainLayout";
-        Optional<User> op =userService.getUser(principal.getName());
+        Optional<Member> op = memberService.getUser(principal.getName());
         if(op.isPresent()){
-           User user = op.get();
+           Member user = op.get();
             model.addAttribute("user", user);
         }
         return "layout/MainLayout";

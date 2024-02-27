@@ -3,7 +3,7 @@ package com.busan.travel.service;
 import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.BoardFormDto;
 import com.busan.travel.entity.Board;
-import com.busan.travel.entity.User;
+import com.busan.travel.entity.Member;
 import com.busan.travel.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,13 +25,13 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Value("${imgSave.location}")
     private String uploadImage; //file:///C:/travel/
 
 
-    public Board save(User user, BoardFormDto boardFormDto){
+    public Board save(Member user, BoardFormDto boardFormDto){
         if(boardFormDto.getNoticeYn())
             boardFormDto.setNoticeYn(false);
         else
@@ -58,6 +58,10 @@ public class BoardService {
             }
         }
         board.updateFile(fileName, url);
+        boardRepository.save(board);
+    }
+
+    public void updateBoard(Board board){
         boardRepository.save(board);
     }
 

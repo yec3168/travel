@@ -1,31 +1,30 @@
 package com.busan.travel.controller;
 
 import com.busan.travel.dto.BoardFormDto;
-import com.busan.travel.dto.UserFormDto;
 import com.busan.travel.entity.Board;
-import com.busan.travel.entity.User;
+import com.busan.travel.entity.Member;
 import com.busan.travel.repository.BoardRepository;
 import com.busan.travel.service.BoardService;
-import com.busan.travel.service.UserService;
+import com.busan.travel.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private BoardService boardService;
@@ -54,7 +53,7 @@ public class BoardController {
             return "board/Write";
         }
         try {
-            User writer = userService.getUserByEmail(principal.getName());
+            Member writer = memberService.getUserByEmail(principal.getName());
             Board board = boardService.save(writer, boardFormDto);
             if (board != null){
                 boardService.saveFile(board, multipartFile);
@@ -80,4 +79,37 @@ public class BoardController {
         return "board/detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/update/{id}")
+    public String  boardUpdate(@PathVariable("id")Long id, Model model,
+                               Principal principal){
+        Board board = boardService.getBoard(id);
+        if(!board.getWriter().getEmail().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+
+        BoardFormDto boardFormDto =  BoardFormDto.toDto(board);
+        model.addAttribute("boardFormDto", boardFormDto);
+        return "board/Write";
+
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update/{id}")
+    public String  boardUpdate(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
+                               @PathVariable("id")Long id, Principal principal,
+                               Model model, @RequestParam("boardFile") MultipartFile multipartFile){
+        if(bindingResult.hasErrors()){
+            return "board/Write";
+        }
+        Board board = boardService.getBoard(id);
+        if(!board.getWriter().getEmail().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정 권한이 없습니다.");
+
+        if(!multipartFile.isEmpty())
+            boardService.saveFile(board, multipartFile);
+
+        board.update(boardFormDto.getSubject(), boardFormDto.getContent());
+        boardService.updateBoard(board);
+        return "redirect:/board/list";
+    }
 }

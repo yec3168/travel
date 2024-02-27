@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 
 @Entity
 @Getter
@@ -24,7 +22,7 @@ public class Board extends BaseTimeEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User writer;
+    private Member writer;
 
     private int view; // 조회수
 
@@ -36,7 +34,7 @@ public class Board extends BaseTimeEntity{
 
     @Builder
     public Board(String subject, String content, int view,
-                 User writer, Boolean  noticeYn, String fileName,
+                 Member writer, Boolean  noticeYn, String fileName,
                  String url){
         this.subject = subject;
         this.content =content;
@@ -47,7 +45,7 @@ public class Board extends BaseTimeEntity{
         this.url =url;
     }
 
-    public static Board createBoard(BoardFormDto boardFormDto, User writer){
+    public static Board createBoard(BoardFormDto boardFormDto, Member writer){
         Board board = Board.builder()
                 .subject(boardFormDto.getSubject())
                 .content(boardFormDto.getContent())
@@ -61,5 +59,9 @@ public class Board extends BaseTimeEntity{
     public void updateFile(String fileName, String url){
         this.fileName = fileName;
         this.url = url;
+    }
+    public void update(String subject, String content){
+        this.subject = subject;
+        this.content = content;
     }
 }

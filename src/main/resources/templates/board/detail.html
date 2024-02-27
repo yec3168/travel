@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/MainLayout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/MainLayout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="title">
     <title>글작성 페이지</title>
 </th:block>
@@ -44,8 +45,14 @@
                 </tbody>
             </table>
             <p class="btn_set">
-                <a th:href="@{/board/write( id=${board.id} )}" class="btns btn_bdr4 btn_mid">수정</a>
-                <button type="button" class="btns btn_bdr1 btn_mid">삭제</button>
+                <a th:href="@{|/board/update/${board.id}|}" class="btns btn_bdr4 btn_mid"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${board.writer != null and  #authentication.getPrincipal().getUsername() == board.writer.email}"
+                   th:text="수정"></a>
+                <a  class="btns btn_bdr1 btn_mid"
+                    sec:authorize="isAuthenticated()"
+                    th:if="${board.writer != null and  #authentication.getPrincipal().getUsername() == board.writer.email}"
+                    th:text="삭제"></a>
                 <a th:href="@{/board/list}" class="btns btn_bdr3 btn_mid">뒤로</a>
             </p>
         </section>

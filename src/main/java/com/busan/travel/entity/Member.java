@@ -1,22 +1,21 @@
 package com.busan.travel.entity;
 
-import com.busan.travel.dto.UserFormDto;
+import com.busan.travel.dto.MemberFormDto;
 import com.busan.travel.status.Gender;
 import com.busan.travel.status.UserRole;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class User  {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +51,7 @@ public class User  {
 
 
         @Builder
-        public User(String email, String password ,String name,
+        public Member(String email, String password ,String name,
                      String nickName, String address, Gender gender,
                      UserRole userRole, LocalDateTime createDate,
                     String filename, String url){
@@ -68,21 +67,23 @@ public class User  {
             this.url = url;
         }
 
-    public static User createUser(UserFormDto userFormDto,PasswordEncoder passwordEncoder,
+
+
+    public static Member createUser(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder,
                                   String filename, String url, UserRole role) {
-        String password = passwordEncoder.encode(userFormDto.getPassword());
-        User user = User.builder()
-                .name(userFormDto.getName())
-                .nickName(userFormDto.getNickName())
-                .email(userFormDto.getEmail())
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
+        Member member = Member.builder()
+                .name(memberFormDto.getName())
+                .nickName(memberFormDto.getNickName())
+                .email(memberFormDto.getEmail())
                 .password(password)
-                .address(userFormDto.getAddress())
-                .gender(userFormDto.getGender())
+                .address(memberFormDto.getAddress())
+                .gender(memberFormDto.getGender())
                 .userRole(role)
                 .filename(filename)
                 .url(url)
                 .createDate(LocalDateTime.now()).build();
-        return user;
+        return member;
     }
 
     public void updateImg(String filename, String url){

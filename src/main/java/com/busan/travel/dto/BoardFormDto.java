@@ -1,11 +1,10 @@
 package com.busan.travel.dto;
 
-import com.busan.travel.entity.User;
+import com.busan.travel.entity.Board;
+import com.busan.travel.entity.Member;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,11 +17,25 @@ public class BoardFormDto {
     @NotEmpty(message = "내용은 필수 입력값입니다.")
     private String content;
 
-    private User writer;
+    private Member writer;
 
     private Boolean noticeYn;
 
     private String fileName;
 
     private String url;
+
+
+    public static BoardFormDto toDto(Board board){
+        BoardFormDto boardFormDto = new BoardFormDto();
+        boardFormDto.setId(board.getId());
+        boardFormDto.setSubject(board.getSubject());
+        boardFormDto.setContent(board.getContent());
+        boardFormDto.setWriter(board.getWriter());
+        boardFormDto.setNoticeYn(board.getNoticeYn());
+        boardFormDto.setFileName(board.getFileName());
+        boardFormDto.setUrl(board.getUrl());
+
+        return boardFormDto;
+    }
 }
