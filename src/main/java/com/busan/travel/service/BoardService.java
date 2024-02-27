@@ -64,6 +64,9 @@ public class BoardService {
     public void updateBoard(Board board){
         boardRepository.save(board);
     }
+    public void deleteBoard(Board board){
+        boardRepository.delete(board);
+    }
 
     public Board getBoard(Long id){
         Optional<Board> op = boardRepository.findById(id);

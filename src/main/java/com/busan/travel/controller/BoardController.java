@@ -3,7 +3,6 @@ package com.busan.travel.controller;
 import com.busan.travel.dto.BoardFormDto;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.Member;
-import com.busan.travel.repository.BoardRepository;
 import com.busan.travel.service.BoardService;
 import com.busan.travel.service.MemberService;
 import jakarta.validation.Valid;
@@ -29,8 +28,6 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    @Autowired
-    private BoardRepository boardRepository;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
@@ -110,6 +107,17 @@ public class BoardController {
 
         board.update(boardFormDto.getSubject(), boardFormDto.getContent());
         boardService.updateBoard(board);
+        return "redirect:/board/detail/"+id;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String boardDelete(@PathVariable("id")Long id, Principal principal){
+        Board board = boardService.getBoard(id);
+        if(!board.getWriter().getEmail().equals(principal.getName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+        }
+        boardService.deleteBoard(board);
         return "redirect:/board/list";
     }
 }
