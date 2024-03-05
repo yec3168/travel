@@ -64,4 +64,7 @@ public class Board extends BaseTimeEntity{
         this.subject = subject;
         this.content = content;
     }
+    public void upCountView(int view){
+        this.view =view+1;
+    }
 }

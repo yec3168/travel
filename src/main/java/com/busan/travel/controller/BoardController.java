@@ -5,6 +5,8 @@ import com.busan.travel.entity.Board;
 import com.busan.travel.entity.Member;
 import com.busan.travel.service.BoardService;
 import com.busan.travel.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -71,8 +73,11 @@ public class BoardController {
 
     @GetMapping("/detail/{id}")
     public String boardDetail(@PathVariable("id")Long id, Model model,
-                              Principal principal){
-        model.addAttribute("board", boardService.getBoard(id));
+                              HttpServletResponse response,
+                              HttpServletRequest request){
+        Board board = boardService.getBoard(id);
+        model.addAttribute("board", board);
+        boardService.viewCountValidation(board, request, response);
         return "board/detail";
     }
 
