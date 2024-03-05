@@ -1,6 +1,7 @@
 package com.busan.travel.controller;
 
 import com.busan.travel.dto.BoardFormDto;
+import com.busan.travel.dto.CommentBoardFormDto;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.Member;
 import com.busan.travel.service.BoardService;
@@ -73,8 +74,10 @@ public class BoardController {
     @GetMapping("/detail/{id}")
     public String boardDetail(@PathVariable("id")Long id, Model model,
                               HttpServletResponse response,
-                              HttpServletRequest request){
+                              HttpServletRequest request,
+                              CommentBoardFormDto commentBoardFormDto){
         Board board = boardService.getBoard(id);
+        model.addAttribute("comment", commentBoardFormDto);
         model.addAttribute("board", board);
         boardService.viewCountValidation(board, request, response);
         return "board/detail";

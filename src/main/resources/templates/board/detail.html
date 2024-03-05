@@ -78,14 +78,11 @@
 
             <!-- 댓글 부분-->
             <div class="cm_write">
-                <form method="post" action="/answer/create"role="form" onsubmit="return cmCheck()">
-                    <div class="wr_input">
-                        <span>asd</span>
-                        <span>qhjrtkytu</span>
-                    </div>
+                <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${comment}" onsubmit="return cmCheck()">
                     <div class="cm_input">
-                        <textarea sec:authorize="isAnonymous()" readonly rows="6"></textarea>
-                        <textarea id="textBox" sec:authorize="isAuthenticated()" rows="6"></textarea>
+                        <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="내용을 입력해주세요."></textarea>
+                        <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
+                                  sec:authorize="isAuthenticated()"  rows="6"></textarea>
                         <span>
                             <i id="counter">0/300</i>
                             <button type="submit" class="btns">등 록</button>
@@ -93,6 +90,40 @@
                     </div>
                 </form>
             </div>
+
+            <!-- 내용 부분 -->
+            <div class="cm_list">
+                <div th:if="${#lists.size(board.commentBoardList) == 0}">
+                    <p  class="cm_none" >댓글이 없습니다.</p>
+                </div>
+
+                <div th:unless="${#lists.size(board.commentBoardList) == 0}">
+                    <div th:each="comment : ${board.commentBoardList}">
+                        <div>
+                            <span class="writer_img" >
+                                <img th:src="${comment.writer.url}" style=" width: 30px; height: 30px;">
+                            </span>
+                            <p class="writer">
+                                <em th:text="${comment.writer.nickName}"></em>
+                                <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
+                            </p>
+                            <div class="cont">
+                                <span class="txt_con" th:text="${comment.content}"></span>
+                            </div>
+                            <p class="cm_bt">
+                                <div class="func_btns">
+                                    <button type="button" class="btns btn_bdr4 btn_mid">수정</button>
+                                    <button type="button" class="btns btn_bdr4 btn_mid">삭제</button>
+                                </div>
+
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
         </section>
     </div> <!--/* .content */-->
 
@@ -114,9 +145,9 @@
     const votebtn = document.getElementsByClassName("vote")
     Array.from(votebtn).forEach(function (element){
        element.addEventListener("click", function (){
-           //console.log(element.id)
+           console.log(element.id)
            if(element.id == "like"){
-               //console.log("들어옴")
+               console.log("들어옴")
                if(confirm("좋아요를 누르시겠습니까?"))
                    location.href=this.dataset.uri;
                else
@@ -142,7 +173,10 @@
     $("#textBox").keyup( function (e){
         const content = $(this).val();
 
-        if(content.length)
+        const counter = document.getElementById("counter");
+        counter.value = content.length+"/300";
+        counter.innerHTML = content.length+"/300";
+
     })
     </script>
 </th:block>

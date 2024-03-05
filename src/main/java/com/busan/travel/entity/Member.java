@@ -50,22 +50,22 @@ public class Member {
     private List<Board> boardList;
 
 
-        @Builder
-        public Member(String email, String password ,String name,
-                     String nickName, String address, Gender gender,
-                     UserRole userRole, LocalDateTime createDate,
-                    String filename, String url){
-            this.email =email;
-            this.password = password;
-            this.name = name;
-            this.nickName =nickName;
-            this.address =address;
-            this.gender =gender;
-            this.userRole = userRole;
-            this.createDate= createDate;
-            this.filename =filename;
-            this.url = url;
-        }
+    @Builder
+    public Member(String email, String password ,String name,
+                 String nickName, String address, Gender gender,
+                 UserRole userRole, LocalDateTime createDate,
+                String filename, String url){
+        this.email =email;
+        this.password = password;
+        this.name = name;
+        this.nickName =nickName;
+        this.address =address;
+        this.gender =gender;
+        this.userRole = userRole;
+        this.createDate= createDate;
+        this.filename =filename;
+        this.url = url;
+    }
 
 
 

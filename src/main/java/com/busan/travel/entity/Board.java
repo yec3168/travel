@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -42,6 +44,8 @@ public class Board extends BaseTimeEntity{
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Member> hateVote;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CommentBoard> commentBoardList = new ArrayList<>();
     @Builder
     public Board(String subject, String content, int view,
                  Member writer, Boolean  noticeYn, String fileName,
