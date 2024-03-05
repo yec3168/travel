@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.Set;
 
 
 @Entity
@@ -26,11 +29,18 @@ public class Board extends BaseTimeEntity{
 
     private int view; // 조회수
 
+    @ColumnDefault("false")
     private Boolean noticeYn;
 
     private String fileName;
 
     private String url;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Member> likeVote;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Member> hateVote;
 
     @Builder
     public Board(String subject, String content, int view,
@@ -67,4 +77,5 @@ public class Board extends BaseTimeEntity{
     public void upCountView(int view){
         this.view =view+1;
     }
+
 }

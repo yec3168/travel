@@ -31,7 +31,6 @@ public class BoardController {
     private BoardService boardService;
 
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
     public String getBoardWrite(Model model, Principal principal, BoardFormDto boardFormDto) {
         if (principal == null) {
@@ -124,5 +123,32 @@ public class BoardController {
         }
         boardService.deleteBoard(board);
         return "redirect:/board/list";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/like/{id}")
+    public String likeVote(@PathVariable("id") Long id, Principal principal){
+        Board board = boardService.getBoard(id);
+        Member member = memberService.getUserByEmail(principal.getName());
+
+        if(board.getLikeVote().contains(member))
+            boardService.likeVoteDown(board, member);
+        else
+            boardService.likeVoteUp(board, member);
+
+        return "redirect:/board/detail/"+id;
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/hate/{id}")
+    public String hateVote(@PathVariable("id") Long id, Principal principal){
+        Board board = boardService.getBoard(id);
+        Member member = memberService.getUserByEmail(principal.getName());
+
+        if(board.getHateVote().contains(member))
+            boardService.hateVoteDown(board, member);
+        else
+            boardService.hateVoteUp(board, member);
+
+        return "redirect:/board/detail/"+id;
     }
 }

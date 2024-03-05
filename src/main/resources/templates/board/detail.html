@@ -40,7 +40,9 @@
                 </tr>
                 <tr>
                     <th scope="row">내용</th>
-                    <td colspan="3">[[ *{content} ]]</td>
+                    <td colspan="3">
+                        <div th:utext="${@commonUtil.markdown(board.content)}"></div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -56,8 +58,35 @@
                     th:text="삭제"></a>
                 <a th:href="@{/board/list}" class="btns btn_bdr3 btn_mid">뒤로</a>
             </p>
+            <p class="btn_set">
+                <a href="#" class="vote btn" id="like"
+                   th:data-uri="@{|/board/like/${board.id}|}">
+                    <span style="font-size: 25px; color: tomato">
+                        <i class="fas fa-regular fa-thumbs-up"></i>
+                    </span>
+                    <span class="badge bg-danger" th:text="${#lists.size(board.likeVote)}"></span>
+                </a>
+                <a href="#" class="vote btn" id="hate"
+                   th:data-uri="@{|/board/hate/${board.id}|}">
+                     <span style="font-size: 25px; color: Dodgerblue">
+                        <i class="fas fa-regular fa-thumbs-down"></i>
+                    </span>
+                    <span class="badge bg-primary" th:text="${#lists.size(board.hateVote)}"></span>
+                </a>
+            </p>
+
+            <hr>
+            <!-- 댓글 부분-->
+            <div>
+                <h3>댓글</h3>
+                <div>
+
+                </div>
+            </div>
         </section>
     </div> <!--/* .content */-->
+
+
     </th:block>
     </html>
 </th:block>
@@ -71,6 +100,26 @@
         else
             return false;
     }
+
+    const votebtn = document.getElementsByClassName("vote")
+    Array.from(votebtn).forEach(function (element){
+       element.addEventListener("click", function (){
+           //console.log(element.id)
+           if(element.id == "like"){
+               //console.log("들어옴")
+               if(confirm("좋아요를 누르시겠습니까?"))
+                   location.href=this.dataset.uri;
+               else
+                   return false;
+           }
+           else{
+               if(confirm("싫어요를 누르시겠습니까"))
+                   location.href=this.dataset.uri;
+               else
+                   return false;
+           }
+       });
+    });
     </script>
 </th:block>
 </html>

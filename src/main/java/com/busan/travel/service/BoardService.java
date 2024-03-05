@@ -39,7 +39,7 @@ public class BoardService {
 
 
     public Board save(Member user, BoardFormDto boardFormDto){
-        if(boardFormDto.getNoticeYn())
+        if(!boardFormDto.getNoticeYn())
             boardFormDto.setNoticeYn(false);
         else
             boardFormDto.setNoticeYn(true);
@@ -87,7 +87,29 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, 10);
         return boardRepository.findAll(pageable);
     }
+    // 좋아요
+    public void likeVoteUp(Board board, Member member){
+        board.getLikeVote().add(member);
 
+        updateBoard(board);
+    }
+    public void likeVoteDown(Board board, Member member){
+        board.getLikeVote().remove(member);
+        updateBoard(board);
+    }
+
+    //싫어요
+    public void hateVoteUp(Board board, Member member){
+        board.getHateVote().add(member);
+
+        updateBoard(board);
+    }
+    public void hateVoteDown(Board board, Member member){
+        board.getHateVote().remove(member);
+        updateBoard(board);
+    }
+
+    /* 조회수 증가*/
     public void viewCountUp(Board board){
         board.upCountView(board.getView());
         boardRepository.save(board);
@@ -102,7 +124,7 @@ public class BoardService {
         /* request에 있는 쿠키들이 있을때 */
         for (int i = 0; cookies != null && i < cookies.length; i++) {
             // postView 쿠키가 있을 때
-            if (cookies[i].getName().equals("questionView")) {
+            if (cookies[i].getName().equals("boardView")) {
                 // cookie 변수에 저장
                 cookie = cookies[i];
                 // 만약 cookie 값에 현재 게시글 번호가 없을 때
@@ -118,7 +140,7 @@ public class BoardService {
         // 만약 postView라는 쿠키가 없으면 처음 접속한 것이므로 새로 생성
         if (!isCookie) {
             viewCountUp(board);
-            cookie = new Cookie("questionView", "[" + board.getId() + "]"); // oldCookie에 새 쿠키 생성
+            cookie = new Cookie("boardView", "[" + board.getId() + "]"); // oldCookie에 새 쿠키 생성
         }
 
         // 쿠키 유지시간을 오늘 하루 자정까지로 설정
