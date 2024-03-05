@@ -75,13 +75,23 @@
                 </a>
             </p>
 
-            <hr>
-            <!-- 댓글 부분-->
-            <div>
-                <h3>댓글</h3>
-                <div>
 
-                </div>
+            <!-- 댓글 부분-->
+            <div class="cm_write">
+                <form method="post" action="/answer/create"role="form" onsubmit="return cmCheck()">
+                    <div class="wr_input">
+                        <span>asd</span>
+                        <span>qhjrtkytu</span>
+                    </div>
+                    <div class="cm_input">
+                        <textarea sec:authorize="isAnonymous()" readonly rows="6"></textarea>
+                        <textarea id="textBox" sec:authorize="isAuthenticated()" rows="6"></textarea>
+                        <span>
+                            <i id="counter">0/300</i>
+                            <button type="submit" class="btns">등 록</button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </section>
     </div> <!--/* .content */-->
@@ -120,6 +130,20 @@
            }
        });
     });
+
+    /* 댓글 textarea 부분 */
+    function cmCheck(){
+        if(confirm("댓글을 등록하시겠습니까?"))
+            return true;
+        else
+            return false;
+    }
+
+    $("#textBox").keyup( function (e){
+        const content = $(this).val();
+
+        if(content.length)
+    })
     </script>
 </th:block>
 </html>

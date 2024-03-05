@@ -90,7 +90,6 @@ public class BoardService {
     // 좋아요
     public void likeVoteUp(Board board, Member member){
         board.getLikeVote().add(member);
-
         updateBoard(board);
     }
     public void likeVoteDown(Board board, Member member){
