@@ -111,7 +111,7 @@
 
                     <p class="func_btns" sec:authorize="isAuthenticated()"
                        th:if="${comment.writer != null and #authentication.getPrincipal().getUsername == comment.writer.email}">
-                        <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|location.href='@{/comment/update/{id}(id=${comment.id})}'|">수정</button>
+                        <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|openPop(${comment.id})|">수정</button>
                         <button type="button" class="btns btn_bdr4 btn_mid">삭제</button>
                     </p>
                 </div>
@@ -120,8 +120,21 @@
     </div> <!--/* .content */-->
 
     <div id="commentPop" class="popLayer">
+        <h3>수정</h3>
+        <div id="popup_wrap">
+            <div class="pop_container">
+                <form id="commentUpdateForm" method="post"action="/comment/update/">
 
-    </div>
+                    <div class="scroll_cont">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button type="button" class="btn_close" onclick="closeSignupPopup();"><span><i class="far fa-times-circle"></i></span></button>
+    </div> <!-- 댓글 수정 -->
+
+
     </th:block>
     </html>
 </th:block>
@@ -181,11 +194,18 @@
             dataType:"json",
             url: '/comment/update/'+id,
             success: function (result){
-                console.log(result.value)
                 layerPop("commentPop");
+            },
+            error: function (request, status, error){
+                console.log(error)
             }
-        });
+        })
 
+    }
+
+    function closeSignupPopup(){
+        document.getElementById("commentUpdateForm").reset()
+        layerPopClose();
     }
 
     </script>

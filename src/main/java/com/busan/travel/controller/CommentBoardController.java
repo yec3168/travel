@@ -48,7 +48,8 @@ public class CommentBoardController {
 
     @GetMapping("/update/{id}")
     @ResponseBody
-    public CommentBoard updateComment(@PathVariable("id") Long id){
-        return commentBoardService.getComment(id);
+    public Object updateComment(@PathVariable("id") Long id){
+        CommentBoardFormDto commentBoardFormDto = CommentBoardFormDto.toDto(commentBoardService.getComment(id));
+        return commentBoardFormDto;
     }
 }
