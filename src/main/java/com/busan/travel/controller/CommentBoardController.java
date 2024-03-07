@@ -1,7 +1,7 @@
 package com.busan.travel.controller;
 
-import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.CommentBoardFormDto;
+import com.busan.travel.dto.CommentUpdateForm;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.CommentBoard;
 import com.busan.travel.entity.Member;
@@ -50,6 +50,10 @@ public class CommentBoardController {
     @ResponseBody
     public Object updateComment(@PathVariable("id") Long id){
         CommentBoardFormDto commentBoardFormDto = CommentBoardFormDto.toDto(commentBoardService.getComment(id));
-        return commentBoardFormDto;
+
+        CommentUpdateForm commentUpdateForm = new CommentUpdateForm();
+        commentUpdateForm.setContent(commentBoardFormDto.getContent());
+        commentUpdateForm.setNickname(commentBoardFormDto.getWriter().getNickName());
+        return commentUpdateForm;
     }
 }

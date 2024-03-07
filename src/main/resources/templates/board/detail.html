@@ -123,30 +123,32 @@
         <h3>수정</h3>
         <div id="popup_wrap">
             <div class="pop_container">
-                <form id="commentUpdateForm" method="post"action="/comment/update/">
+                <form id="commentUpdateForm" method="post"action="/comment/update/" onsubmit="return false;">
                     <table class="tb tb_row">
                         <colgroup>
                             <col style="width:30%;" /> <col style="width:70%;" />
                         </colgroup>
                         <tr>
                             <th>작성자</th>
-                            <td></td>
+                            <td>
+                                <input type="text" id="updateWriter" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <th>내용</th>
                             <td>
-                                <div class="scroll_cont">
-
+                                <div class="scroll_cont" >
+                                    <textarea id="updateContent"></textarea>
                                 </div>
                             </td>
                         </tr>
                     </table>
                     <p class="btn_set">
-                        <a  class="btns btn_bdr4 btn_mid"
-                           sec:authorize="isAuthenticated()"
+                        <button type="submit" class="btns btn_bdr4 btn_mid" sec:authorize="isAuthenticated()"
                            th:if="${board.writer != null and  #authentication.getPrincipal().getUsername() == board.writer.email}"
-                           th:text="수정"></a>
-                        <a th:href="@{/board/list}" class="btns btn_bdr3 btn_mid">취소</a>
+                           th:text="수정" onclick="commentCheck()">
+                        </button>
+                        <button class="btns btn_bdr3 btn_mid" onclick="closeSignupPopup()">취소</button>
                     </p>
                 </form>
             </div>
@@ -214,20 +216,44 @@
             dataType:"json",
             url: '/comment/update/'+id,
             success: function (result){
+                console.log(result.nickname)
+                document.getElementById("updateWriter").value = result.nickname;
+                document.getElementById("updateContent").value = result.content;
                 layerPop("commentPop");
             },
             error: function (request, status, error){
+                console.log(request)
+                console.log(status)
                 console.log(error)
             }
         })
-
     }
-
+    /* 수정창 닫기*/
     function closeSignupPopup(){
         document.getElementById("commentUpdateForm").reset()
         layerPopClose();
     }
 
+    function commentCheck(){
+        const commentUpdateForm = document.getElementById("commentUpdateForm");
+        if(validationCheck(commentUpdateForm) !=null){
+            if(confirm("수정하시겠습니까?")){
+                commentUpdateForm.submit();
+                return true;
+            }
+            else
+                return false;
+        }
+    }
+    /**/
+    function validationCheck(form) {
+        let formInput = form.querySelector('textarea')
+        if(formInput.value == ""){
+            $(formInput).focus();
+            alert("필수입력 항목을 입력해주세요.")
+            return null;
+        }
+    }
     </script>
 </th:block>
 </html>

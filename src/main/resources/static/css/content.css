@@ -183,7 +183,7 @@ h4 + .search_box {margin-top:10px;}
 /* 댓글리스트 */
 .cm_list {border-bottom:1px solid #ddd; font-size:14px;}
 .cm_list > div {overflow:hidden; border-top:1px solid #e0e0e0; padding:15px 0; position:relative;}
-.cm_list > div .writer_img {display:inline-block; position:absolute; top:20px; left:0;}
+.cm_list > div .writer_img {display:inline-block; position:absolute; top:11px; left:0;}
 .cm_list > div .writer_img img {width:30px; height:30px; border-radius:100%;}
 .cm_list > div .writer {padding:0 0 0 40px;}
 .cm_list > div .writer em {font-size:14px; font-style:normal; color:#222; display:inline-block; margin-right:20px;}
