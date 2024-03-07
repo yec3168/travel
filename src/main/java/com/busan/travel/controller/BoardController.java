@@ -77,7 +77,7 @@ public class BoardController {
                               HttpServletRequest request,
                               CommentBoardFormDto commentBoardFormDto){
         Board board = boardService.getBoard(id);
-        model.addAttribute("comment", commentBoardFormDto);
+        model.addAttribute("commentBoardFormDto", commentBoardFormDto);
         model.addAttribute("board", board);
         boardService.viewCountValidation(board, request, response);
         return "board/detail";

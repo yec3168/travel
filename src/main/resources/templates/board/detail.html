@@ -78,7 +78,7 @@
 
             <!-- 댓글 부분-->
             <div class="cm_write">
-                <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${comment}" onsubmit="return cmCheck()">
+                <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
                     <div class="cm_input">
                         <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="내용을 입력해주세요."></textarea>
                         <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
@@ -97,37 +97,31 @@
                     <p  class="cm_none" >댓글이 없습니다.</p>
                 </div>
 
-                <div th:unless="${#lists.size(board.commentBoardList) == 0}">
-                    <div th:each="comment : ${board.commentBoardList}">
-                        <div>
-                            <span class="writer_img" >
-                                <img th:src="${comment.writer.url}" style=" width: 30px; height: 30px;">
-                            </span>
-                            <p class="writer">
-                                <em th:text="${comment.writer.nickName}"></em>
-                                <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
-                            </p>
-                            <div class="cont">
-                                <span class="txt_con" th:text="${comment.content}"></span>
-                            </div>
-                            <p class="cm_bt">
-                                <div class="func_btns">
-                                    <button type="button" class="btns btn_bdr4 btn_mid">수정</button>
-                                    <button type="button" class="btns btn_bdr4 btn_mid">삭제</button>
-                                </div>
-
-                            </p>
-                        </div>
+                <div th:unless="${#lists.size(board.commentBoardList) == 0}" th:each="comment: ${board.commentBoardList}">
+                    <span class="writer_img">
+                        <img th:src="${comment.writer.url}" width="30px" height="30px">
+                    </span>
+                    <p class="writer">
+                        <em th:text="${comment.writer.nickName}"></em>
+                        <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
+                    </p>
+                    <div class="cont">
+                        <span class="txt_con" th:text="${comment.content}"></span>
                     </div>
 
+                    <p class="func_btns" sec:authorize="isAuthenticated()"
+                       th:if="${comment.writer != null and #authentication.getPrincipal().getUsername == comment.writer.email}">
+                        <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|location.href='@{/comment/update/{id}(id=${comment.id})}'|">수정</button>
+                        <button type="button" class="btns btn_bdr4 btn_mid">삭제</button>
+                    </p>
                 </div>
-
             </div>
-
         </section>
     </div> <!--/* .content */-->
 
+    <div id="commentPop" class="popLayer">
 
+    </div>
     </th:block>
     </html>
 </th:block>
@@ -178,6 +172,22 @@
         counter.innerHTML = content.length+"/300";
 
     })
+
+    /* 댓글 수정 팝업 창*/
+    function openPop(id){
+        $.ajax({
+            type:"get",
+            async:false,
+            dataType:"json",
+            url: '/comment/update/'+id,
+            success: function (result){
+                console.log(result.value)
+                layerPop("commentPop");
+            }
+        });
+
+    }
+
     </script>
 </th:block>
 </html>

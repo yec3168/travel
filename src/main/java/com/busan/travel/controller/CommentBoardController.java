@@ -1,5 +1,6 @@
 package com.busan.travel.controller;
 
+import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.CommentBoardFormDto;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.CommentBoard;
@@ -13,9 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -44,5 +43,12 @@ public class CommentBoardController {
         CommentBoard commentBoard =commentBoardService.create(commentBoardFormDto, writer, board);
 
         return "redirect:/board/detail/"+commentBoard.getBoard().getId();
+    }
+    
+
+    @GetMapping("/update/{id}")
+    @ResponseBody
+    public CommentBoard updateComment(@PathVariable("id") Long id){
+        return commentBoardService.getComment(id);
     }
 }
