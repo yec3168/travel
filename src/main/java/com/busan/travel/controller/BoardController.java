@@ -72,8 +72,10 @@ public class BoardController {
     @GetMapping("/list")
     public String getBoardList(Model model,
                                @RequestParam(value = "page", defaultValue = "0")int page) {
-        Page<Board> paging = boardService.getList(page);
+        Page<Board> pagingTrue = boardService.getListNoticeFalse(page);
+        Page<Board> paging = boardService.getListNoticeTrue(page);
         model.addAttribute("paging", paging);
+        model.addAttribute("pagingTrue", pagingTrue);
         return "board/List";
     }
 

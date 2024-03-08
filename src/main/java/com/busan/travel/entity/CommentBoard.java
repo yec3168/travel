@@ -27,7 +27,7 @@ public class CommentBoard extends BaseTimeEntity {
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
-            ;
+
     @ManyToMany
     private Set<Member> vote;
 

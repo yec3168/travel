@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,11 +83,22 @@ public class BoardService {
             throw new  DataNotFoundException("작성한 게시물을 찾을 수 없습니다.");
     }
 
-    public Page<Board> getList(int page){
+    public Page<Board> getListNoticeTrue(int page){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return boardRepository.findAll(pageable);
+
+        Page<Board> noticeTrue = boardRepository.findByNoticeYnFalseOrderByCreateDateDesc(pageable);
+        return noticeTrue;
+    }
+
+    public Page<Board> getListNoticeFalse(int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+
+        Page<Board> noticeFalse = boardRepository.findByNoticeYnTrueOrderByCreateDateDesc(pageable);
+        return noticeFalse;
     }
     // 좋아요
     public void likeVoteUp(Board board, Member member){
