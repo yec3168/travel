@@ -8,8 +8,14 @@ import com.busan.travel.entity.CommentBoard;
 import com.busan.travel.entity.Member;
 import com.busan.travel.repository.CommentBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +36,15 @@ public class CommentBoardService {
         return commentBoard;
     }
 
+    public void updateComment(String content, CommentBoard commentBoard){
+        commentBoard.updateContent(content);
+        commentBoardRepository.save(commentBoard);
+    }
+
+    public void deleteComment(CommentBoard commentBoard){
+        commentBoardRepository.delete(commentBoard);
+    }
+
     public CommentBoard getComment(Long id){
         Optional<CommentBoard> op = commentBoardRepository.findById(id);
         if(op.isPresent())
@@ -38,8 +53,21 @@ public class CommentBoardService {
             throw new DataNotFoundException("Comment not Found");
     }
 
-    public void updateComment(String content, CommentBoard commentBoard){
-        commentBoard.updateContent(content);
-        commentBoardRepository.save(commentBoard);
+    public Page<CommentBoard> getCommentList(int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return commentBoardRepository.findAll(pageable);
+    }
+
+    public void vote(CommentBoard commentBoard, Member member, boolean state){
+        if(state){
+            commentBoard.getVote().add(member);
+            commentBoardRepository.save(commentBoard);
+        }
+        else{
+            commentBoard.getVote().remove(member);
+            commentBoardRepository.save(commentBoard);
+        }
     }
 }

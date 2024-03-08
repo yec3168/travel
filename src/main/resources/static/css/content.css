@@ -53,6 +53,7 @@ section:first-child, #tabmenu + section {margin-top:0;}
 .tb_col td {text-align:center;}
 .tb_col thead th {background:#6f8294; border-color:rgba(255,255,255,0.2); color:#fff;}
 .tb_col tbody tr:nth-child(even) {background:#f6f7f8;}
+.tb_col tbody td span{color: #cc0000; }
 .tb_col .no_data_msg {padding:50px 0;}
 
 .tb_row {border-top:2px solid #6f8294;}
@@ -198,7 +199,7 @@ h4 + .search_box {margin-top:10px;}
 .cm_list > div .cont .date {color:#999; font-size:12px; font-family:Arial, Helvetica, sans-serif; letter-spacing:0; display:block;}
 .cm_list > div .cm_bt {display:inline-block; font-size:12px; color:#777; border:1px solid #ccc; height:22px; line-height:20px; margin-top:7px; padding:0 5px;}
 .cm_list > div:first-child {border:0;}
-.cm_list > div .cm_answ er {position:relative; border-top:1px dashed #ddd; margin-top:15px; padding-top:15px; padding-left:25px;}
+.cm_list > div .cm_answer {position:relative; border-top:1px dashed #ddd; margin-top:15px; padding-top:15px; padding-left:25px;}
 .cm_list > div .cm_answer::before {content:''; background-position:-85px 0; width:8px; height:10px; text-align:center; position:absolute; top:19px; left:10px;}
 .cm_list > div .cm_answer > div {position:relative;}
 .cm_list > div .cm_answer .writer_img {left:25px;}

@@ -20,7 +20,7 @@ public class CommentBoard extends BaseTimeEntity {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER) // detail의 openPop때문에 eager로 바꿈
+    @ManyToOne(fetch = FetchType.LAZY) // detail의 openPop때문에 eager로 바꿈
     @JoinColumn(name = "user_id")
     private Member writer;
 
@@ -30,6 +30,7 @@ public class CommentBoard extends BaseTimeEntity {
             ;
     @ManyToMany
     private Set<Member> vote;
+
 
     @Builder
     public CommentBoard(String content, Member writer, Board board){

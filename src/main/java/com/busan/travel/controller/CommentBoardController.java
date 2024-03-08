@@ -44,6 +44,8 @@ public class CommentBoardController {
             return "board/detail";
         CommentBoard commentBoard =commentBoardService.create(commentBoardFormDto, writer, board);
 
+        if(!commentBoard.getWriter().getEmail().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 권한이 없습니다./n 로그인후 이용해주세요.");
         return "redirect:/board/detail/"+commentBoard.getBoard().getId();
     }
     
@@ -72,6 +74,32 @@ public class CommentBoardController {
         // 업데이트 부분.
         commentBoardService.updateComment(content, commentBoard);
 
+        return "redirect:/board/detail/"+commentBoard.getBoard().getId();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String deleteComment(@PathVariable("id")Long id, Principal principal){
+        CommentBoard commentBoard = commentBoardService.getComment(id);
+
+        if(!commentBoard.getWriter().getEmail().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+
+        commentBoardService.deleteComment(commentBoard);
+
+        return "redirect:/board/detail/"+commentBoard.getBoard().getId();
+    }
+
+
+    @PreAuthorize("isAuthenticated")
+    @GetMapping("/like/{id}")
+    public String likeComment(@PathVariable("id")Long id, Principal principal){
+        CommentBoard commentBoard = commentBoardService.getComment(id);
+        Member member = memberService.getUserByEmail(principal.getName());
+        if(commentBoard.getVote().contains(member))
+            commentBoardService.vote(commentBoard, member, false);
+        else
+            commentBoardService.vote(commentBoard, member, true);
         return "redirect:/board/detail/"+commentBoard.getBoard().getId();
     }
 }
