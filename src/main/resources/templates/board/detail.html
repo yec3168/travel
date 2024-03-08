@@ -82,8 +82,8 @@
                 <div style="position:relative;">
                     <span th:text="|${#lists.size(board.commentBoardList)}개의 답변이 있습니다.|"></span>
                     <span style="position:absolute; right: 8px;bottom: 5px;">
-                        <a class="btns btn_bdr3 btn_mid">최신순</a>
-                        <a class="btns btn_bdr3 btn_mid">추천순</a>
+                        <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'createDate')} ? 'active'" th:href="@{|?sort=createDate&page=${paging.number}|}">최신순</a>
+                        <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'vote')} ? 'active'" th:href="@{|?sort=vote&page=${paging.number}|}">추천순</a>
                     </span>
 
 
@@ -143,7 +143,9 @@
 <!--                        </div>-->
 <!--                    </div>-->
                 </div>
+
             </div>
+
         </section>
     </div> <!--/* .content */-->
 
