@@ -49,4 +49,8 @@ public class CommentBoard extends BaseTimeEntity {
         return  commentBoard;
     }
 
+    public void updateContent(String content){
+        this.content =content;
+    }
+
 }

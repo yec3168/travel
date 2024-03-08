@@ -10,11 +10,13 @@ import com.busan.travel.service.CommentBoardService;
 import com.busan.travel.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -46,14 +48,30 @@ public class CommentBoardController {
     }
     
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update/{id}")
     @ResponseBody
     public Object updateComment(@PathVariable("id") Long id){
-        CommentBoardFormDto commentBoardFormDto = CommentBoardFormDto.toDto(commentBoardService.getComment(id));
+        CommentBoard commentBoard = commentBoardService.getComment(id);
 
         CommentUpdateForm commentUpdateForm = new CommentUpdateForm();
-        commentUpdateForm.setContent(commentBoardFormDto.getContent());
-        commentUpdateForm.setNickname(commentBoardFormDto.getWriter().getNickName());
+        commentUpdateForm.setContent(commentBoard.getContent());
+        commentUpdateForm.setNickName(commentBoard.getWriter().getNickName());
         return commentUpdateForm;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update/{id}")
+    public String updateComment(@RequestParam("updateContent")String content, @PathVariable("id")Long id,
+                                Principal principal, Model model){
+        CommentBoard commentBoard = commentBoardService.getComment(id);
+
+        if(!commentBoard.getWriter().getEmail().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+
+        // 업데이트 부분.
+        commentBoardService.updateComment(content, commentBoard);
+
+        return "redirect:/board/detail/"+commentBoard.getBoard().getId();
     }
 }

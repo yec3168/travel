@@ -9,5 +9,5 @@ public class CommentUpdateForm {
 
     private String content;
 
-    private String nickname;
+    private String nickName;
 }

@@ -2,6 +2,7 @@ package com.busan.travel.service;
 
 import com.busan.travel.DataNotFoundException;
 import com.busan.travel.dto.CommentBoardFormDto;
+import com.busan.travel.dto.CommentUpdateForm;
 import com.busan.travel.entity.Board;
 import com.busan.travel.entity.CommentBoard;
 import com.busan.travel.entity.Member;
@@ -35,5 +36,10 @@ public class CommentBoardService {
             return op.get();
         else
             throw new DataNotFoundException("Comment not Found");
+    }
+
+    public void updateComment(String content, CommentBoard commentBoard){
+        commentBoard.updateContent(content);
+        commentBoardRepository.save(commentBoard);
     }
 }

@@ -123,7 +123,8 @@
         <h3>수정</h3>
         <div id="popup_wrap">
             <div class="pop_container">
-                <form id="commentUpdateForm" method="post"action="/comment/update/" onsubmit="return false;">
+                <form id="commentUpdateForm" method="post" th:action="@{/comment/update/${}}" onsubmit="return commentCheck();">
+                    <input type="hidden" id="commentId">
                     <table class="tb tb_row">
                         <colgroup>
                             <col style="width:30%;" /> <col style="width:70%;" />
@@ -138,7 +139,7 @@
                             <th>내용</th>
                             <td>
                                 <div class="scroll_cont" >
-                                    <textarea id="updateContent"></textarea>
+                                    <textarea id="updateContent" name="updateContent"></textarea>
                                 </div>
                             </td>
                         </tr>
@@ -146,7 +147,7 @@
                     <p class="btn_set">
                         <button type="submit" class="btns btn_bdr4 btn_mid" sec:authorize="isAuthenticated()"
                            th:if="${board.writer != null and  #authentication.getPrincipal().getUsername() == board.writer.email}"
-                           th:text="수정" onclick="commentCheck()">
+                           th:text="수정">
                         </button>
                         <button class="btns btn_bdr3 btn_mid" onclick="closeSignupPopup()">취소</button>
                     </p>
@@ -208,6 +209,7 @@
 
     })
 
+
     /* 댓글 수정 팝업 창*/
     function openPop(id){
         $.ajax({
@@ -216,8 +218,8 @@
             dataType:"json",
             url: '/comment/update/'+id,
             success: function (result){
-                console.log(result.nickname)
-                document.getElementById("updateWriter").value = result.nickname;
+                document.getElementById("commentId").value = id;
+                document.getElementById("updateWriter").value = result.nickName;
                 document.getElementById("updateContent").value = result.content;
                 layerPop("commentPop");
             },
@@ -236,14 +238,20 @@
 
     function commentCheck(){
         const commentUpdateForm = document.getElementById("commentUpdateForm");
-        if(validationCheck(commentUpdateForm) !=null){
-            if(confirm("수정하시겠습니까?")){
+        const commentId = document.getElementById("commentId");
+        console.log(commentId)
+        if(validationCheck(commentUpdateForm)){
+            if(confirm("수정하시겠습니까?")) {
+                commentUpdateForm.action = "/comment/update/" + commentId.value;
+                commentUpdateForm.method = 'POST'
                 commentUpdateForm.submit();
                 return true;
             }
             else
                 return false;
         }
+        else
+            return false;
     }
     /**/
     function validationCheck(form) {
@@ -251,8 +259,10 @@
         if(formInput.value == ""){
             $(formInput).focus();
             alert("필수입력 항목을 입력해주세요.")
-            return null;
+            return false;
         }
+        else
+            return true;
     }
     </script>
 </th:block>
