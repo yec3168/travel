@@ -91,7 +91,7 @@
                 <hr>
                 <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
                     <div class="cm_input">
-                        <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="내용을 입력해주세요."></textarea>
+                        <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="로그인 후 이용해주세요."></textarea>
                         <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
                                   sec:authorize="isAuthenticated()"  rows="6"></textarea>
                         <span>
