@@ -53,12 +53,21 @@ public class CommentBoardService {
             throw new DataNotFoundException("Comment not Found");
     }
 
-    public Page<CommentBoard> getCommentList(int page){
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return commentBoardRepository.findAll(pageable);
+    public Page<CommentBoard> getCommentList(Board board, int page, String sort){
+        Pageable pageable;
+        // 최신순
+        if(sort.equals("createDate")|| sort.equals("")){
+            List<Sort.Order> sorts = new ArrayList<>();
+            sorts.add(Sort.Order.desc("createDate"));
+            pageable = PageRequest.of(page, 10, Sort.by(sorts));
+            return commentBoardRepository.findAllByBoard(board, pageable);
+        }else{
+            pageable = PageRequest.of(page, 10);
+            return commentBoardRepository.findAllByBoardOrderByVote(board, pageable);
+        }
+
     }
+
 
     public void vote(CommentBoard commentBoard, Member member, boolean state){
         if(state){

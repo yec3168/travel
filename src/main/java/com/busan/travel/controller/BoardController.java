@@ -3,8 +3,10 @@ package com.busan.travel.controller;
 import com.busan.travel.dto.BoardFormDto;
 import com.busan.travel.dto.CommentBoardFormDto;
 import com.busan.travel.entity.Board;
+import com.busan.travel.entity.CommentBoard;
 import com.busan.travel.entity.Member;
 import com.busan.travel.service.BoardService;
+import com.busan.travel.service.CommentBoardService;
 import com.busan.travel.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +32,9 @@ public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private CommentBoardService commentBoardService;
 
 
     @GetMapping("/write")
@@ -65,7 +70,8 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public String getBoardList(Model model, @RequestParam(value = "page", defaultValue = "0")int page) {
+    public String getBoardList(Model model,
+                               @RequestParam(value = "page", defaultValue = "0")int page) {
         Page<Board> paging = boardService.getList(page);
         model.addAttribute("paging", paging);
         return "board/List";
@@ -73,12 +79,15 @@ public class BoardController {
 
     @GetMapping("/detail/{id}")
     public String boardDetail(@PathVariable("id")Long id, Model model,
-                              HttpServletResponse response,
-                              HttpServletRequest request,
-                              CommentBoardFormDto commentBoardFormDto){
+                              HttpServletResponse response, HttpServletRequest request,
+                              CommentBoardFormDto commentBoardFormDto,
+                              @RequestParam(value = "page", defaultValue = "0")int page,
+                              @RequestParam(value = "sort", defaultValue = "")String  sort){
         Board board = boardService.getBoard(id);
+        Page<CommentBoard> paging = commentBoardService.getCommentList(board, page, sort);
         model.addAttribute("commentBoardFormDto", commentBoardFormDto);
         model.addAttribute("board", board);
+        model.addAttribute("paging", paging);
         boardService.viewCountValidation(board, request, response);
         return "board/detail";
     }

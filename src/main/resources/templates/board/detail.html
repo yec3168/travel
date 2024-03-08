@@ -79,6 +79,16 @@
 
             <!-- 댓글 부분-->
             <div class="cm_write">
+                <div style="position:relative;">
+                    <span th:text="|${#lists.size(board.commentBoardList)}개의 답변이 있습니다.|"></span>
+                    <span style="position:absolute; right: 8px;bottom: 5px;">
+                        <a class="btns btn_bdr3 btn_mid">최신순</a>
+                        <a class="btns btn_bdr3 btn_mid">추천순</a>
+                    </span>
+
+
+                </div>
+                <hr>
                 <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
                     <div class="cm_input">
                         <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="내용을 입력해주세요."></textarea>
@@ -98,7 +108,7 @@
                     <p  class="cm_none" >댓글이 없습니다.</p>
                 </div>
 
-                <div th:unless="${#lists.size(board.commentBoardList) == 0}" th:each="comment: ${board.commentBoardList}">
+                <div th:unless="${#lists.size(board.commentBoardList) == 0}" th:each="comment: ${paging}">
                     <span class="writer_img">
                         <img th:src="${comment.writer.url}" width="30px" height="30px">
                     </span>
