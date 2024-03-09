@@ -92,12 +92,8 @@ public class BoardService {
         return noticeTrue;
     }
 
-    public Page<Board> getListNoticeFalse(int page){
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-
-        Page<Board> noticeFalse = boardRepository.findByNoticeYnTrueOrderByCreateDateDesc(pageable);
+    public List<Board> getListNoticeFalse(int page){;
+        List<Board> noticeFalse = boardRepository.findByNoticeYnTrueOrderByCreateDateDesc();
         return noticeFalse;
     }
     // 좋아요
