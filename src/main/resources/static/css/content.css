@@ -9,8 +9,8 @@
 #container .rcontent .content {background:#fff; border-radius:12px; box-shadow:0 0 20px rgba(80,80,80,0.1); padding:40px 40px 70px 40px; min-height:600px; overflow:hidden;}
 
 #container .rcontent .contentMain { background:#fff; border-radius:12px; box-shadow:0 0 20px rgba(80,80,80,0.1); padding:40px 40px 70px 40px; min-height:600px; overflow:hidden;}
-#container .rcontent .content .leftCotent {width: 50%; border-radius:12px; }
-#container .rcontent .content .rightContent {margin-left:50%; width: 50%; border-radius:12px; }
+#container .rcontent .content .leftCotent { border-radius:12px; display: inline-block}
+#container .rcontent .content .rightContent { border-radius:12px; display: inline-block}
 
 .menu_toggle {background:linear-gradient(to left, #434b53, #32393f); border-top-right-radius:4px; border-bottom-right-radius:4px; width:20px; height:50px; position:absolute; top:80px; left:209px; cursor:pointer; box-sizing:border-box;}
 .menu_toggle > span {background-position:-145px 0; width:4px; height:7px; position:absolute; top:50%; left:50%; margin-top:-3px; margin-left:-2px;}
