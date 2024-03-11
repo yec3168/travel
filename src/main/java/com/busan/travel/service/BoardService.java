@@ -97,26 +97,53 @@ public class BoardService {
         return noticeFalse;
     }
     // 좋아요
-    public void likeVoteUp(Board board, Member member){
-        board.getLikeVote().add(member);
-        updateBoard(board);
-    }
-    public void likeVoteDown(Board board, Member member){
-        board.getLikeVote().remove(member);
-        updateBoard(board);
-    }
+    public void likeVote(Board board, Member member, boolean value){
+        if(value){
+            board.getLikeVote().add(member);
+            updateBoard(board);
+        }
+        else{
+            board.getLikeVote().remove(member);
+            updateBoard(board);
+        }
 
+    }
     //싫어요
-    public void hateVoteUp(Board board, Member member){
-        board.getHateVote().add(member);
+    public void hateVote(Board board, Member member, boolean value){
+        if(value){ // true
+            board.getHateVote().add(member);
+            updateBoard(board);
+        }else{
+            board.getHateVote().remove(member);
+            updateBoard(board);
+        }
 
-        updateBoard(board);
-    }
-    public void hateVoteDown(Board board, Member member){
-        board.getHateVote().remove(member);
-        updateBoard(board);
     }
 
+    /* 추천순, 조회수 정렬*/
+    public List<Board> getListMain(String sort){
+        List<Board> boardList = boardRepository.findAll();
+        Pageable pageable;
+        List<Sort.Order> sorts = new ArrayList<>();
+        //현재시간을 구해서 일주일 게시글 들만 가져옴.
+        
+        if(sort.equals("createDate")||sort.equals("")){
+            pageable = PageRequest.of(0, 10);
+            return boardRepository.findAllByOrderByView(pageable);
+        }
+        else{
+            pageable = PageRequest.of(0, 10);
+            return boardRepository.findAllByOrderByLikeVote(pageable);
+        }
+    }
+
+    //day : 1, 7, 30
+    // day전의 시간을 구해서 그만큼 더함.
+    public LocalDateTime getTime(int day){
+        LocalDateTime current = LocalDateTime.now();
+        return current;
+    }
+    
     /* 조회수 증가*/
     public void viewCountUp(Board board){
         board.upCountView(board.getView());

@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findById(Long id);
 
+    Page<Board> findAll(Pageable pageable);
+
     //게시판(공지) 최신순
     @Query(" SELECT b "
             + "FROM Board as b "
@@ -30,17 +32,17 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByNoticeYnFalseOrderByCreateDateDesc(Pageable pageable);
 
 
-    Page<Board> findAll(Pageable pageable);
-
     //게시판 조회순 (메인 홈페이지)
-    @Query( "select b " +
+    @Query( "SELECT b " +
             "FROM Board as b " +
-            "ORDER BY b.view desc ")
-    List<Board> findAllByOOrderByView(Board board);
+            "WHERE b.noticeYn =false " +
+            "ORDER BY b.view desc, b.createDate ")
+    List<Board> findAllByOrderByView(Pageable pageable);
 
     //게시판 추천순 (메인 홈페이지)
-    @Query( "select b " +
-            "FROM Board as b " +
-            "ORDER BY size(b.likeVote) desc ")
-    List<Board> findByOOrderByLikeVote(Board board);
+    @Query( "SELECT b " +
+            "FROM  Board as b " +
+            "WHERE b.noticeYn =false "+
+            "ORDER BY size(b.likeVote) desc, b.createDate ")
+    List<Board> findAllByOrderByLikeVote(Pageable pageable);
 }

@@ -85,7 +85,7 @@ public class BoardController {
                               HttpServletResponse response, HttpServletRequest request,
                               CommentBoardFormDto commentBoardFormDto,
                               @RequestParam(value = "page", defaultValue = "0")int page,
-                              @RequestParam(value = "sort", defaultValue = "")String  sort){
+                              @RequestParam(value = "sort", defaultValue = "")String sort){
         Board board = boardService.getBoard(id);
         Page<CommentBoard> paging = commentBoardService.getCommentList(board, page, sort);
         model.addAttribute("commentBoardFormDto", commentBoardFormDto);
@@ -147,10 +147,9 @@ public class BoardController {
         Member member = memberService.getUserByEmail(principal.getName());
 
         if(board.getLikeVote().contains(member))
-            boardService.likeVoteDown(board, member);
+            boardService.likeVote(board, member, false);
         else
-            boardService.likeVoteUp(board, member);
-
+            boardService.likeVote(board, member, true);
         return "redirect:/board/detail/"+id;
     }
     @PreAuthorize("isAuthenticated()")
@@ -160,9 +159,9 @@ public class BoardController {
         Member member = memberService.getUserByEmail(principal.getName());
 
         if(board.getHateVote().contains(member))
-            boardService.hateVoteDown(board, member);
+            boardService.hateVote(board, member, false);
         else
-            boardService.hateVoteUp(board, member);
+            boardService.hateVote(board, member, true);
 
         return "redirect:/board/detail/"+id;
     }
