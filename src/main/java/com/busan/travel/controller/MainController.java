@@ -18,13 +18,13 @@ public class MainController {
     @GetMapping("/")
     public String home(Principal principal, Model model){
         if(principal == null)
-            return "layout/MainLayout";
+            return "layout/Home";
         Optional<Member> op = memberService.getUser(principal.getName());
         if(op.isPresent()){
            Member user = op.get();
             model.addAttribute("user", user);
         }
-        return "layout/MainLayout";
+        return "layout/Home";
     }
 
   }

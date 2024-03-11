@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -72,8 +73,10 @@ public class BoardController {
     @GetMapping("/list")
     public String getBoardList(Model model,
                                @RequestParam(value = "page", defaultValue = "0")int page) {
-        Page<Board> paging = boardService.getList(page);
+        List<Board> pagingTrue = boardService.getListNoticeFalse(page);
+        Page<Board> paging = boardService.getListNoticeTrue(page);
         model.addAttribute("paging", paging);
+        model.addAttribute("pagingTrue", pagingTrue);
         return "board/List";
     }
 
