@@ -24,8 +24,9 @@ public class MainController {
 
     @GetMapping("/")
     public String home(Principal principal, Model model,
-                       @RequestParam(value = "sort", defaultValue = "") String sort){
-        List<Board> boardList =boardService.getListMain(sort);
+                       @RequestParam(value = "boardSort", defaultValue = "") String boardSort,
+                       @RequestParam(value = "reviewSort", defaultValue = "") String reviewSort){
+        List<Board> boardList =boardService.getListMain(boardSort);
         model.addAttribute("boardList", boardList); // 자유게시판 리스트
 
         if(principal == null)

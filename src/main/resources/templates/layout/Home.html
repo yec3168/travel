@@ -9,19 +9,17 @@
         <div class="leftContent">
             <h2 class="text-center">자유게시판</h2>
             <div class="sort">
-                <a>조회순</a>
-                <a>추천순</a>
+                <a th:classappend="${#strings.equals(param.boardSort, 'view')} ? 'active'" th:href="@{|?boardSort=view|}">조회순</a>
+                <a th:classappend="${#strings.equals(param.boardSort, 'vote')} ? 'active'" th:href="@{|?boardSort=vote|}">추천순</a>
             </div>
-
             <div class="listView">
                 <ul  th:each=" board : ${boardList}">
                     <li>
-                    <span  class="text-center">
-                        <span th:text="${board.subject}"></span>
-                        <span style="color: #cc0000" th:text="|+${#lists.size(board.commentBoardList)}|"></span>
-                    </span>
-                        <span th:text="${#lists.size(board.likeVote)}"></span>
-                        <span th:text="${board.view}"></span>
+                        <span  class="text-center">
+                            <span style="color: lightblue" th:text="${board.noticeYn == false ? '[자유]  ' : '[공지] '}"></span>
+                            <span th:text="${board.subject}"></span>
+                            <span style="color: #cc0000" th:text="| +${#lists.size(board.commentBoardList)}|"></span>
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -29,21 +27,16 @@
 
 
         <div class="rightContent" >
-            <h2 class="text-center">리뷰게시판</h2>
+            <h2 class="text-center">####</h2>
             <div class="sort">
-                <a>조회순</a>
-                <a>추천순</a>
+                <a th:classappend="${#strings.equals(param.reviewSort, 'view')} ? 'active'" th:href="@{|?reviewSort=view|}">조회순</a>
+                <a th:classappend="${#strings.equals(param.reviewSort, 'vote')} ? 'active'" th:href="@{|?reviewSort=vote|}">추천순</a>
             </div>
 
             <div class="listView">
-                <ul  th:each=" board : ${boardList}">
+                <ul  >
                     <li>
-                    <span  class="text-center">
-                        <span th:text="${board.subject}"></span>
-                        <span style="color: #cc0000" th:text="|+${#lists.size(board.commentBoardList)}|"></span>
-                    </span>
-                        <span th:text="${#lists.size(board.likeVote)}"></span>
-                        <span th:text="${board.view}"></span>
+
                     </li>
                 </ul>
             </div>

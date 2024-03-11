@@ -127,7 +127,7 @@ public class BoardService {
         List<Sort.Order> sorts = new ArrayList<>();
         //현재시간을 구해서 일주일 게시글 들만 가져옴.
         
-        if(sort.equals("createDate")||sort.equals("")){
+        if(sort.equals("view")||sort.equals("")){
             pageable = PageRequest.of(0, 10);
             return boardRepository.findAllByOrderByView(pageable);
         }
@@ -139,6 +139,7 @@ public class BoardService {
 
     //day : 1, 7, 30
     // day전의 시간을 구해서 그만큼 더함.
+    // https://sunghs.tistory.com/128
     public LocalDateTime getTime(int day){
         LocalDateTime current = LocalDateTime.now();
         return current;
