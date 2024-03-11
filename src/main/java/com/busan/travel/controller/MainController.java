@@ -28,7 +28,6 @@ public class MainController {
                        @RequestParam(value = "reviewSort", defaultValue = "") String reviewSort){
         List<Board> boardList =boardService.getListMain(boardSort);
         model.addAttribute("boardList", boardList); // 자유게시판 리스트
-
         if(principal == null)
             return "layout/Home";
         else {

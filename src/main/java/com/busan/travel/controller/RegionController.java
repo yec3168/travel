@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RegionController {
     @GetMapping("/test")
     public String test(){
-        return "region/exam";
+        return "region/example";
     }
 }
