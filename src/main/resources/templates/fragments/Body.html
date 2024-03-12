@@ -96,7 +96,7 @@
 
 <!-- 마크다운 에디터-->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a6e46eadb6e8fb5388c6573eb958732a"></script>
+<script type="text/javascript" th:src="@{|//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakao_admin_key}|}"></script>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">

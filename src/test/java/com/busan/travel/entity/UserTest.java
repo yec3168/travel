@@ -1,6 +1,7 @@
 package com.busan.travel.entity;
 
-import com.busan.travel.repository.MemberRepository;
+import com.busan.travel.page.entity.Member;
+import com.busan.travel.page.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;

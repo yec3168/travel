@@ -37,4 +37,4 @@ out/
 .vscode/
 
 
-/src/main/java/com/busan/travel/Key.java
+application-API-KEY.properties

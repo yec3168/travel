@@ -1,8 +1,7 @@
 package com.busan.travel;
 
-import com.busan.travel.entity.Board;
-import com.busan.travel.repository.BoardRepository;
-import com.busan.travel.service.BoardService;
+import com.busan.travel.page.entity.Board;
+import com.busan.travel.page.service.BoardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
