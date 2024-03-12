@@ -24,7 +24,7 @@ public class OpenApiService {
     private final String URL ="http://apis.data.go.kr/6260000/FoodService/getFoodKr";
     @Value("${dataset-key}")
     private String busan_dataset_key;
-    private final String secretKey = "?serviceKey=n2qqPFePtc%2BOO68wCjxFQDgjJ9%2BioWQCtwVQL9D6UK51aZhoBAtCVuRz2s1sLYoWWNfgwTEuAM7dgH6w6lc7Hg%3D%3D";
+    private final String secretKey = "?serviceKey=";
     private final String numOfRows = "&numOfRows=5";
     private final String resultType ="&resultType=json";
 
@@ -32,6 +32,7 @@ public class OpenApiService {
     private String makeUrl() throws UnsupportedEncodingException{
         return URL +
                 secretKey +
+                busan_dataset_key+
                 numOfRows +
                 resultType;
     }
