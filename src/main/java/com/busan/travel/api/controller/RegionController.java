@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
@@ -33,8 +34,14 @@ public class RegionController {
 //    }
 
     @GetMapping("/search")
-    private String kwSearch(@PathVariable(value = "kw", required = false)String kw,
-                                            Model model) throws IOException, URISyntaxException {
+    private String kwSearch(Model model) {
+        model.addAttribute("kakao_admin_key", kakao_admin_key);
+        //model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
+        return "region/search";
+    }
+    @PostMapping("/search")
+    private String kwSearch(@PathVariable(value = "kw")String kw,
+                            Model model) throws IOException, URISyntaxException {
         model.addAttribute("kakao_admin_key", kakao_admin_key);
         model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
         return "region/search";
