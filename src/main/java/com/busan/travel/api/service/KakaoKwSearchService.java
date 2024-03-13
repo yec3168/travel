@@ -30,9 +30,6 @@ public class KakaoKwSearchService {
     private String y = "&y=35.137922"; // 부산 위도
 
 
-
-
-
     private String makeUrl(String qurey){
         return BASE_URL + "?query="+qurey + x + y ;
     }

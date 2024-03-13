@@ -17,7 +17,7 @@
         <div>
             <label for="kw">키워드 </label>
             <input type="text" name="kw" id="kw" placeholder="장소, 주소 검색" >
-            <button id="searchBtn" type="button">검색하기</button>
+            <button id="searchBtn" type="button" onclick="getJson()">검색하기</button>
         </div>
         <div class="map_wrap ">
 
@@ -52,7 +52,9 @@
         let markers = [];
 
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-        let options = { //지도를 생성할 때 필요한 기본 옵션
+
+        //지도를 생성할 때 필요한 기본 옵션
+        let options = {
             center: new kakao.maps.LatLng(35.137922, 129.055628), //지도의 중심좌표.
             level: 3 //지도의 레벨(확대, 축소 정도)
         };
@@ -60,29 +62,7 @@
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
 
-
-        // 마커가 표시될 위치입니다
-        function makerPosition(y, x){
-            let markerPosition  = new kakao.maps.LatLng(y, x);
-            let marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-            marker.setMap(map);
-            markers.push(marker);
-            return marker;
-        }
-
-        function removeMarker() {
-            for ( let i = 0; i < markers.length; i++ ) {
-                markers[i].setMap(null);
-            }
-            markers = [];
-        }
-        function asd(result){
-            for(let i = 0; i < result.length; i++){
-                makerPosition(result[i].y, result[i].x)
-            }
-        }
+        // input값 validation check
         function validationCheck(){
             const input = document.getElementById("kw")
 
@@ -94,11 +74,9 @@
             else
                 return true;
         }
-        $("#kw").keyup(function (e){
-            if(e.which ===13)
-                getJson();
-        })
-       function getJson(){
+
+        /* rest api get 결과*/
+        function getJson(){
             if(!validationCheck())
                 return false;
             const searchFormInput = document.getElementById("kw")
@@ -113,10 +91,11 @@
                 },
                 success:function (result){
                     removeMarker()
-                    if(result.size == 0)
+                    if(result.size == 0) {
                         alert("검색 결과가 없습니다.");
-                    console.log(result)
-                    asd(result)
+                        return false;
+                    }
+                    addMarker(result)
                 },
                 fail: function (request, status, error){
                     console.log(request)
@@ -125,6 +104,67 @@
                 }
             })
         };
+
+        /* `엔터`입력시 작동.*/
+        $("#kw").keyup(function (e){
+            if(e.which ===13)
+                getJson();
+        })
+
+
+        // 마커가 표시될 위치입니다
+        function makerPosition(markerPosition){
+            let marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(map);
+
+            // 생성된 마커를 배열에 추가합니다
+            markers.push(marker);
+            return marker;
+        }
+
+        // 마커 전부 지우기.
+        function removeMarker() {
+            for ( let i = 0; i < markers.length; i++ ) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
+        // 마커를 추가하고, 중심좌표를 재설정.
+        function addMarker(result){
+            let bounds = new kakao.maps.LatLngBounds();
+            for(let i = 0; i < result.length; i++){
+                let markerPosition  = new kakao.maps.LatLng(result[i].y, result[i].x);
+                let marker = makerPosition(markerPosition)
+                bounds.extend(markerPosition);
+
+                kakao.maps.event.addListener(marker, "click", function (){
+                    displayInfowindow(marker, result[i]);
+                })
+            }
+            map.setBounds(bounds);
+        }
+
+
+
+        /* 마커 info*/
+        // 마커를 클릭했을 때 정보를 표출할 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            zIndex:1,
+            removable: true
+        });
+
+        // 마커를 클릭했을 때 호출되는 함수입니다
+        // 인포윈도우에 정보를 표시합니다
+        function displayInfowindow(marker, item) {
+            let content = '<div style="padding:5px;z-index:1;">' + item.phone + '</div>';
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+
 
     </script>
 </th:block>
