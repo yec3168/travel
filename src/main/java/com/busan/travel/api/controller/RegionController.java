@@ -36,7 +36,7 @@ public class RegionController {
     private String kwSearch(@PathVariable(value = "kw", required = false)String kw,
                                             Model model) throws IOException, URISyntaxException {
         model.addAttribute("kakao_admin_key", kakao_admin_key);
-        //model.addAttribute("keywordList", kakaoKwSearchService.getList("편의점"));
+        model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
         return "region/search";
     }
 }

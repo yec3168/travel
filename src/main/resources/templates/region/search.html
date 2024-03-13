@@ -7,40 +7,42 @@
     <title>지역</title>
 </th:block>
 
-<th:block layout:fragment="css">
-    <style>
-        .map_wrap{
-            position:relative;width:100%;height:700px;
-        }
-        .map_wrap a, .map_wrap a:hover, .map_wrap a:active{
-            color:#000;text-decoration: none;
-        }
-        #menu_wrap {
-            position:absolute;
-            top:0;left:0;bottom:0;
-            width:300px;
-            margin:10px 0 30px 10px;
-            padding:5px;
-            overflow-y:auto;
-            background:rgba(255, 255, 255, 0.7);
-            z-index: 1;
-            font-size:12px;
-            border-radius: 10px;}
-        .bg_white {background:#fff;}
-    </style>
-</th:block>
 <th:block layout:fragment="content">
     <div class="page_tits">
         <h3>관광지 정보</h3>
         <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>위시리스트</span></p>
     </div>
     <div class="contentMain">
+
+        <div>
+            <form method="get">
+                <label for="kw">키워드 </label>
+                <input type="text" name="kw" id="kw" placeholder="장소, 주소 검색" >
+                <button type="submit">검색하기</button>
+            </form>
+        </div>
         <div class="map_wrap ">
+
             <div id="map" style="width:100%;height:700px;position:relative;overflow:hidden;"></div>
 
             <div id="menu_wrap" class="bg_white">
-
             </div>
+        </div>
+
+        <div th:if="${#lists.size(keywordList) != 0}" th:each="item : ${keywordList}">
+            <ul>
+                <li>
+                    <p th:text="${item.place_name}"></p>
+                    <p th:text="${item.address_name}"></p>
+                    <p th:text="${item.road_address_name}"></p>
+                    <p th:text="${item.phone}"></p>
+                    <p th:text="${item.x}"></p>
+                    <p th:text="${item.y}"></p>
+                    <p th:text="${item.phone}"></p>
+                    <p th:text="${item.place_url}"></p>
+
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -48,6 +50,8 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
+        var markers = [];
+
         var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
         var options = { //지도를 생성할 때 필요한 기본 옵션
             center: new kakao.maps.LatLng(35.137922, 129.055628), //지도의 중심좌표.
@@ -56,13 +60,18 @@
 
         var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
         // 마커가 표시될 위치입니다
-        var markerPosition  = new kakao.maps.LatLng(35.137922, 129.055628);
 
-        // 마커를 생성합니다
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        });
-        marker.setMap(map);
+        function makerPosition(y, x){
+            var markerPosition  = new kakao.maps.LatLng(y, x);
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+            marker.setMap(map);
+            markers.push(marker);
+            return marker;
+        }
+
+
     </script>
 </th:block>
 </html>
