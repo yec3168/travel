@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,11 +39,10 @@ public class RegionController {
         //model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
         return "region/search";
     }
-    @PostMapping("/search")
-    private String kwSearch(@PathVariable(value = "kw")String kw,
-                            Model model) throws IOException, URISyntaxException {
-        model.addAttribute("kakao_admin_key", kakao_admin_key);
-        model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
-        return "region/search";
+    @GetMapping("/keyword")
+    @ResponseBody
+    private List<KakaoResponseDto> kwSearch(@RequestParam(value = "kw", defaultValue = "")String kw,
+                                            Model model) throws IOException, URISyntaxException {
+        return kakaoKwSearchService.getList(kw);
     }
 }

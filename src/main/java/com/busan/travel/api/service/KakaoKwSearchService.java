@@ -1,7 +1,6 @@
 package com.busan.travel.api.service;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
-import lombok.SneakyThrows;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,6 +28,8 @@ public class KakaoKwSearchService {
     private String kakao_rest_key;
     private String x = "&x=129.055628"; // 부산 경도
     private String y = "&y=35.137922"; // 부산 위도
+
+
 
 
 

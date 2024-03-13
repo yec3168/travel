@@ -2,7 +2,6 @@ package com.busan.travel.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.json.simple.JSONObject;
 
 @Getter
 @Setter
@@ -27,6 +26,5 @@ public class GoodRestaurantDto {
     private String main_img_url; // 메인이미지 url
 
     private String thumb_img_url; // 썸네일 url
-
 
 }
