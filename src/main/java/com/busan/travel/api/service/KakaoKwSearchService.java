@@ -28,7 +28,7 @@ public class KakaoKwSearchService {
     private String kakao_rest_key;
 
     private String makeUrl(String qurey, String sort, double lat, double lng){
-        return BASE_URL + "?query="+qurey + "&x=" +lng +"&y" + lat + "&sort="+sort;
+        return BASE_URL + "?query="+qurey + "&x=" +lng +"&y=" + lat + "&sort="+sort;
     }
     private KakaoResponseDto toDto(JSONObject item){
         KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();

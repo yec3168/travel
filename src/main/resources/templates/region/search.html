@@ -37,23 +37,6 @@
             <div id="menu_wrap" class="bg_white">
             </div>
         </div>
-
-        <div th:if="${#lists.size(keywordList) != 0}" th:each="item : ${keywordList}">
-            <ul>
-                <li>
-                    <p th:text="${item.place_name}"></p>
-                    <p th:text="${item.address_name}"></p>
-                    <p th:text="${item.road_address_name}"></p>
-                    <p th:text="${item.phone}"></p>
-                    <p th:text="${item.x}"></p>
-                    <p th:text="${item.y}"></p>
-                    <p th:text="${item.phone}"></p>
-                    <p th:text="${item.place_url}"></p>
-                    <p th:text="${item}"></p>
-
-                </li>
-            </ul>
-        </div>
     </div>
 
 </th:block>
@@ -61,7 +44,7 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         let markers = [];
-        let lat = 35.137922; let lng = 129.055628;
+        let lat = 35.137922,  lng = 129.055628, sort;
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 
         //지도를 생성할 때 필요한 기본 옵션
@@ -71,7 +54,11 @@
         };
 
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
+        /* `엔터`입력시 작동.*/
+        $("#kw").keyup(function (e){
+            if(e.which ===13)
+                getJson();
+        })
 
         // input값 validation check
         function validationCheck(){
@@ -91,14 +78,16 @@
             if(!validationCheck())
                 return false;
             const searchFormInput = document.getElementById("kw")
-            const kw = searchFormInput.value;
 
             $.ajax({
                 type: "get",
                 async: false,
                 url: "/kakao/keyword",
                 data:{
-                    kw : kw
+                    kw : searchFormInput.value,
+                    sort: sort,
+                    lng: lng,
+                    lat, lat
                 },
                 success:function (result){
                     removeMarker()
@@ -108,16 +97,12 @@
                     }
                     addMarker(result)
                 },
-                fail: function (request, status, error){
-                    console.log(request)
-                    console.log(status)
-                    console.log(error)
-                }
             })
         };
 
         function setSort(sort){
             const kw = document.getElementById("kw")
+            this.sort = sort;
             if(kw.value == ""){
                 return false;
             }
@@ -141,21 +126,49 @@
                         }
                         addMarker(result)
                     },
-                    fail: function (request, status, error){
-                        console.log(request)
-                        console.log(status)
-                        console.log(error)
-                    }
                 });
             }
 
         }
+        // 마커 중심 좌표 재설정.
+        function resetCenter(latLng){
+            lat = latLng.getLat();
+            lng = latLng.getLng();
+        }
 
-        /* `엔터`입력시 작동.*/
-        $("#kw").keyup(function (e){
-            if(e.which ===13)
-                getJson();
-        })
+
+        // 선택한 마커 중심으로 검색.
+        var imageSrc = 'https://cdn-icons-png.flaticon.com/512/5737/5737612.png', // 마커이미지의 주소입니다
+            imageSize = new kakao.maps.Size(45, 51), // 마커이미지의 크기입니다
+            imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+        let newMarker = new kakao.maps.Marker({
+            position:  map.getCenter(),
+            image:markerImage
+
+        });
+        newMarker.setMap(map)
+        //사용자가 클릭시 메소드
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            let latlng = mouseEvent.latLng;
+            let selectNewMarker = "https://cdn2.iconfinder.com/data/icons/picons-basic-2/57/basic2-059_pin_location-256.png"
+            resetCenter(latlng)
+
+            newMarker.setPosition(latlng)
+
+        });
+        var newMarkerInfoWindow = new kakao.maps.InfoWindow({
+            content:'현재 위치입니다.' +'<br>'+'선택한 지점 기준으로 검색합니다.',
+            zIndex:1,
+        });
+        kakao.maps.event.addListener(newMarker, 'mouseover', function(mouseEvent) {
+            newMarkerInfoWindow.open(map, newMarker);
+        });
+        kakao.maps.event.addListener(newMarker, 'mouseout', function(mouseEvent) {
+            newMarkerInfoWindow.close()
+        });
 
 
         // 마커가 표시될 위치입니다
@@ -178,7 +191,7 @@
             }
             markers = [];
         }
-        // 마커를 추가하고, 중심좌표를 재설정.
+        // 마커를 추가하고, 화면 상태 재설정
         function addMarker(result){
             let bounds = new kakao.maps.LatLngBounds();
             for(let i = 0; i < result.length; i++){
@@ -187,42 +200,52 @@
                 bounds.extend(markerPosition);
 
                 kakao.maps.event.addListener(marker, "click", function (){
-                    displayInfowindow(marker, result[i]);
+                    overlay.setContent(displayInfowindow(marker, result[i]));
+
+                    overlay.setPosition(marker.getPosition());
+                    overlay.setMap(map)
                 })
             }
             map.setBounds(bounds);
         }
 
-
-
         /* 마커 info*/
         // 마커를 클릭했을 때 정보를 표출할 인포윈도우를 생성합니다
-        var infowindow = new kakao.maps.InfoWindow({
+        var overlay = new kakao.maps.CustomOverlay({
             zIndex:1,
-            removable: true
+            map:map,
         });
+
+
 
         // 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 정보를 표시합니다
         function displayInfowindow(marker, item) {
-            let content =
-                '<div  style="padding:5px; z-index: 1; ">' +
-                    '<h5>'+ item.place_name + '</h5>'
-            if(item.road_address_name){
-                content +=  '<p>' + item.road_address_name +'</p>'+
-                            '<p class="jibun" style="color: lightgrey">' + item.address_name +'</p>';
-            }else{
-                content+=   '<p>' + item.address_name +'</p>';
-            }
-            content +='<p style="color: #00bc8c">' + item.phone +'</p>' +
-                + '</div>';
+            let content ='<div class="wrap">' +
+                '    <div class="info">' +
+                '        <div class="title">' +
+                        item.place_name+
+                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                '        </div>' +
+                '        <div class="body">' +
+                '            <div class="img">' +
+                '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
+                '           </div>' +
+                '            <div class="desc">' +
+                '                <p class="ellipsis">' + item.road_address_name +'</p>' +
+                '                <p class="jibun" style="color: lightgrey">'+ item.address_name +'</p>' +
+                '                <p style="color: #00bc8c">'+ item.phone +'</p>' +
+                '                <a th:href="${item.place_url}"}>홈페이지</a>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>';
 
-
-            infowindow.setContent(content);
-            infowindow.open(map, marker);
-
+            return content;
         }
-
+        function closeOverlay(){
+            overlay.setMap(null);
+        }
 
     </script>
 </th:block>
