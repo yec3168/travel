@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class KakaoResponseDto {
+    private String  id;
+
     private String place_name;// 장소이름
 
     private String address_name; // 주소

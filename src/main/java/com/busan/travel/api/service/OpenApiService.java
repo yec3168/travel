@@ -75,7 +75,8 @@ public class OpenApiService {
         ResponseEntity<String > response  = restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, String.class);
         return response;
     }
-    
+
+
     /* open API 서버로부터 데이터를 JSON 형태로 받아오기*/
     public List<GoodRestaurantDto> getJson() throws UnsupportedEncodingException, URISyntaxException {
         // json데이터를 string 형태로 받아옴.

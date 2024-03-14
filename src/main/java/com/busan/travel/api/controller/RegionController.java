@@ -42,7 +42,10 @@ public class RegionController {
     @GetMapping("/keyword")
     @ResponseBody
     private List<KakaoResponseDto> kwSearch(@RequestParam(value = "kw", defaultValue = "")String kw,
+                                            @RequestParam(value = "sort", defaultValue = "accuracy") String sort,
+                                            @RequestParam(value = "lat", defaultValue = "35.137922") double lat,
+                                            @RequestParam(value = "lng", defaultValue = "129.055628") double lng,
                                             Model model) throws IOException, URISyntaxException {
-        return kakaoKwSearchService.getList(kw);
+        return kakaoKwSearchService.getList(kw, sort, lat, lng) ;
     }
 }

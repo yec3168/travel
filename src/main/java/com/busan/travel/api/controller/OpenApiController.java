@@ -39,6 +39,6 @@ public class OpenApiController {
 
     @GetMapping("/kakao")
     private List<KakaoResponseDto> test1() throws IOException, URISyntaxException {
-        return kakaoKwSearchService.getList("편의점");
+        return kakaoKwSearchService.getList("편의점", "distance", 35, 129);
     }
 }

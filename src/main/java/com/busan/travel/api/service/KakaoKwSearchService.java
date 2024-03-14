@@ -26,12 +26,9 @@ public class KakaoKwSearchService {
 
     @Value("${kakao-rest-key}")
     private String kakao_rest_key;
-    private String x = "&x=129.055628"; // 부산 경도
-    private String y = "&y=35.137922"; // 부산 위도
 
-
-    private String makeUrl(String qurey){
-        return BASE_URL + "?query="+qurey + x + y ;
+    private String makeUrl(String qurey, String sort, double lat, double lng){
+        return BASE_URL + "?query="+qurey + "&x=" +lng +"&y" + lat + "&sort="+sort;
     }
     private KakaoResponseDto toDto(JSONObject item){
         KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
@@ -45,6 +42,7 @@ public class KakaoKwSearchService {
         kakaoResponseDto.setPlace_url((String) item.get("place_url"));
         kakaoResponseDto.setX((String) item.get("x"));
         kakaoResponseDto.setY((String) item.get("y"));
+        kakaoResponseDto.setId((String) item.get("id"));
 
         return  kakaoResponseDto;
     }
@@ -69,10 +67,10 @@ public class KakaoKwSearchService {
 
         return response;
     }
-    public List<KakaoResponseDto> getList(String qurey) throws IOException, URISyntaxException {
+    public List<KakaoResponseDto> getList(String qurey, String sort, double lat, double lng) throws IOException, URISyntaxException {
         // 한글로 들어오게 된다면 encoding 진행.
         qurey = URLEncoder.encode(qurey, "UTF-8");
-        String makeURl = makeUrl(qurey);
+        String makeURl = makeUrl(qurey, sort, lat, lng);
 
         //System.out.println(makeURl);
         ResponseEntity<String> response = getResponse(makeURl);

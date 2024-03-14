@@ -14,15 +14,26 @@
     </div>
     <div class="contentMain">
 
-        <div>
-            <label for="kw">키워드 </label>
-            <input type="text" name="kw" id="kw" placeholder="장소, 주소 검색" >
-            <button id="searchBtn" type="button" onclick="getJson()">검색하기</button>
-        </div>
+
         <div class="map_wrap ">
 
             <div id="map"></div>
 
+            <div class="custom_typecontrol radius_border">
+                <span id="btnRoadmap" class="accuracy" onclick="setSort('accuracy')">정확도순</span>
+                <span id="btnSkyview" class="distance" onclick="setSort('distance')">거리순</span>
+            </div>
+
+            <div class="map_search">
+                <input type="text" name="kw" id="kw" placeholder="장소, 주소 검색" >
+                <span>
+                    <button id="searchBtn" type="button" onclick="getJson()">
+                         <i class="bi bi-search"></i>
+                    </button>
+                </span>
+            </div>
+
+            <!-- 위시리스트 추가하는 부분.-->
             <div id="menu_wrap" class="bg_white">
             </div>
         </div>
@@ -50,12 +61,12 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         let markers = [];
-
+        let lat = 35.137922; let lng = 129.055628;
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 
         //지도를 생성할 때 필요한 기본 옵션
         let options = {
-            center: new kakao.maps.LatLng(35.137922, 129.055628), //지도의 중심좌표.
+            center: new kakao.maps.LatLng(lat, lng), //지도의 중심좌표.
             level: 3 //지도의 레벨(확대, 축소 정도)
         };
 
@@ -81,7 +92,7 @@
                 return false;
             const searchFormInput = document.getElementById("kw")
             const kw = searchFormInput.value;
-            console.log(kw)
+
             $.ajax({
                 type: "get",
                 async: false,
@@ -104,6 +115,41 @@
                 }
             })
         };
+
+        function setSort(sort){
+            const kw = document.getElementById("kw")
+            if(kw.value == ""){
+                return false;
+            }
+            else{
+                $.ajax({
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    url: "/kakao/keyword",
+                    data:{
+                        kw : kw.value,
+                        sort: sort,
+                        lat : lat,
+                        lng : lng
+                    },
+                    success:function (result){
+                        removeMarker()
+                        if(result.size == 0) {
+                            alert("검색 결과가 없습니다.");
+                            return false;
+                        }
+                        addMarker(result)
+                    },
+                    fail: function (request, status, error){
+                        console.log(request)
+                        console.log(status)
+                        console.log(error)
+                    }
+                });
+            }
+
+        }
 
         /* `엔터`입력시 작동.*/
         $("#kw").keyup(function (e){
@@ -159,10 +205,22 @@
         // 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 정보를 표시합니다
         function displayInfowindow(marker, item) {
-            let content = '<div style="padding:5px;z-index:1;">' + item.phone + '</div>';
+            let content =
+                '<div  style="padding:5px; z-index: 1; ">' +
+                    '<h5>'+ item.place_name + '</h5>'
+            if(item.road_address_name){
+                content +=  '<p>' + item.road_address_name +'</p>'+
+                            '<p class="jibun" style="color: lightgrey">' + item.address_name +'</p>';
+            }else{
+                content+=   '<p>' + item.address_name +'</p>';
+            }
+            content +='<p style="color: #00bc8c">' + item.phone +'</p>' +
+                + '</div>';
+
 
             infowindow.setContent(content);
             infowindow.open(map, marker);
+
         }
 
 
