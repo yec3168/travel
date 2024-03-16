@@ -159,6 +159,9 @@
             })
 
         }
+        function removeList(){
+            const wishList = document.getElementById("wishList");
+        }
 
         // 마커 중심 좌표 재설정.
         function resetCenter(latLng){
@@ -278,12 +281,12 @@
         }
         function createCotent(item) {
             selected_item = item;
-            let content ='<div class="list">' +
-                '    <div class="info">' +
+            let content ='<div class="child">' +
+                '    <div class="info" style="background-color: white">' +
                 '        <div class="title">' +
                 item.place_name+
                 '        </div>' +
-                '        <div class="body">' +
+                '        <div class="body" style="height: 100px">' +
                 '            <div class="img">' +
                 '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
                 '           </div>' +
@@ -293,8 +296,8 @@
                 '                <p style="color: #00bc8c">'+ item.phone +'</p>' +
                 '                <a class="link" href='+item.place_url+'>홈페이지</a>' +
                 '            </div>' +
-                '            <div class="btn_set">' +
-                '               <button type="button" class="btn btn-outline-secondary">제거</button>'
+                '            <div class="btn_set" style="bottom:50px;">' +
+                '               <button type="button" class="btn btn-outline-secondary" onclick="removeList()">제거</button>'
             '            </div>'
             '        </div>' +
             '    </div>' +
@@ -305,6 +308,7 @@
         function closeOverlay(){
             overlay.setMap(null);
         }
+
 
     </script>
 </th:block>
