@@ -20,8 +20,8 @@
             <div id="map"></div>
 
             <div class="custom_typecontrol radius_border">
-                <span id="btnRoadmap" class="accuracy" onclick="setSort('accuracy')">정확도순</span>
-                <span id="btnSkyview" class="distance" onclick="setSort('distance')">거리순</span>
+                <span id="btnRoadmap" class="selected_btn" onclick="setSort('accuracy')">정확도순</span>
+                <span id="btnSkyview" class="wait_btn" onclick="setSort('distance')">거리순</span>
             </div>
 
             <div class="map_search">
@@ -35,6 +35,7 @@
 
             <!-- 위시리스트 추가하는 부분.-->
             <div id="menu_wrap" class="bg_white">
+                <ul id="wishList"></ul>
             </div>
         </div>
     </div>
@@ -44,7 +45,7 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         let markers = [];
-        let lat = 35.137922,  lng = 129.055628, sort;
+        let lat = 35.137922,  lng = 129.055628, sort, selected_item;
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 
         //지도를 생성할 때 필요한 기본 옵션
@@ -75,6 +76,7 @@
 
         /* rest api get 결과*/
         function getJson(){
+
             if(!validationCheck())
                 return false;
             const searchFormInput = document.getElementById("kw")
@@ -87,22 +89,30 @@
                     kw : searchFormInput.value,
                     sort: sort,
                     lng: lng,
-                    lat, lat
+                    lat: lat
                 },
                 success:function (result){
                     removeMarker()
-                    if(result.size == 0) {
-                        alert("검색 결과가 없습니다.");
-                        return false;
-                    }
                     addMarker(result)
                 },
             })
         };
-
+        function changeActive(sort){
+            let accuracy = document.getElementById("btnRoadmap")
+            let distance = document.getElementById("btnSkyview")
+            if(sort == "accuracy"){
+                accuracy.className = "selected_btn";
+                distance.className = "wait_btn";
+            }
+            else{
+                accuracy.className = "wait_btn";
+                distance.className = "selected_btn";
+            }
+        }
         function setSort(sort){
             const kw = document.getElementById("kw")
             this.sort = sort;
+            changeActive(sort)
             if(kw.value == ""){
                 return false;
             }
@@ -120,16 +130,36 @@
                     },
                     success:function (result){
                         removeMarker()
-                        if(result.size == 0) {
-                            alert("검색 결과가 없습니다.");
-                            return false;
-                        }
                         addMarker(result)
                     },
                 });
             }
 
         }
+        function addList(){
+            console.log(JSON.stringify(selected_item))
+            $.ajax({
+                type:'get',
+                async:false,
+                dataType: 'json',
+                url: "/kakao/add",
+                data:{
+                    item:JSON.stringify(selected_item)
+                },
+                success:function (result){
+                    const wishList = document.getElementById("wishList");
+                    let content = createCotent(result); // wishList에 추가할 부분.
+
+                    let element= document.createElement("li")
+                    element.innerHTML = content;
+                    element.className = "item";
+
+                    wishList.appendChild(element);
+                }
+            })
+
+        }
+
         // 마커 중심 좌표 재설정.
         function resetCenter(latLng){
             lat = latLng.getLat();
@@ -153,7 +183,6 @@
         //사용자가 클릭시 메소드
         kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
             let latlng = mouseEvent.latLng;
-            let selectNewMarker = "https://cdn2.iconfinder.com/data/icons/picons-basic-2/57/basic2-059_pin_location-256.png"
             resetCenter(latlng)
 
             newMarker.setPosition(latlng)
@@ -200,7 +229,7 @@
                 bounds.extend(markerPosition);
 
                 kakao.maps.event.addListener(marker, "click", function (){
-                    overlay.setContent(displayInfowindow(marker, result[i]));
+                    overlay.setContent(displayInfowindow(result[i]));
 
                     overlay.setPosition(marker.getPosition());
                     overlay.setMap(map)
@@ -220,11 +249,12 @@
 
         // 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 정보를 표시합니다
-        function displayInfowindow(marker, item) {
+        function displayInfowindow(item) {
+            selected_item = item;
             let content ='<div class="wrap">' +
                 '    <div class="info">' +
                 '        <div class="title">' +
-                        item.place_name+
+                item.place_name+
                 '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
                 '        </div>' +
                 '        <div class="body">' +
@@ -235,11 +265,40 @@
                 '                <p class="ellipsis">' + item.road_address_name +'</p>' +
                 '                <p class="jibun" style="color: lightgrey">'+ item.address_name +'</p>' +
                 '                <p style="color: #00bc8c">'+ item.phone +'</p>' +
-                '                <a th:href="${item.place_url}"}>홈페이지</a>' +
+                '                <a class="link" href='+item.place_url+'>홈페이지</a>' +
                 '            </div>' +
+                '            <div class="btn_set">' +
+                '               <button type="button" class="btn btn-outline-secondary" onclick="addList()">추가</button>'
+            '            </div>'
+            '        </div>' +
+            '    </div>' +
+            '</div>';
+
+            return content;
+        }
+        function createCotent(item) {
+            selected_item = item;
+            let content ='<div class="list">' +
+                '    <div class="info">' +
+                '        <div class="title">' +
+                item.place_name+
                 '        </div>' +
-                '    </div>' +
-                '</div>';
+                '        <div class="body">' +
+                '            <div class="img">' +
+                '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
+                '           </div>' +
+                '            <div class="desc">' +
+                '                <p class="ellipsis">' + item.road_address_name +'</p>' +
+                '                <p class="jibun" style="color: lightgrey">'+ item.address_name +'</p>' +
+                '                <p style="color: #00bc8c">'+ item.phone +'</p>' +
+                '                <a class="link" href='+item.place_url+'>홈페이지</a>' +
+                '            </div>' +
+                '            <div class="btn_set">' +
+                '               <button type="button" class="btn btn-outline-secondary">제거</button>'
+            '            </div>'
+            '        </div>' +
+            '    </div>' +
+            '</div>';
 
             return content;
         }

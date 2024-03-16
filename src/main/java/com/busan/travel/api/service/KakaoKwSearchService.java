@@ -90,4 +90,8 @@ public class KakaoKwSearchService {
             throw new RuntimeException(e);
         }
     }
+
+//    public List<KakaoResponseDto> qureyDsl(List<KakaoResponseDto> wishList){
+//        List<KakaoResponseDto> result =
+//    }
 }
