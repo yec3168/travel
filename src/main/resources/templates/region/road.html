@@ -24,20 +24,25 @@
 
                 </div>
                 <div id="road_wrap" class="bg_white">
-                    <div class="start_end_search">
+
+                    <div class="start_end_search" >
+                        <div style="width: 100%; height: 50px;" >
+                            <span style="font-family: 'Malgun Gothic', dotum, '돋움', sans-serif; font-size: 20px; color: white; margin-left: 45px">kakao</span>
+                            <span style="font-family: 'Noto Sans KR', sans-serif; font-size: 25px; color: white"> map</span>
+                        </div>
                         <div class="start">
                             <input type="text" name="start" id="start" placeholder="출발지를 입력해주세요." >
                             <span>
-                                <button id="" type="button" onclick="getStartPosition()">
+                                <button id="startButton" type="button" onclick="getStartPosition()">
                                      <i class="bi bi-search"></i>
                                 </button>
                             </span>
                         </div>
-                        <i class="bi bi-arrow-down-up" style="color: skyblue;"></i>
+                        <i class="bi bi-arrow-down-up" id="upDown"></i>
                         <div class="end">
                             <input type="text" name="end" id="end" placeholder="도착지를 입력해주세요." >
                             <span>
-                                <button id="" type="button" onclick="getEndPosition()">
+                                <button id="endButton" type="button" onclick="getEndPosition()">
                                      <i class="bi bi-search"></i>
                                 </button>
                             </span>
@@ -61,11 +66,11 @@
         };
 
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-        /* `엔터`입력시 작동.*/
-        $("#kw").keyup(function (e){
-            if(e.which ===13)
-                getPosition();
-        })
+        // /* `엔터`입력시 작동.*/
+        // $("#startButton").keyup(function (e){
+        //     if(e.which ===13)
+        //         getPosition();
+        // })
 
 
 
@@ -109,26 +114,26 @@
                 return true;
         }
 
-        // 주소나 장소 위치 받아오기 size =5
-        // function getStartPosition(){
-        //     const searchFormInput = document.getElementById("start")
-        //     if(!validationCheck(searchFormInput))
-        //         return false;
-        //     $.ajax({
-        //         type: "get",
-        //         async: false,
-        //         url: "/kakao/keyword",
-        //         data:{
-        //             kw : searchFormInput.value,
-        //             sort: "accuracy",
-        //             lat : lat,
-        //             lng : lng,
-        //         },
-        //         success:function (result){
-        //             console.log(result)
-        //         },
-        //     })
-        // };
+       // 주소나 장소 위치 받아오기 size =5
+        function getStartPosition(){
+            const searchFormInput = document.getElementById("start")
+            if(!validationCheck(searchFormInput))
+                return false;
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "/kakao/keyword",
+                data:{
+                    kw : searchFormInput.value,
+                    sort: "accuracy",
+                    lat : lat,
+                    lng : lng,
+                },
+                success:function (result){
+                    console.log(result)
+                },
+            })
+        };
     </script>
 </th:block>
 </html>
