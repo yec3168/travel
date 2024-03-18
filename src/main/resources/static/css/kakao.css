@@ -8,11 +8,11 @@
 #road_wrap {position:absolute;top:0;left:0;bottom:0;width:400px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 
-.bg_white .start_end_search{height: 170px; border-bottom: 1px solid black; background-color: #0e9fdd}
+.bg_white .start_end_search{height: 170px; border-bottom: 1px solid white; background-color: #258fff}
 .bg_white .start_end_search .start{ width: 100%; height: 50px; margin-bottom: 5px; margin-top: 5px}
 .bg_white .start_end_search .start input{ border-radius: 15px; float: right; width: 90%; height: 40px}
 .bg_white .start_end_search .start button{ border-radius: 50%; position: absolute; right: 20px; background:transparent; height: 40px; border: 0px solid;}
-.bg_white .start_end_search #upDown{color: skyblue;float: left; top:90px; position: absolute; font-size: 25px; left: 10px}
+.bg_white .start_end_search #upDown{color: white;float: left; top:90px; position: absolute; font-size: 25px; left: 10px}
 .bg_white .start_end_search .end{ width: 100%; height: 50px;}
 .bg_white .start_end_search .end input{ border-radius: 15px; float: right; width: 90%; height: 40px; top:50px;}
 .bg_white .start_end_search .end button{ border-radius: 50%; position: absolute; right: 20px; background:transparent; height: 40px; border: 0px solid;}
