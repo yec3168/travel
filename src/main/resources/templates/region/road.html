@@ -110,25 +110,25 @@
         }
 
         // 주소나 장소 위치 받아오기 size =5
-        function getStartPosition(){
-            const searchFormInput = document.getElementById("start")
-            if(!validationCheck(searchFormInput))
-                return false;
-            $.ajax({
-                type: "get",
-                async: false,
-                url: "/kakao/keyword",
-                data:{
-                    kw : searchFormInput.value,
-                    sort: "accuracy",
-                    lat : lat,
-                    lng : lng,
-                },
-                success:function (result){
-                    console.log(result)
-                },
-            })
-        };
+        // function getStartPosition(){
+        //     const searchFormInput = document.getElementById("start")
+        //     if(!validationCheck(searchFormInput))
+        //         return false;
+        //     $.ajax({
+        //         type: "get",
+        //         async: false,
+        //         url: "/kakao/keyword",
+        //         data:{
+        //             kw : searchFormInput.value,
+        //             sort: "accuracy",
+        //             lat : lat,
+        //             lng : lng,
+        //         },
+        //         success:function (result){
+        //             console.log(result)
+        //         },
+        //     })
+        // };
     </script>
 </th:block>
 </html>

@@ -4,11 +4,8 @@ import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/kakao")
 public class RegionController {
 
@@ -28,18 +23,11 @@ public class RegionController {
     private String kakao_admin_key;
 
     @Autowired
-    private final KakaoKwSearchService kakaoKwSearchService;
-
-//    @GetMapping("/test")
-//    public String test(Model model){
-//        model.addAttribute("kakao_admin_key", kakao_admin_key);
-//        return "search";
-//    }
+    private  KakaoKwSearchService kakaoKwSearchService;
 
     @GetMapping("/search")
-    private String kwSearch(Model model) {
+    public String roadHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
-        //model.addAttribute("keywordList", kakaoKwSearchService.getList(kw));
         return "region/search";
     }
     @GetMapping("/keyword")
@@ -53,7 +41,7 @@ public class RegionController {
         return kakaoKwSearchService.getList(kw, sort, Double.parseDouble(lat),  Double.parseDouble(lng)) ;
     }
 
-    @PreAuthorize("isAuthenticated()")
+
     @PostMapping("/add")
     @ResponseBody
     private KakaoResponseDto addWish(@RequestParam("item") String item,
