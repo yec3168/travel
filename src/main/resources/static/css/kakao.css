@@ -5,6 +5,15 @@
 
 #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:300px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 
+#road_wrap {position:absolute;top:0;left:0;bottom:0;width:400px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#fff;}
+.bg_white .start_end_search{height: 100px;}
+.bg_white .start input{ border-radius: 15px; float: right; width: 90%; height: 40px}
+.bg_white .start button{ border-radius: 50%; position: absolute; right: 20px; background:transparent; height: 40px; border: 0px solid;}
+.bg_white .end input{ border-radius: 15px; float: right; width: 90%; height: 40px; top:50px;}
+.bg_white .end button{ border-radius: 50%; position: absolute; right: 20px; top:50px; background:transparent; height: 40px; border: 0px solid;}
+
+
 
 /* 검색 상자.*/
 .map_wrap .map_search{position: absolute; top: 15px; left: 35%; width: 30%; margin-left: auto; margin-right: auto; padding: 5px; overflow-y: auto; z-index: 1; border-radius: 12px; display: inline-block}
@@ -13,7 +22,7 @@
 .map_wrap .map_search button{display: inline; border-radius: 50%; height: 40px; position: absolute; right: 4%; border: 0 solid ; background:transparent; }
 
 
-.bg_white {background:#fff;}
+
 
 
 /* infoWindow 정보*/

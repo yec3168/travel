@@ -9,11 +9,11 @@
 
 <th:block layout:fragment="content">
     <div class="page_tits">
-        <h3>관광지 정보</h3>
+        <h3>위시리스트</h3>
         <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>위시리스트</span></p>
     </div>
     <div class="contentMain">
-
+        <p></p>
 
         <div class="map_wrap ">
 
@@ -139,7 +139,7 @@
         function addList(){
             console.log(JSON.stringify(selected_item))
             $.ajax({
-                type:'get',
+                type:'post',
                 async:false,
                 dataType: 'json',
                 url: "/kakao/add",
@@ -305,6 +305,7 @@
 
             return content;
         }
+
         function closeOverlay(){
             overlay.setMap(null);
         }

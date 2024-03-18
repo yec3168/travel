@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -32,8 +29,6 @@ public class RegionController {
 
     @Autowired
     private final KakaoKwSearchService kakaoKwSearchService;
-
-    private List<KakaoResponseDto> wishList = new ArrayList<>();
 
 //    @GetMapping("/test")
 //    public String test(Model model){
@@ -58,13 +53,16 @@ public class RegionController {
         return kakaoKwSearchService.getList(kw, sort, Double.parseDouble(lat),  Double.parseDouble(lng)) ;
     }
 
-    @GetMapping("/add")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/add")
     @ResponseBody
     private KakaoResponseDto addWish(@RequestParam("item") String item,
                                            Principal principal) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         KakaoResponseDto kakaoResponseDto = mapper.readValue(item, KakaoResponseDto.class);
-        wishList.add(0, kakaoResponseDto);
+
+        //해당 사용자 위시리스트 추가.
+        kakaoKwSearchService.addWishList(kakaoResponseDto);
 
         return  kakaoResponseDto;
     }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/MainLayout}">
+
+<th:block layout:fragment="title">
+    <title>지역</title>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="page_tits">
+        <h3>길찾기</h3>
+        <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>길찾기</span></p>
+    </div>
+    <div class="contentMain">
+        <div class="contentMain">
+            <p></p>
+
+            <div class="map_wrap ">
+
+                <div id="map"></div>
+
+                <div class="map_search">
+
+                </div>
+                <div id="road_wrap" class="bg_white">
+                    <div class="start_end_search">
+                        <div class="start">
+                            <input type="text" name="start" id="start" placeholder="출발지를 입력해주세요." >
+                            <span>
+                                <button id="" type="button" onclick="getStartPosition()">
+                                     <i class="bi bi-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <i class="bi bi-arrow-down-up" style="color: skyblue;"></i>
+                        <div class="end">
+                            <input type="text" name="end" id="end" placeholder="도착지를 입력해주세요." >
+                            <span>
+                                <button id="" type="button" onclick="getEndPosition()">
+                                     <i class="bi bi-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        let lat = 35.137922,  lng = 129.055628;
+        let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+
+        //지도를 생성할 때 필요한 기본 옵션
+        let options = {
+            center: new kakao.maps.LatLng(lat, lng), //지도의 중심좌표.
+            level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+
+        let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        /* `엔터`입력시 작동.*/
+        $("#kw").keyup(function (e){
+            if(e.which ===13)
+                getPosition();
+        })
+
+
+
+
+        // 시작 마커 이미지 지정.
+        let startSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
+            startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
+            startOption = {
+                offset: new kakao.maps.Point(15, 43) // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+            };
+        // 시작 마커 이미지 생성.
+        var startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
+
+
+
+
+        // 도착 이미지 지정.
+        var arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png', // 도착 마커이미지 주소입니다
+            arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
+            arriveOption = {
+                offset: new kakao.maps.Point(15, 43) // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+            };
+
+        // 도착 마커 이미지를 생성
+        var arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
+
+
+
+
+
+
+        // input값 validation check
+        function validationCheck(kw){
+
+            if(kw.value==""){
+                $(input).focus();
+                alert("장소, 주소를 입력해주세요.")
+                return false;
+            }
+            else
+                return true;
+        }
+
+        // 주소나 장소 위치 받아오기 size =5
+        function getStartPosition(){
+            const searchFormInput = document.getElementById("start")
+            if(!validationCheck(searchFormInput))
+                return false;
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "/kakao/keyword",
+                data:{
+                    kw : searchFormInput.value,
+                    sort: "accuracy",
+                    lat : lat,
+                    lng : lng,
+                },
+                success:function (result){
+                    console.log(result)
+                },
+            })
+        };
+    </script>
+</th:block>
+</html>

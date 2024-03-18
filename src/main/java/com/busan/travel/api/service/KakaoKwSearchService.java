@@ -1,9 +1,11 @@
 package com.busan.travel.api.service;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.repository.WishRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,8 @@ public class KakaoKwSearchService {
     @Value("${kakao-rest-key}")
     private String kakao_rest_key;
 
+    @Autowired
+    private WishRepository wishRepository;
     private String makeUrl(String qurey, String sort, double lat, double lng){
         return BASE_URL + "?query="+qurey + "&x=" +lng +"&y=" + lat + "&sort="+sort;
     }
@@ -89,6 +93,13 @@ public class KakaoKwSearchService {
         }catch (org.json.simple.parser.ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<KakaoResponseDto> findAll(){
+        return wishRepository.findAll();
+    }
+    public void addWishList(KakaoResponseDto kakaoResponseDto){
+        wishRepository.addWishList(kakaoResponseDto);
     }
 
 //    public List<KakaoResponseDto> qureyDsl(List<KakaoResponseDto> wishList){
