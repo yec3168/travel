@@ -25,7 +25,7 @@
                 </div>
                 <div id="road_wrap" class="bg_white">
 
-                    <div class="start_end_search" >
+                    <div class="start_end_search">
                         <div style="width: 100%; height: 50px; font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;"  >
                             <span style="vertical-align:middle; font-size: 25px; color: white; margin-left: 45px">kakao <b>map</b></span>
 
@@ -33,7 +33,7 @@
                         <div class="start">
                             <input type="text" name="start" id="start" placeholder="출발지를 입력해주세요." >
                             <span>
-                                <button id="startButton" type="button" onclick="getStartPosition()">
+                                <button id="startButton" type="button" onclick="getPosition('start')">
                                      <i class="bi bi-search"></i>
                                 </button>
                             </span>
@@ -42,11 +42,12 @@
                         <div class="end">
                             <input type="text" name="end" id="end" placeholder="도착지를 입력해주세요." >
                             <span>
-                                <button id="endButton" type="button" onclick="getEndPosition()">
+                                <button id="endButton" type="button"  onclick="getPosition('end')">
                                      <i class="bi bi-search"></i>
                                 </button>
                             </span>
                         </div>
+                        <ul class="placeList" id="placeList"></ul>
                     </div>
 
                 </div>
@@ -101,7 +102,6 @@
 
 
 
-
         // input값 validation check
         function validationCheck(kw){
 
@@ -115,8 +115,9 @@
         }
 
        // 주소나 장소 위치 받아오기 size =5
-        function getStartPosition(){
-            const searchFormInput = document.getElementById("start")
+        function getPosition(id){
+            const searchFormInput = document.getElementById(id)
+            console.log(searchFormInput)
             if(!validationCheck(searchFormInput))
                 return false;
             $.ajax({
@@ -131,9 +132,70 @@
                 },
                 success:function (result){
                     console.log(result)
+                    displayPlaces(result)
+                    if(id === "start"){
+                        $(".end_button").hide();
+                        $(".start_button").show();
+                    }
+                    else{
+                        $(".end_button").show();
+                        $(".start_button").hide();
+                    }
                 },
             })
-        };
+        }
+        //검색 결과 표출하는 함수.
+        function displayPlaces(places){
+            const placeList = document.getElementById("placeList")
+            let bounds = new kakao.maps.LatLngBounds();
+            //기존에 자식들 제거.
+            removeAllChildNods(placeList)
+
+            //place 내용들 추가.
+
+            for(let i = 0; i < places.length; i++){
+                let placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
+                let element = createContent(i, places[i]); // content내용이 들어감.
+
+                bounds.extend(placePosition);
+
+                placeList.appendChild(element);
+            }
+        }
+        // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+        function removeAllChildNods(placeList) {
+            while (placeList.hasChildNodes()) {
+                placeList.removeChild (placeList.lastChild);
+            }
+        }
+        // Content 생성
+        function createContent(index, item){
+            let element= document.createElement("li");
+            let content =
+                '    <div class="place_info">' +
+                '        <div class="button_set">' +
+                '           <button type="button" class="start_button"  >출발</button>' +
+                '           <button type="button" class="end_button" >도착</button>' +
+                '       </div>' +
+                '        <div class="title">' +
+                '               <strong style="color: #258fff;">'+index+'</strong>' +
+                '               <a href='+item.place_url+'><strong>'+item.place_name+'</strong></a>' +
+                '        </div>' +
+                '        <div class="body">' +
+                '            <div class="desc">' +
+                '                <p class="ellipsis">' + item.road_address_name +'</p>' +
+                '                <p class="jibun" style="color: lightgrey">'+ item.address_name +'</p>' +
+                '                <span style="color: #00bc8c">'+ item.phone +'</span>' +
+                '                <span><a class="link" href='+item.place_url+'>상세보기</a></span>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>';
+            element.innerHTML = content;
+            element.className = "placeItem";
+
+            console.log(element)
+            return element;
+        }
     </script>
 </th:block>
 </html>
