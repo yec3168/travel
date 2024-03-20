@@ -47,6 +47,28 @@
                                 </button>
                             </span>
                         </div>
+                        <div class="road_btn">
+                            <span>
+                                <a href="javascript: naviAPI('car');" >
+                                    <i class="bi bi-car-front-fill"></i>
+                                </a>
+                            </span>
+                            <span>
+                                <a href="javascript: alert('준비 중입니다.');" >
+                                    <i class="bi bi-bus-front-fill"></i>
+                                </a>
+                            </span>
+                            <span>
+                                <a href="javascript: alert('준비 중입니다.');">
+                                    <i class="bi bi-question-lg"></i>
+                                </a>
+                            </span>
+                            <span>
+                                <a href="javascript: alert('준비 중입니다.');">
+                                    <i class="bi bi-question-lg"></i>
+                                </a>
+                            </span>
+                        </div>
                         <ul class="placeList" id="placeList"></ul>
                     </div>
 
@@ -67,12 +89,15 @@
         };
 
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-        // /* `엔터`입력시 작동.*/
-        // $("#startButton").keyup(function (e){
-        //     if(e.which ===13)
-        //         getPosition();
-        // })
-
+         /* `엔터`입력시 작동.*/
+         $("#start").keyup(function (e){
+             if(e.which ===13)
+                 getPosition("start");
+         })
+        $("#end").keyup(function (e){
+            if(e.which ===13)
+                getPosition("end");
+        })
 
 
 
@@ -83,22 +108,29 @@
                 offset: new kakao.maps.Point(15, 43) // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
             };
         // 시작 마커 이미지 생성.
-        var startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
-
-
-
+        let startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
+        let startMarker = new kakao.maps.Marker({
+            map: map,
+            image:startImage,
+            //position:null
+        });
+        startMarker.setMap(null);
 
         // 도착 이미지 지정.
-        var arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png', // 도착 마커이미지 주소입니다
+        let arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png', // 도착 마커이미지 주소입니다
             arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
             arriveOption = {
                 offset: new kakao.maps.Point(15, 43) // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
             };
 
         // 도착 마커 이미지를 생성
-        var arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
-
-
+        let arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
+        let arriveMarker = new kakao.maps.Marker({
+            map: map,
+            image:arriveImage,
+            //position:null
+        });
+        arriveMarker.setMap(null);
 
 
 
@@ -115,6 +147,8 @@
         }
 
        // 주소나 장소 위치 받아오기 size =5
+        let startPlace = [];
+        let arrivePlace=[];
         function getPosition(id){
             const searchFormInput = document.getElementById(id)
             console.log(searchFormInput)
@@ -134,13 +168,16 @@
                     console.log(result)
                     displayPlaces(result)
                     if(id === "start"){
+                        startPlace = result;
                         $(".end_button").hide();
                         $(".start_button").show();
                     }
                     else{
+                        arrivePlace = result;
                         $(".end_button").show();
                         $(".start_button").hide();
                     }
+
                 },
             })
         }
@@ -161,6 +198,7 @@
 
                 placeList.appendChild(element);
             }
+            map.setBounds(bounds)
         }
         // 검색결과 목록의 자식 Element를 제거하는 함수입니다
         function removeAllChildNods(placeList) {
@@ -174,8 +212,8 @@
             let content =
                 '    <div class="place_info">' +
                 '        <div class="button_set">' +
-                '           <button type="button" class="start_button"  >출발</button>' +
-                '           <button type="button" class="end_button" >도착</button>' +
+                '           <button type="button" class="start_button" onclick="setStartMarker('+index+')">출발</button>' +
+                '           <button type="button" class="end_button" onclick="setArriveMarker('+index+')">도착</button>' +
                 '       </div>' +
                 '        <div class="title">' +
                 '               <strong style="color: #258fff;">'+index+'</strong>' +
@@ -196,6 +234,70 @@
             console.log(element)
             return element;
         }
+        // 출발 버튼을 클릭시 발생하는 함수.
+        function  setStartMarker(index){
+            let bounds = new kakao.maps.LatLngBounds();
+
+            // 기존 마커 제거.
+            startMarker.setMap(null)
+           // startMarker.setPosition(null)
+
+            //새로운 장소 지정.
+            const place = startPlace[index];
+            // position 재설정.
+            let startPostion = new kakao.maps.LatLng(place.y, place.x);
+            // startMarker에 position 설정, 화면에 표시.
+            startMarker.setPosition(startPostion);
+            startMarker.setMap(map);
+
+            //지도 중심좌표 레벨 재설정.
+            bounds.extend(startPostion);
+            map.setBounds(bounds)
+        }
+        function  setArriveMarker(index){
+            let bounds = new kakao.maps.LatLngBounds();
+
+            // 기존 마커 제거.
+            arriveMarker.setMap(null)
+            //arriveMarker.setPosition(null)
+
+            //새로운 장소 지정.
+            const place = arrivePlace[index];
+            // position 재설정.
+            let arrivePosition = new kakao.maps.LatLng(place.y, place.x);
+            // arriveMarker에 position 설정, 화면에 표시.
+            arriveMarker.setPosition(arrivePosition);
+            arriveMarker.setMap(map);
+
+            //지도 중심좌표 레벨 재설정. ( 출발 위치 고려해서 설정.)
+            bounds.extend(startMarker.getPosition())
+            bounds.extend(arrivePosition);
+            map.setBounds(bounds)
+        }
+
+
+
+        function naviAPI(method){
+            // 마커가 표시되지 않았으면 길찾기를 실행하지 않음.
+            if(startMarker.getMap()==null || arriveMarker.getMap()==null){
+                alert("출발지나 목적지를 설정해주세요.")
+                return;
+            }
+            let startPosition = startMarker.getPosition(),
+                originLat = startPosition.getLat(),
+                originLng = startPosition.getLng();
+
+            let arrivePostion = arriveMarker.getPosition(),
+                arriveLat = arrivePostion.getLat(),
+                arriveLng = arrivePostion.getLng();
+
+            if (method === "car"){
+
+
+            }
+        }
+
+
     </script>
 </th:block>
 </html>

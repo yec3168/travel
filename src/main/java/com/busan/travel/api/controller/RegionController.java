@@ -26,7 +26,7 @@ public class RegionController {
     private  KakaoKwSearchService kakaoKwSearchService;
 
     @GetMapping("/search")
-    public String roadHome(Model model){
+    public String searchHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
         return "region/search";
     }
@@ -53,6 +53,16 @@ public class RegionController {
         kakaoKwSearchService.addWishList(kakaoResponseDto);
 
         return  kakaoResponseDto;
+    }
+
+
+
+    //길찾기 부분.
+
+    @GetMapping("/road")
+    public String roadHome(Model model){
+        model.addAttribute("kakao_admin_key", kakao_admin_key);
+        return "region/road";
     }
 
 

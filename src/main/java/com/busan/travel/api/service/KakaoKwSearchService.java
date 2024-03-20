@@ -50,7 +50,13 @@ public class KakaoKwSearchService {
 
         return  kakaoResponseDto;
     }
-
+    public HttpHeaders makeHeader(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization" ,"KakaoAK "+kakao_rest_key);
+        headers.set("Accept", "application/json");
+        headers.set("charset", "UTF-8");
+        return headers;
+    }
     /* responseEntity 만들기 */
     public ResponseEntity<String> getResponse(String baseUrl) throws IOException, URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -58,18 +64,12 @@ public class KakaoKwSearchService {
         URL url = new URL(baseUrl);
         System.out.println(url.toString());
 
-        // header setting
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization" ,"KakaoAK "+kakao_rest_key);
-        headers.set("Accept", "application/json");
-        headers.set("charset", "UTF-8");
-        
         //Entity setting
-        HttpEntity entity = new HttpEntity(headers);
-        // restTemplate를 이용하여 요청을 보내고 String 형태로 받음.
-        ResponseEntity<String> response =restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, String.class);
+        HttpEntity entity = new HttpEntity(makeHeader());
 
-        return response;
+        // restTemplate를 이용하여 요청을 보내고 String 형태로 받음.
+        return restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, String.class);
+
     }
     public List<KakaoResponseDto> getList(String qurey, String sort, double lat, double lng) throws IOException, URISyntaxException {
         // 한글로 들어오게 된다면 encoding 진행.
