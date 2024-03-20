@@ -2,10 +2,9 @@ package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
-import com.busan.travel.api.service.OpenApiService;
+import com.busan.travel.api.service.GoodRestaurantService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.UnsupportedOrmXsdVersionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,19 +21,19 @@ import java.util.List;
 public class OpenApiController {
 
     @Autowired
-    private final OpenApiService openApiService;
+    private final GoodRestaurantService goodRestaurantService;
 
     @Autowired
     private final KakaoKwSearchService kakaoKwSearchService;
 
     @GetMapping("/open-api")
     public Object fetch() throws UnsupportedEncodingException, URISyntaxException {
-        return openApiService.getEntity().getBody();
+        return goodRestaurantService.getEntity().getBody();
     }
 
     @GetMapping("/open")
     public Object test() throws UnsupportedEncodingException, ParseException, URISyntaxException {
-        return openApiService.getJson().toString();
+        return goodRestaurantService.getJson().toString();
     }
 
     @GetMapping("/kakao")

@@ -15,12 +15,11 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OpenApiService {
+public class GoodRestaurantService {
     private final String URL ="http://apis.data.go.kr/6260000/FoodService/getFoodKr";
     @Value("${dataset-key}")
     private String busan_dataset_key;

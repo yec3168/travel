@@ -12,12 +12,12 @@
 #container .rcontent .contentMain li{border-bottom: 1px solid lightgrey; padding: 5px 0 5px 0;}
 #container .rcontent .contentMain h2{margin-top: 30px}
 
-#container .rcontent .contentMain .leftContent { border-radius:12px;  position: relative; float: left;  width: 50%; height: 70%}
+#container .rcontent .contentMain .leftContent { border-radius:12px;  position: relative; float: left;  width: 50%; height: 500px;}
 #container .rcontent .contentMain .leftContent .sort{padding: 10px 0px 15px 0px; border-bottom: 2px solid black; width: 70%;  margin-left: auto;margin-right: auto; text-align: right}
 #container .rcontent .contentMain .leftContent .sort a{padding-left: 5px; margin-right: 10px}
 #container .rcontent .contentMain .leftContent .listView{padding: 20px 0 0 0; width: 55%; margin-left: auto; margin-right: auto;}
 
-#container .rcontent .contentMain .rightContent { border-radius:12px;  position: relative;float: right;   width: 50%; height: 70%}
+#container .rcontent .contentMain .rightContent { border-radius:12px;  position: relative;float: right;   width: 50%; height: 500px;}
 #container .rcontent .contentMain .rightContent .sort{ padding: 10px 0px 15px 0px; border-bottom: 2px solid black; width: 70%; margin-left: auto;margin-right: auto; text-align: right;}
 #container .rcontent .contentMain .rightContent .sort a{padding-left: 5px; margin-right: 10px}
 #container .rcontent .contentMain .rightContent .listView{padding: 20px 0 0 0; width: 55%; margin-left: auto; margin-right: auto;}
