@@ -23,7 +23,7 @@
                             <option value="writer">작성자</option>
                         </select>
                         <input type="text" id="keyword" name="keyword" placeholder="키워드를 입력해 주세요." title="키워드 입력" />
-                        <button type="button" class="bt_search" ><i class="fas fa-search"></i><span class="skip_info">검색</span></button>
+                        <button type="button" class="bt_search" onclick="searchQuery()"><i class="fas fa-search"></i><span class="skip_info">검색</span></button>
                     </div>
                 </form>
             </div>
@@ -106,7 +106,35 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        function validationCheck(){
+            const searchForm = document.getElementById("searchForm")
+            const input = searchForm.querySelector("input")
 
+            if(input.value === ""){
+                alert("키워드를 입력해주세요.")
+                return false;
+            }
+            else
+                return true;
+        }
+        function searchQuery(){
+            if(validationCheck()){
+                const keyword = document.getElementById("keyword");
+                const selectedValue = document.querySelector('#searchType').value
+                $.ajax({
+                   type: 'POST',
+                    url: "/board/search",
+                   data: {
+                       keyword : keyword.value,
+                       selectedValue : selectedValue
+                   },
+                    success:function (result){
+                       console.log(result)
+                    }
+                });
+            }
+
+        }
     </script>
 </th:block>
 </html>

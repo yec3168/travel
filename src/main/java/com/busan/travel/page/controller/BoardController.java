@@ -165,4 +165,14 @@ public class BoardController {
 
         return "redirect:/board/detail/"+id;
     }
+
+
+
+
+    //검색기능
+    @PostMapping("/keword")
+    public String searchValue(@RequestParam("keword")String keyword,
+                              @RequestParam("selectedValue") String value){
+
+    }
 }

@@ -161,7 +161,7 @@ h4 + .search_box {margin-top:10px;}
 .search_box {background:#f7f8fa; border:1px solid #cfcfcf; box-shadow:0 2px 0px rgba(80,80,80,0.05); padding:10px 20px; margin:25px 0; overflow:hidden;}
 .search_box input[type="text"], .search_box select, .search_box button {height:34px;}
 .search_box input[type="text"], .search_box select {width:auto; padding:4px 5px; border:1px solid #ddd;}
-.search_box input[type="text"] {width:170px;}
+.search_box input[type="text"] {width: 350px;}
 .sch_group button {background:#586a7d; border:0; padding:0; color:#fff; font-weight:bold; width:42px; line-height:34px; border-radius:3px; vertical-align:top; position:relative;}
 .search_box input#sDate {margin-right:3px !important;}
 

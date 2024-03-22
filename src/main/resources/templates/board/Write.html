@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/MainLayout}">
+      layout:decorate="~{layout/MainLayout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <th:block layout:fragment="title">
     <title>리스트 페이지</title>
@@ -24,8 +24,8 @@
                     <tbody>
                     <tr>
                         <th scope="row">공지글</th>
-                        <td>
-                            <input type="checkbox" th:field="*{noticeYn}" class="chk" />
+                        <td >
+                            <input type="checkbox" th:field="*{noticeYn}" class="chk"  /> <!--sec:authorize="hasRole('admin')"-->
                             <label th:for="noticeYn"> 설정</label>
 
                         </td>

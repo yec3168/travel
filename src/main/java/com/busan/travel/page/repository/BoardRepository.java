@@ -45,4 +45,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "WHERE b.noticeYn =false "+
             "ORDER BY size(b.likeVote) desc, b.createDate ")
     List<Board> findAllByOrderByLikeVote(Pageable pageable);
+
+
+
+
+
 }
