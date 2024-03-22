@@ -1,4 +1,4 @@
-package com.busan.travel.api.dto;
+package com.busan.travel.OpenData.dto;
 
 import lombok.Getter;
 import lombok.Setter;

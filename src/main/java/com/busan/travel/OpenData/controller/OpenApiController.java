@@ -1,8 +1,8 @@
-package com.busan.travel.api.controller;
+package com.busan.travel.OpenData.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
-import com.busan.travel.api.service.GoodRestaurantService;
+import com.busan.travel.OpenData.service.GoodRestaurantService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

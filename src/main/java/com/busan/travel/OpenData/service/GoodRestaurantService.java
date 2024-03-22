@@ -1,6 +1,6 @@
-package com.busan.travel.api.service;
+package com.busan.travel.OpenData.service;
 
-import com.busan.travel.api.dto.GoodRestaurantDto;
+import com.busan.travel.OpenData.dto.GoodRestaurantDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
