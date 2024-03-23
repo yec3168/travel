@@ -27,3 +27,13 @@ https://apis.map.kakao.com/web/
 https://data.busan.go.kr/dataSet/detail.nm?contentId=10&publicdatapk=15063506  
 
 ![image](https://github.com/yec3168/travel/assets/85733545/19166af5-1ca5-44aa-b430-cd4f5ee1a02f)
+
+
+
+# Page
+
+## 📃회원  
+- 로그인  /user/login
+- 회원가입  /user/new
+- 회원탈퇴
+- 수정
