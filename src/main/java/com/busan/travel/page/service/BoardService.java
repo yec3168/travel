@@ -186,4 +186,31 @@ public class BoardService {
         cookie.setMaxAge((int) (todayEndSecond - currentSecond));
         response.addCookie(cookie);
     }
+
+
+
+//    //검색기능
+//    public Page<Board> searchKeyword(int page, String keyword, String searchValue){
+//        Page<Board> result;
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("createDate"));
+//        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+//
+//        if(searchValue.equals("")){
+//            //전체 검색
+//            result = boardRepository.findBySubjectContaining(keyword, pageable);
+//        }
+//        else if(searchValue.equals("subject")){
+//            //제목
+//            result = boardRepository.findBySubjectContaining(keyword, pageable);
+//        }
+//        else if(searchValue.equals("content")){
+//            //내용
+//            result = boardRepository.findByContentContaining(keyword, pageable);
+//        }
+//        else{
+//            result = boardRepository.findByWriterContaining(keyword, pageable);
+//        }
+//        return  result;
+//    }
 }

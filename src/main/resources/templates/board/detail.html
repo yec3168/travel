@@ -115,11 +115,13 @@
                     <p class="writer">
                         <em th:text="${comment.writer.nickName}"></em>
                         <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
-                        <a href="#" id="commentLike" class="bt bt-outline-secondary"
-                           th:data-uri="@{|/comment/like/${comment.id}}|">
-                            추천
-                            <span class="badge bg-secondary" th:utext="${#lists.size(comment.vote)}"></span>
-                        </a>
+                        <span class="comment_vote">
+                            <a href="#" id="commentLike" class="bt bt-outline-secondary"
+                               th:data-uri="@{|/comment/like/${comment.id}}|">
+                                <i class="fas fa-light fa-thumbs-up" style="padding-right: 5px; font-size: 14px"></i>
+                                <span th:utext="${#lists.size(comment.vote)}"></span>
+                            </a>
+                        </span>
                     </p>
                     <div class="cont">
                         <span class="txt_con" th:text="${comment.content}"></span>

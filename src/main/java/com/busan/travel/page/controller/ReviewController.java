@@ -10,6 +10,12 @@ public class ReviewController {
 
     @GetMapping("/list")
     public String viewList(){
-        return null;
+        return "review/List";
+    }
+
+    @GetMapping("/write")
+    public String reviewWrite(){
+
+        return "review/Write";
     }
 }

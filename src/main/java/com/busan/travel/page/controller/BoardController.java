@@ -170,9 +170,18 @@ public class BoardController {
 
 
     //검색기능
-    @PostMapping("/keword")
-    public String searchValue(@RequestParam("keword")String keyword,
-                              @RequestParam("selectedValue") String value){
-
-    }
+//    @GetMapping("/keword")
+//    public String searchValue(@RequestParam(value = "keword", defaultValue = "")String keyword,
+//                              @RequestParam(value = "selectedValue", defaultValue = "") String searchValue,
+//                              @RequestParam(value = "page", defaultValue = "0")int page, Model model){
+//        // 공지글은 고정.
+//        List<Board> pagingTrue = boardService.getListNoticeFalse(page);
+//        model.addAttribute("pagingTrue", pagingTrue);
+//
+//
+//        //keyword에 따라 검색기능 활성화
+//        Page<Board> paging = boardService.searchKeyword(page, keyword, searchValue);
+//        model.addAttribute("paging", paging);
+//        return "board/List";
+//    }
 }
