@@ -55,6 +55,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // 1. 전채 검색
     /*제목, 내용, 작성자 다 검색.*/
 
+    @Query("select b " +
+            "from Board  as b " +
+            "where b.noticeYn = false and " +
+            "b.subject like %:keyword% or " +
+            "b.content like %:keyword% or " +
+            "b.writer.nickName like %:keyword% ")
+    Page<Board> findAllBySubjectOrContentOrWriterContaining(String keyword, Pageable pageable);
 
     // 2.  제목
     @Query("SELECT b " +

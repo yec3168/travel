@@ -212,7 +212,7 @@ public class BoardService {
                     boardRepository.findByContentContaining(keyword, pageable);
             default ->
                     // 전체검색.
-                    boardRepository.findBySubjectContaining(keyword, pageable);
+                    boardRepository.findAllBySubjectOrContentOrWriterContaining(keyword, pageable);
         };
         return  result;
     }
