@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 
@@ -170,18 +171,18 @@ public class BoardController {
 
 
     //검색기능
-//    @GetMapping("/keword")
-//    public String searchValue(@RequestParam(value = "keword", defaultValue = "")String keyword,
-//                              @RequestParam(value = "selectedValue", defaultValue = "") String searchValue,
-//                              @RequestParam(value = "page", defaultValue = "0")int page, Model model){
-//        // 공지글은 고정.
-//        List<Board> pagingTrue = boardService.getListNoticeFalse(page);
-//        model.addAttribute("pagingTrue", pagingTrue);
-//
-//
-//        //keyword에 따라 검색기능 활성화
-//        Page<Board> paging = boardService.searchKeyword(page, keyword, searchValue);
-//        model.addAttribute("paging", paging);
-//        return "board/List";
-//    }
+    @GetMapping("/search")
+    public String searchValue(@RequestParam(value = "keyword", defaultValue = "")String keyword,
+                              @RequestParam(value = "searchType", defaultValue = "") String searchType,
+                              @RequestParam(value = "page", defaultValue = "0")int page, Model model) throws UnsupportedEncodingException {
+        // 공지글은 고정.
+        List<Board> pagingTrue = boardService.getListNoticeFalse(page);
+        model.addAttribute("pagingTrue", pagingTrue);
+
+        //keyword에 따라 검색기능 활성화
+        Page<Board> paging = boardService.searchKeyword(page, keyword, searchType);
+
+        model.addAttribute("paging", paging);
+        return "board/List";
+    }
 }

@@ -8,6 +8,7 @@ import com.busan.travel.page.repository.BoardRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.buf.Utf8Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -189,28 +192,28 @@ public class BoardService {
 
 
 
-//    //검색기능
-//    public Page<Board> searchKeyword(int page, String keyword, String searchValue){
-//        Page<Board> result;
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-//        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-//
-//        if(searchValue.equals("")){
-//            //전체 검색
-//            result = boardRepository.findBySubjectContaining(keyword, pageable);
-//        }
-//        else if(searchValue.equals("subject")){
-//            //제목
-//            result = boardRepository.findBySubjectContaining(keyword, pageable);
-//        }
-//        else if(searchValue.equals("content")){
-//            //내용
-//            result = boardRepository.findByContentContaining(keyword, pageable);
-//        }
-//        else{
-//            result = boardRepository.findByWriterContaining(keyword, pageable);
-//        }
-//        return  result;
-//    }
+    //검색기능
+    public Page<Board> searchKeyword(int page, String keyword, String searchType) throws UnsupportedEncodingException {
+        Page<Board> result;
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+
+        System.out.println(keyword);
+        result = switch (searchType) {
+            case "writer" ->
+                    //작성자. (닉네임으로 검색.)
+                    boardRepository.findByNickname(keyword, pageable);
+            case "subject" ->
+                    //제목
+                    boardRepository.findBySubjectContaining(keyword, pageable);
+            case "content" ->
+                    //내용
+                    boardRepository.findByContentContaining(keyword, pageable);
+            default ->
+                    // 전체검색.
+                    boardRepository.findBySubjectContaining(keyword, pageable);
+        };
+        return  result;
+    }
 }
