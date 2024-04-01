@@ -308,9 +308,21 @@
                     },
                     success:function (response){
                         console.log(response)
+                        let linePath = [];
+                        for(let vertex of response){
+                            linePath.push(new kakao.maps.LatLng(vertex.x, vertex.y));
+                        }
+                        console.log(linePath)
+                        let polyline = new kakao.maps.Polyline({
+                            path: linePath,
+                            strokeWeight: 5,
+                            strokeColor: '#000000',
+                            strokeOpacity: 0.7,
+                            strokeStyle: 'solid'
+                        });
+                        polyline.setMap(map);
                     }
                 })
-
             }
         }
 

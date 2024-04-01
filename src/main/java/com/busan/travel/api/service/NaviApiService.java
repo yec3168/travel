@@ -48,13 +48,14 @@ public class NaviApiService {
         return naviApiResponseDto;
     }
 
-    private LinePathDto toDto(JSONObject item){
+    private LinePathDto toDto(String y, String x){
         LinePathDto linePathDto = new LinePathDto();
-
+        linePathDto.setY(y);
+        linePathDto.setX(x);
         return linePathDto;
     }
 
-    public List<NaviApiResponseDto> getPlace(String origin, String originX, String originY,
+    public List<LinePathDto> getPlace(String origin, String originX, String originY,
                                              String destination, String destinationX, String destinationY) throws UnsupportedEncodingException, URISyntaxException, ParseException {
         // 1. URI 생성.
         URI uri = new URI(makeURL(origin, originX, originY, destination, destinationX, destinationY));
@@ -84,18 +85,17 @@ public class NaviApiService {
 
 //        System.out.println(roads.size());
 //        System.out.println(roads.toString());
-        List<JSONObject> roadList = new ArrayList<>();
+        List<LinePathDto> roadList = new ArrayList<>();
         for(Object o : roads){
             JSONObject item = (JSONObject)o;
             JSONArray vertexes = (JSONArray) item.get("vertexes");
             System.out.println(vertexes.toString());
+
+            for(int i = 0; i < vertexes.size(); i +=2){
+                roadList.add(toDto(Double.toString((double) vertexes.get(i)), Double.toString((double) vertexes.get(i+1))));
+            }
         }
-
-        List<NaviApiResponseDto> result = new ArrayList<>();
-
-//        for(Object o : JSONArray){
-//            result.add(todto((JSONObject) o));
-//        }
-        return result;
+        System.out.println(roadList.toString());
+        return roadList;
     }
 }

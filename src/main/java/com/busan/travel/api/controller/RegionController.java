@@ -1,6 +1,7 @@
 package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.dto.LinePathDto;
 import com.busan.travel.api.dto.NaviApiResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
 import com.busan.travel.api.service.NaviApiService;
@@ -73,12 +74,12 @@ public class RegionController {
 
     @GetMapping("/car")
     @ResponseBody
-    public List<NaviApiResponseDto> getLinePath(@RequestParam("origin")String origin,
-                                                @RequestParam("originX")String originX,
-                                                @RequestParam("originY")String originY,
-                                                @RequestParam("destination")String destination,
-                                                @RequestParam("destinationX")String destinationX,
-                                                @RequestParam("destinationY")String destinationY) throws UnsupportedEncodingException, URISyntaxException, ParseException {
+    public List<LinePathDto> getLinePath(@RequestParam("origin")String origin,
+                                         @RequestParam("originX")String originX,
+                                         @RequestParam("originY")String originY,
+                                         @RequestParam("destination")String destination,
+                                         @RequestParam("destinationX")String destinationX,
+                                         @RequestParam("destinationY")String destinationY) throws UnsupportedEncodingException, URISyntaxException, ParseException {
         System.out.println(origin + originX + originY+ destination + destinationX+ destinationY);
         return naviApiService.getPlace(origin, originX, originY, destination, destinationX, destinationY);
     }
