@@ -59,7 +59,8 @@
                         <ul>
                             <li><a th:href="@{/kakao/search}"  class="on">위시리스트</a></li>
                             <li><a th:href="@{/kakao/road}"  >길찾기</a></li>
-                            <li><a href="javascript: alert('준비 중입니다.');"  >계획작성</a></li>
+                            <li><a th:href="@{/plan/view}"  >계획작성</a></li>
+                            <li><a href="javascript: alert('준비 중입니다.');"  >...</a></li>
                         </ul>
                     </li>
                     <li class="has_sub"><a href="javascript: void(0);"><span>회원 관리</span></a>
@@ -97,7 +98,10 @@
 
 <!-- 마크다운 에디터-->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<!--카카오 api-->
 <script type="text/javascript" th:src="@{|//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakao_admin_key}|}"></script>
+<!--캘린더-->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
     </script>

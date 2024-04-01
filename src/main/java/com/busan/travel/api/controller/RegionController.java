@@ -2,7 +2,6 @@ package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.dto.LinePathDto;
-import com.busan.travel.api.dto.NaviApiResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
 import com.busan.travel.api.service.NaviApiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,7 +35,7 @@ public class RegionController {
     @GetMapping("/search")
     public String searchHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
-        return "region/search";
+        return "tourist/search";
     }
     @GetMapping("/keyword")
     @ResponseBody
@@ -69,7 +68,7 @@ public class RegionController {
     @GetMapping("/road")
     public String roadHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
-        return "region/road";
+        return "tourist/road";
     }
 
     @GetMapping("/car")
