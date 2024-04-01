@@ -276,7 +276,14 @@
         }
 
 
-
+        let linePath = [];
+        let polyline = new kakao.maps.Polyline({
+            path: linePath,
+            strokeWeight: 5,
+            strokeColor: '#258fff',
+            strokeOpacity: 0.7,
+            strokeStyle: 'solid'
+        });
         function naviAPI(method){
             // 마커가 표시되지 않았으면 길찾기를 실행하지 않음.
             if(startMarker.getMap()==null || arriveMarker.getMap()==null){
@@ -307,24 +314,25 @@
                         destinationY : destinationLat
                     },
                     success:function (response){
-                        console.log(response)
-                        let linePath = [];
+                        //초기화
+                        linePath=[];
+                        polyline.setMap(null);
+
+                        //라인 그리기
                         for(let vertex of response){
                             linePath.push(new kakao.maps.LatLng(vertex.x, vertex.y));
                         }
                         console.log(linePath)
-                        let polyline = new kakao.maps.Polyline({
-                            path: linePath,
-                            strokeWeight: 5,
-                            strokeColor: '#000000',
-                            strokeOpacity: 0.7,
-                            strokeStyle: 'solid'
-                        });
+
+                        // path 설정 및 map에 그리기
+                        polyline.setPath(linePath);
                         polyline.setMap(map);
+
                     }
                 })
             }
         }
+
 
 
     </script>
