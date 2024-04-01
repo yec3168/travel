@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class NaviApiServiceTest {
@@ -22,6 +20,7 @@ class NaviApiServiceTest {
     @Test
     public void Test() throws UnsupportedEncodingException, URISyntaxException, ParseException {
         String qurey = "부산역";
-        System.out.println(naviApiService.getPlace(qurey).toString());
+
+//        System.out.println(naviApiService.getPlace(qurey).toString());
     }
 }

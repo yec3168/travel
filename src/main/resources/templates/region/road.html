@@ -285,14 +285,31 @@
             }
             let startPosition = startMarker.getPosition(),
                 originLat = startPosition.getLat(),
-                originLng = startPosition.getLng();
+                originLng = startPosition.getLng(),
+                origin= document.getElementById("start").value;
 
             let arrivePostion = arriveMarker.getPosition(),
-                arriveLat = arrivePostion.getLat(),
-                arriveLng = arrivePostion.getLng();
+                destinationLat = arrivePostion.getLat(),
+                destinationLng = arrivePostion.getLng(),
+                destination = document.getElementById("end").value;
 
             if (method === "car"){
-
+                $.ajax({
+                    type: "get",
+                    url: "/kakao/car",
+                    async: false,
+                    data:{
+                        origin: origin,
+                        originX : originLng,
+                        originY : originLat,
+                        destination : destination,
+                        destinationX : destinationLng,
+                        destinationY : destinationLat
+                    },
+                    success:function (response){
+                        console.log(response)
+                    }
+                })
 
             }
         }

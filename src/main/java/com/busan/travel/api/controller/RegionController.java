@@ -1,9 +1,12 @@
 package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.dto.NaviApiResponseDto;
 import com.busan.travel.api.service.KakaoKwSearchService;
+import com.busan.travel.api.service.NaviApiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.List;
@@ -24,6 +28,9 @@ public class RegionController {
 
     @Autowired
     private  KakaoKwSearchService kakaoKwSearchService;
+
+    @Autowired
+    private NaviApiService naviApiService;
 
     @GetMapping("/search")
     public String searchHome(Model model){
@@ -58,11 +65,22 @@ public class RegionController {
 
 
     //길찾기 부분.
-
     @GetMapping("/road")
     public String roadHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
         return "region/road";
+    }
+
+    @GetMapping("/car")
+    @ResponseBody
+    public List<NaviApiResponseDto> getLinePath(@RequestParam("origin")String origin,
+                                                @RequestParam("originX")String originX,
+                                                @RequestParam("originY")String originY,
+                                                @RequestParam("destination")String destination,
+                                                @RequestParam("destinationX")String destinationX,
+                                                @RequestParam("destinationY")String destinationY) throws UnsupportedEncodingException, URISyntaxException, ParseException {
+        System.out.println(origin + originX + originY+ destination + destinationX+ destinationY);
+        return naviApiService.getPlace(origin, originX, originY, destination, destinationX, destinationY);
     }
 
 
