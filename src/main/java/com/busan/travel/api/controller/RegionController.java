@@ -2,8 +2,11 @@ package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.dto.LinePathDto;
+import com.busan.travel.api.entity.Wish;
 import com.busan.travel.api.service.KakaoKwSearchService;
 import com.busan.travel.api.service.NaviApiService;
+import com.busan.travel.page.entity.Member;
+import com.busan.travel.page.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.parser.ParseException;
@@ -32,6 +35,9 @@ public class RegionController {
     @Autowired
     private NaviApiService naviApiService;
 
+    @Autowired
+    private MemberService memberService;
+
     @GetMapping("/search")
     public String searchHome(Model model){
         model.addAttribute("kakao_admin_key", kakao_admin_key);
@@ -57,12 +63,24 @@ public class RegionController {
         KakaoResponseDto kakaoResponseDto = mapper.readValue(item, KakaoResponseDto.class);
 
         //해당 사용자 위시리스트 추가.
-        kakaoKwSearchService.addWishList(kakaoResponseDto);
+        if(principal != null){
+            Member member = memberService.getUserByEmail(principal.getName());
+            kakaoKwSearchService.addWishList(kakaoResponseDto, member);
+        }
 
         return  kakaoResponseDto;
     }
 
-
+    @GetMapping("/wishes")
+    @ResponseBody
+    private List<KakaoResponseDto> findWishList(Principal principal){
+        if(principal != null) {
+            Member member = memberService.getUserByEmail(principal.getName());
+            return kakaoKwSearchService.findAllByMember(member);
+        }
+        else
+            return null;
+    }
 
     //길찾기 부분.
     @GetMapping("/road")

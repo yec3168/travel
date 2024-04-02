@@ -1,7 +1,9 @@
 package com.busan.travel.api.service;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.entity.Wish;
 import com.busan.travel.api.repository.WishRepository;
+import com.busan.travel.page.entity.Member;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -94,15 +96,27 @@ public class KakaoKwSearchService {
             throw new RuntimeException(e);
         }
     }
+    public void addWishList(KakaoResponseDto kakaoResponseDto, Member member){
+        Wish wish = Wish.builder()
+                .place_name(kakaoResponseDto.getPlace_name())
+                .address_name(kakaoResponseDto.getAddress_name())
+                .road_address_name(kakaoResponseDto.getRoad_address_name())
+                .category_group_name(kakaoResponseDto.getCategory_group_name())
+                .category_group_code(kakaoResponseDto.getCategory_group_code())
+                .distance(kakaoResponseDto.getDistance())
+                .phone(kakaoResponseDto.getPhone())
+                .place_url(kakaoResponseDto.getPlace_url())
+                .x(kakaoResponseDto.getX())
+                .y(kakaoResponseDto.getY())
+                .member(member)
+                .build();
 
-    public List<KakaoResponseDto> findAll(){
-        return wishRepository.findAll();
-    }
-    public void addWishList(KakaoResponseDto kakaoResponseDto){
-        wishRepository.addWishList(kakaoResponseDto);
+        wishRepository.save(wish);
     }
 
-//    public List<KakaoResponseDto> qureyDsl(List<KakaoResponseDto> wishList){
-//        List<KakaoResponseDto> result =
-//    }
+    public List<KakaoResponseDto> findAllByMember(Member member){
+        return wishRepository.findAllByMember(member);
+    }
+
+
 }

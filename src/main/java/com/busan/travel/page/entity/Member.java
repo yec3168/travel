@@ -1,6 +1,6 @@
 package com.busan.travel.page.entity;
 
-import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.entity.Wish;
 import com.busan.travel.page.dto.MemberFormDto;
 import com.busan.travel.page.status.Gender;
 import com.busan.travel.page.status.UserRole;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,6 +50,8 @@ public class Member {
     @OneToMany(mappedBy = "writer",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Board> boardList;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Wish> wishList;
 
     @Builder
     public Member(String email, String password ,String name,

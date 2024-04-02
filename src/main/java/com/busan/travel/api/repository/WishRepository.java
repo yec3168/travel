@@ -1,20 +1,15 @@
 package com.busan.travel.api.repository;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
+import com.busan.travel.api.entity.Wish;
+import com.busan.travel.page.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class WishRepository {
+public interface WishRepository extends JpaRepository<Wish, Long> {
 
-    private List<KakaoResponseDto> wishList = new ArrayList<>();
-
-    public void  addWishList(KakaoResponseDto kakaoResponseDto){
-        wishList.add(kakaoResponseDto);
-    }
-    public List<KakaoResponseDto> findAll(){
-        return wishList;
-    }
+    List<KakaoResponseDto> findAllByMember(Member member);
 }
