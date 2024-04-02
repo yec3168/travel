@@ -98,39 +98,29 @@
 
         // Planner
 
-        const calenderEl = document.getElementById("calender")
-        const calender = new FullCalendar.Calendar(calenderEl, {
-            initialView: 'timeGridWeek',
-            headerToolbar: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'timeGridWeek, timeGridDay'
-
-            },
-            events:{
-              title: 'Event',
-            },
-            visibleRange:{
-              start: '2024-04-01',
-              end:'2024-04-07'
-            },
-            allDaySlot: false,
-            locale: 'ko', // 한국어 설정.
-            navLinks: true,
-            editable: true, // 수정 가능
-            droppables: true, // 드래그 가능.
-
-        })
         function openPlanner(){
             if(!validationCheck()){
                 return false;
             }
+
             $("#planner").show()
             $("#selectDay").hide()
-            calender.changeView('visibleRange', {
-                start: startDate,
-                end: endDate
-            });
+            const calenderEl = document.getElementById("calender")
+            const calender = new FullCalendar.Calendar(calenderEl, {
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'timeGridWeek, timeGridDay'
+
+                },
+                allDaySlot: false,
+                locale: 'ko', // 한국어 설정.
+                navLinks: true,
+                editable: true, // 수정 가능
+                droppables: true, // 드래그 가능.
+
+            })
             calender.render()
 
         }
