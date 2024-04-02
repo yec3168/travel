@@ -1,0 +1,23 @@
+#selectDay{margin: auto; margin-top: 50px; height: 650px; width: 650px; background-color: white; border-radius: 5%}
+#selectDay p{padding-left:30px; font-size:48px; color:#333; font-family:Arial, Helvetica, sans-serif, Dotum; font-weight:bold; border-bottom: 7px solid #0081a4}
+#selectDay i{color:#00adb4; font-weight:bold;}
+
+#selectDay #selectForm{margin: auto; height: 550px; width: 80%; position: relative}
+#selectDay #selectForm #tb{ border-collapse: separate; border-spacing: 0px 85px;}
+#selectDay #selectForm tr{text-align: center}
+#selectDay #selectForm label{font-size: 25px;font-weight:bold; font-family: Verdana fantasy;}
+#selectDay #selectForm input{ outline: none;  width: 80%; margin-left: 50px}
+
+#selectDay button{margin: auto;
+    text-align: center;
+    border: 1px solid #00adb4;
+    font-weight: bold;
+    background-color: #00adb4;
+    border-radius: 15px;
+    width: 200px;
+    height: 61px;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif, Dotum;
+    position: absolute;
+    bottom: 50px;
+    left: 150px;}

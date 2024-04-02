@@ -7,24 +7,135 @@
     <title>지역</title>
 </th:block>
 
+
+
 <th:block layout:fragment="content">
-    <div class="page_tits">
-        <h3>길찾기</h3>
-        <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>계획작성</span></p>
+    <div id="selectDay">
+        <p>플래너<i>작성</i></p>
+        <form id="selectForm">
+            <table id="tb">
+                <colgroup>  <col style="width:20%;" />  <col style="width:80%;" /></colgroup>
+                <tr>
+                    <th>
+                        <label th:for="title">여행제목 </label>
+                    </th>
+                    <td colspan="3">
+                        <input type="text" id="title" placeholder="여행제목을 입력하세요.">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label th:for="title">여행기간 </label>
+                    </th>
+                    <td colspan="3">
+                        <input type="text" name="datefilter" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label th:for="title">인원 </label>
+                    </th>
+                    <td colspan="3">
+                        <input type="text" id="people">
+                    </td>
+                </tr>
+                <button type="button" onclick="openPlanner()">만들기</button>
+            </table>
+        </form>
     </div>
-    <div class="contentMain">
-        <div id='calendar'></div>
+
+    <div id="planner">
+        <div class="page_tits">
+            <h3>플래너</h3>
+            <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>계획작성</span></p>
+        </div>
+        <div class="contentMain">
+            <div id="calender"></div>
+        </div>
     </div>
 </th:block>
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth'
+        let startDate, endDate = "";
+        $(document).ready(function() {
+            $("#planner").hide()
+            $("#selectDay").show()
+        })
+        $(function() {
+            $('input[name="datefilter"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
             });
-            calendar.render();
+            $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+                startDate = picker.startDate.format('YYYY-MM-DD')
+                endDate = picker.endDate.format('YYYY-MM-DD')
+            });
+
+            $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                startDate, endDate = "";
+            });
+
         });
+        function validationCheck(){
+            const selectForm = document.getElementById("selectForm")
+            let formInput = selectForm.querySelectorAll('input[type="text"]')
+
+            for (let i = 0; i < formInput.length; i++){
+                if(formInput[i].value == ""){
+                    $(formInput[i]).focus();
+                    alert("필수입력 값들을 입력 하세요.")
+                    return false;
+                }
+            }
+            return true;
+
+        }
+
+
+        // Planner
+
+        const calenderEl = document.getElementById("calender")
+        const calender = new FullCalendar.Calendar(calenderEl, {
+            initialView: 'timeGridWeek',
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'timeGridWeek, timeGridDay'
+
+            },
+            events:{
+              title: 'Event',
+            },
+            visibleRange:{
+              start: '2024-04-01',
+              end:'2024-04-07'
+            },
+            allDaySlot: false,
+            locale: 'ko', // 한국어 설정.
+            navLinks: true,
+            editable: true, // 수정 가능
+            droppables: true, // 드래그 가능.
+
+        })
+        function openPlanner(){
+            if(!validationCheck()){
+                return false;
+            }
+            $("#planner").show()
+            $("#selectDay").hide()
+            calender.changeView('visibleRange', {
+                start: startDate,
+                end: endDate
+            });
+            calender.render()
+
+        }
+
+
     </script>
 </th:block>
 </html>
