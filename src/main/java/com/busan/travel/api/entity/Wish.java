@@ -13,6 +13,7 @@ public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "wish_id")
     private Long id;
 
     private String place_name;// 장소이름
@@ -36,6 +37,7 @@ public class Wish {
     private String y; //경도
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member; //작성자
 
     @Builder

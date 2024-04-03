@@ -74,12 +74,12 @@ public class RegionController {
     @GetMapping("/wishes")
     @ResponseBody
     private List<KakaoResponseDto> findWishList(Principal principal){
-        if(principal != null) {
-            Member member = memberService.getUserByEmail(principal.getName());
-            return kakaoKwSearchService.findAllByMember(member);
-        }
-        else
-            return null;
+       if(principal != null){
+           Member member = memberService.getUserByEmail(principal.getName());
+           List<KakaoResponseDto> wishList=  kakaoKwSearchService.findAllByMember(member);
+           return wishList;
+       }
+       return null;
     }
 
     //길찾기 부분.

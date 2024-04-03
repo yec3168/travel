@@ -115,7 +115,12 @@ public class KakaoKwSearchService {
     }
 
     public List<KakaoResponseDto> findAllByMember(Member member){
-        return wishRepository.findAllByMember(member);
+       List<Wish> wishList =  wishRepository.findAllByMember(member);
+       List<KakaoResponseDto> response = new ArrayList<>();
+       for(int i = 0; i < wishList.size(); i++){
+            response.add(KakaoResponseDto.toDto(wishList.get(i)));
+       }
+       return response;
     }
 
 

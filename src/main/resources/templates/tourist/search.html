@@ -44,6 +44,21 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
+        $(document).ready(function (){
+           $.ajax({
+               type: 'get',
+               async: false, //비동기
+               url: '/kakao/wishes',
+               success:function (response){
+                   if(response === null)
+                       return false;
+
+                   console.log(response)
+                   for(let wish of response)
+                        appendList(wish);
+               }
+           })
+        });
         let markers = [];
         let lat = 35.137922,  lng = 129.055628, sort, selected_item;
         let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -149,17 +164,20 @@
                     item:JSON.stringify(selected_item)
                 },
                 success:function (result){
-                    const wishList = document.getElementById("wishList");
-                    let content = createCotent(result); // wishList에 추가할 부분.
-
-                    let element= document.createElement("li")
-                    element.innerHTML = content;
-                    element.className = "item";
-
-                    wishList.appendChild(element);
+                    appendList(result);
                 }
             })
 
+        }
+        function appendList(result){
+            const wishList = document.getElementById("wishList");
+            let content = createCotent(result); // wishList에 추가할 부분.
+
+            let element= document.createElement("li")
+            element.innerHTML = content;
+            element.className = "item";
+
+            wishList.appendChild(element);
         }
         function removeList(){
             const wishList = document.getElementById("wishList");

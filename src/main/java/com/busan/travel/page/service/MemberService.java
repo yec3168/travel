@@ -1,6 +1,7 @@
 package com.busan.travel.page.service;
 
 import com.busan.travel.DataNotFoundException;
+import com.busan.travel.api.entity.Wish;
 import com.busan.travel.page.dto.MemberFormDto;
 import com.busan.travel.page.entity.Member;
 import com.busan.travel.page.repository.MemberRepository;

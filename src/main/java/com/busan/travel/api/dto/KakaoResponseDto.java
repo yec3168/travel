@@ -1,8 +1,7 @@
 package com.busan.travel.api.dto;
 
-import lombok.Builder;
+import com.busan.travel.api.entity.Wish;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -29,4 +28,22 @@ public class KakaoResponseDto {
     private String x;
 
     private String y;
+
+
+    public static KakaoResponseDto toDto(Wish wish){
+        KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
+        kakaoResponseDto.setPlace_name(wish.getPlace_name());
+        kakaoResponseDto.setAddress_name(wish.getAddress_name());
+        kakaoResponseDto.setRoad_address_name(wish.getRoad_address_name());
+        kakaoResponseDto.setCategory_group_name(wish.getCategory_group_name());
+        kakaoResponseDto.setCategory_group_code(wish.getCategory_group_code());
+        kakaoResponseDto.setDistance(wish.getDistance());
+        kakaoResponseDto.setPhone(wish.getPhone());
+        kakaoResponseDto.setPlace_url(wish.getPlace_url());
+        kakaoResponseDto.setX(wish.getX());
+        kakaoResponseDto.setY(wish.getY());
+
+        return  kakaoResponseDto;
+    }
+
 }
