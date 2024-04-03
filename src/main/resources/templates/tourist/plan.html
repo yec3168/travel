@@ -49,8 +49,36 @@
             <h3>플래너</h3>
             <p class="path"><strong>현재 위치 :</strong> <span>관광지 정보</span> <span>계획작성</span></p>
         </div>
-        <div class="contentMain">
+        <div class="contentPlanner">
+            <button type="button" id="addEvent" onclick="openPop()">일정추가</button>
             <div id="calender"></div>
+        </div>
+    </div>
+
+    <div id="addPlan" class="popLayer">
+        <div class="pop_container" >
+            <div id="menu">
+                <h3>위시리스트</h3>
+                <ul id="wishList"></ul>
+            </div>
+            <div id="write">
+                <form id="planForm">
+                    <ul>
+                        <label>asd</label>
+                        <input type="text" name="title">
+                    </ul>
+
+                    <ul>
+                        <label>asdfdg</label>
+                        <input type="text" name="title">
+                    </ul>
+                </form>
+            </div>
+            <p class="btn_set">
+                <button type="submit" class="btns btn_st2" >추가</button>
+                <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
+            </p>
+            <button type="button" class="btn_close" onclick="closeSignupPopup();"><span><i class="far fa-times-circle"></i></span></button>
         </div>
     </div>
 </th:block>
@@ -95,36 +123,111 @@
 
         }
 
-
         // Planner
+        function getWishList(){
+            $.ajax({
+                type: 'get',
+                async: false, //비동기
+                url: '/kakao/wishes',
+                success:function (response){
+                    if(response === null)
+                        return false;
 
+                    console.log(response)
+                    for(let wish of response)
+                        appendList(wish);
+                }
+            })
+        }
+        function appendList(result){
+            const wishList = document.getElementById("wishList");
+            console.log(wishList.childElementCount)
+            let content = createContent(wishList.childElementCount, result); // wishList에 추가할 부분.
+
+            let element= document.createElement("li")
+            element.innerHTML = content;
+            element.className = "item";
+
+            wishList.appendChild(element);
+        }
+        function createContent(index, item) {
+            let content =
+                '    <div class="place_info">' +
+                '        <div class="button_set">' +
+                '           <button type="button" class="set_button" onclick="setPlan('+index+')">선택</button>' +
+                '       </div>' +
+                '        <div class="title">' +
+                '               <strong style="color: #258fff;">' + index + '</strong>' +
+                '               <a href=' + item.place_url + '><strong>' + item.place_name + '</strong></a>' +
+                '        </div>' +
+                '        <div class="body">' +
+                '            <div class="desc">' +
+                '                <p class="ellipsis">' + item.road_address_name + '</p>' +
+                '                <p class="jibun" style="color: lightgrey">' + item.address_name + '</p>' +
+                '                <span style="color: #00bc8c">' + item.phone + '</span>' +
+                '                <span><a class="link" href=' + item.place_url + '>상세보기</a></span>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>';
+            return content;
+        }
+        function diff(){
+            let startDay = new Date(startDate), endDay = new Date(endDate);
+            let diff = Math.abs(endDay.getTime() - startDay.getTime());
+            diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            return diff;
+        }
         function openPlanner(){
             if(!validationCheck()){
                 return false;
             }
-
             $("#planner").show()
             $("#selectDay").hide()
+            let duration = diff();
+
             const calenderEl = document.getElementById("calender")
             const calender = new FullCalendar.Calendar(calenderEl, {
-                initialView: 'timeGridWeek',
+                initialView: 'timeGridFourDay',
+                initialDate : startDate,
+                duration: { days: duration+1},
+                visibleRange:{
+                    start : startDate,
+                    end : endDate,
+                },
                 headerToolbar: {
                     left: 'prev,next',
                     center: 'title',
-                    right: 'timeGridWeek, timeGridDay'
-
+                    right: 'timeGridFourDay,timeGridDay'
                 },
-                allDaySlot: false,
+                views: {
+                    timeGridFourDay: {
+                        type: 'timeGrid',
+                        duration: {days: duration+1},
+                        buttonText: '전체'
+                    },
+                    timeGridDay: {
+                        buttonText: '날짜',
+                    }
+                },
+                allDaySlot: false, // allday 삭제
                 locale: 'ko', // 한국어 설정.
-                navLinks: true,
                 editable: true, // 수정 가능
                 droppables: true, // 드래그 가능.
 
             })
             calender.render()
-
         }
 
+
+
+        // pop 띄우기
+        function openPop(){
+            layerPop('addPlan')
+            getWishList();
+        }
+        function closeSignupPopup(){
+           layerPopClose()
+        }
 
     </script>
 </th:block>

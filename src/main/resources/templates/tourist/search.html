@@ -75,10 +75,6 @@
             if(e.which ===13)
                 getJson();
         })
-        $(document).ready(function (){
-
-        })
-
         // input값 validation check
         function validationCheck(){
             const input = document.getElementById("kw")
@@ -153,7 +149,7 @@
             }
 
         }
-        function addList(){
+        function addList(index){
             console.log(JSON.stringify(selected_item))
             $.ajax({
                 type:'post',
@@ -171,7 +167,8 @@
         }
         function appendList(result){
             const wishList = document.getElementById("wishList");
-            let content = createCotent(result); // wishList에 추가할 부분.
+            console.log(wishList.childElementCount)
+            let content = createContent(result); // wishList에 추가할 부분.
 
             let element= document.createElement("li")
             element.innerHTML = content;
@@ -188,6 +185,9 @@
             lat = latLng.getLat();
             lng = latLng.getLng();
         }
+
+
+
 
 
         // 선택한 마커 중심으로 검색.
@@ -223,6 +223,10 @@
         });
 
 
+
+
+
+
         // 마커가 표시될 위치입니다
         function makerPosition(markerPosition){
             let marker = new kakao.maps.Marker({
@@ -252,7 +256,7 @@
                 bounds.extend(markerPosition);
 
                 kakao.maps.event.addListener(marker, "click", function (){
-                    overlay.setContent(displayInfowindow(result[i]));
+                    overlay.setContent(displayInfowindow(i, result[i]));
 
                     overlay.setPosition(marker.getPosition());
                     overlay.setMap(map)
@@ -272,7 +276,7 @@
 
         // 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 정보를 표시합니다
-        function displayInfowindow(item) {
+        function displayInfowindow(index, item) {
             selected_item = item;
             let content ='<div class="wrap">' +
                 '    <div class="info">' +
@@ -291,7 +295,7 @@
                 '                <a class="link" href='+item.place_url+'>홈페이지</a>' +
                 '            </div>' +
                 '            <div class="btn_set">' +
-                '               <button type="button" class="btn btn-outline-secondary" onclick="addList()">추가</button>'
+                '               <button type="button" class="btn btn-outline-secondary" onclick="addList('+index+')">추가</button>'
             '            </div>'
             '        </div>' +
             '    </div>' +
@@ -299,7 +303,7 @@
 
             return content;
         }
-        function createCotent(item) {
+        function createContent(item) {
             selected_item = item;
             let content ='<div class="child">' +
                 '    <div class="info" style="background-color: white">' +
@@ -325,7 +329,6 @@
 
             return content;
         }
-
         function closeOverlay(){
             overlay.setMap(null);
         }

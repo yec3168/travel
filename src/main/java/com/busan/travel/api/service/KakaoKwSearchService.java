@@ -48,7 +48,6 @@ public class KakaoKwSearchService {
         kakaoResponseDto.setPlace_url((String) item.get("place_url"));
         kakaoResponseDto.setX((String) item.get("x"));
         kakaoResponseDto.setY((String) item.get("y"));
-        kakaoResponseDto.setId((String) item.get("id"));
 
         return  kakaoResponseDto;
     }

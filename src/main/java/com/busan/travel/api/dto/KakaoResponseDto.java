@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class KakaoResponseDto {
-    private String  id;
+    private Long  id;
 
     private String place_name;// 장소이름
 
@@ -32,6 +32,7 @@ public class KakaoResponseDto {
 
     public static KakaoResponseDto toDto(Wish wish){
         KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
+        kakaoResponseDto.setId(wish.getId());
         kakaoResponseDto.setPlace_name(wish.getPlace_name());
         kakaoResponseDto.setAddress_name(wish.getAddress_name());
         kakaoResponseDto.setRoad_address_name(wish.getRoad_address_name());
