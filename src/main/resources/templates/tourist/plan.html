@@ -11,7 +11,7 @@
 
 <th:block layout:fragment="content">
     <div id="selectDay">
-        <p>플래너<i>작성</i></p>
+        <p class="title_p">플래너<i class="title_i">작성</i></p>
         <form id="selectForm">
             <table id="tb">
                 <colgroup>  <col style="width:20%;" />  <col style="width:80%;" /></colgroup>
@@ -62,22 +62,32 @@
                 <ul id="wishList"></ul>
             </div>
             <div id="write">
-                <form id="planForm">
+                <div id="planForm">
+                    <p class="title_p" style="border-bottom: 0px solid #0081a4;"><i class="title_i">일정</i>추가</p>
                     <ul>
-                        <label>asd</label>
-                        <input type="text" name="title">
+                        <label>제목</label>
+                        <input type="text" name="planNm" id="planNm">
+                    </ul>
+                    <ul>
+                        <label>장소</label>
+                        <input type="text" name="planPl" id="planPl">
+                    </ul>
+                    <ul>
+                        <label>시간</label>
+                        <input type="text" name="datetimes" id="planTm">
                     </ul>
 
                     <ul>
-                        <label>asdfdg</label>
-                        <input type="text" name="title">
+                        <label>추가내용</label>
+                        <input type="text" name="planCn" id="planCn">
                     </ul>
-                </form>
+                    <p class="btn_set">
+                        <button type="button" class="btns btn_st2" onclick="addEvent()">추가</button>
+                        <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
+                    </p>
+                </div>
             </div>
-            <p class="btn_set">
-                <button type="submit" class="btns btn_st2" >추가</button>
-                <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
-            </p>
+
             <button type="button" class="btn_close" onclick="closeSignupPopup();"><span><i class="far fa-times-circle"></i></span></button>
         </div>
     </div>
@@ -105,6 +115,13 @@
             $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
                 startDate, endDate = "";
+            });
+
+            $('input[name="datetimes"]').daterangepicker({
+                timePicker: true,
+                locale: {
+                    format: 'YYYY-MM-DD hh:mm:ss'
+                }
             });
 
         });
@@ -187,7 +204,7 @@
 
             const calenderEl = document.getElementById("calender")
             const calender = new FullCalendar.Calendar(calenderEl, {
-                initialView: 'timeGridFourDay',
+                initialView: 'timeGridSelectDay',
                 initialDate : startDate,
                 duration: { days: duration+1},
                 visibleRange:{
@@ -197,10 +214,10 @@
                 headerToolbar: {
                     left: 'prev,next',
                     center: 'title',
-                    right: 'timeGridFourDay,timeGridDay'
+                    right: 'timeGridSelectDay,timeGridDay'
                 },
                 views: {
-                    timeGridFourDay: {
+                    timeGridSelectDay: {
                         type: 'timeGrid',
                         duration: {days: duration+1},
                         buttonText: '전체'
@@ -209,16 +226,53 @@
                         buttonText: '날짜',
                     }
                 },
+                events:[
+                    {
+                        title  : 'event3',
+                        start  : '2024-04-22 12:30:00',
+                        end: '2024-04-22 15:00:00'
+                    }
+                ],
+                select : function(info) {
+                    if(confirm("일정을 추가하시겠습니까?")) {
+                        openPop();
+                        //시간 추가.
+                        const planForm = document.getElementById("planForm")
+                        let planTm = planForm.querySelector('#planTm')
+                        planTm.value = info.startStr + "-" + info.endStr
+
+                        return true;
+                    }
+                    else
+                        return false;
+                },
                 allDaySlot: false, // allday 삭제
-                locale: 'ko', // 한국어 설정.
+                // locale: 'ko', // 한국어 설정.
                 editable: true, // 수정 가능
-                droppables: true, // 드래그 가능.
+                selectable: true,
 
             })
             calender.render()
         }
 
+        function setPlan(index){
+            const wish = document.querySelectorAll("#wishList .item")[index]
 
+            let planPl = document.getElementById("planPl") // 일정 장소이름.
+            planPl.value = wish.querySelector(".title > a").text
+            console.log(wish.querySelector(".title > a > strong").text)
+        }
+
+        function addEvent(){
+            const planForm = document.getElementById("planForm")
+            const planNm = planForm.querySelector("#planNm").value,
+                planPl = planForm.querySelector("#planPl").value,
+                planTm = planForm.querySelector("#planTm").value,
+                planCn = planForm.querySelector("#planCn").value;
+
+            let startTime = planTm.slice("-")[0], endTime= planTm.slice("-")[1];
+            console.log(startTime, endTime, planTm.slice("-"));
+        }
 
         // pop 띄우기
         function openPop(){

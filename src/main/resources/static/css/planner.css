@@ -1,6 +1,6 @@
 #selectDay{margin: auto; margin-top: 50px; height: 650px; width: 650px; background-color: white; border-radius: 5%}
-#selectDay p{padding-left:30px; font-size:48px; color:#333; font-family:Arial, Helvetica, sans-serif, Dotum; font-weight:bold; border-bottom: 7px solid #0081a4}
-#selectDay i{color:#00adb4; font-weight:bold;}
+.title_p {padding-left:30px; font-size:48px; color:#333; font-family:Arial, Helvetica, sans-serif, Dotum; font-weight:bold; border-bottom: 7px solid #0081a4}
+.title_i {color:#00adb4; font-weight:bold;}
 
 #selectDay #selectForm{margin: auto; height: 550px; width: 80%; position: relative}
 #selectDay #selectForm #tb{ border-collapse: separate; border-spacing: 0px 85px;}
@@ -17,16 +17,18 @@
 
 
 #addPlan{max-width: 1500px}
-#menu{float: left;width: 400px;height: 600px;overflow-y: auto;border-radius: 5px}
+#menu{float: left;width: 400px;height: 600px;overflow-y: auto;border-radius: 5px; border-right: 2px solid}
 #menu #wishList{}
 #menu #wishList .item .place_info{ position: relative; text-align: left; padding: 10px}
 #menu #wishList .item .button_set{ position:absolute; right: 50px; top: 40px;  }
-#menu #wishList .item .button_set button{  font-weight: 400;line-height: 1.5;padding: 0.4em 0.65em;text-align: center;user-select: none;vertical-align: middle;font-family: inherit;font-size: 1em;border-radius: 5px;background-color: #2c3e50;border-color: #2c3e50;color: white;}
+#menu #wishList .item .button_set button{ padding: 0.4em 0.65em; user-select: none;vertical-align: middle;font-family: inherit;font-size: 1em;border-radius: 5px;background-color: #2c3e50;border-color: #2c3e50;color: white;}
 #menu #wishList .item .place_info .title{font-size: 24px}
 
 #addPlan #write #planForm{width: 900px; margin-left: 400px; height: 600px;}
-#addPlan #write #planForm ul{width: 900px; }
-#addPlan #write #planForm ul label{font-weight: 400;line-height: 1.5;padding: 0.4em 0.65em;text-align: center;user-select: none;vertical-align: middle;font-family: inherit;font-size: 1.5em;}
-#addPlan #write #planForm ul input{width: 50%}
+#addPlan #write #planForm ul{width: 900px; padding-top: 50px;}
+#addPlan #write #planForm ul label{width:200px;  font-weight: 400;line-height: 1.5;padding: 0.4em 0.65em;text-align: center;user-select: none;vertical-align: middle;font-family: inherit;font-size: 1.5em;}
+#addPlan #write #planForm ul input{width: 50%; border-radius: 5px; outline: none;}
+
+
 
 #addPlan .btn_set{ padding-top: 30px; width: 100%}
