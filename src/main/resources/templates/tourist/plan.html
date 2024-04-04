@@ -121,7 +121,7 @@
             $('input[name="datetimes"]').daterangepicker({
                 timePicker: true,
                 locale: {
-                    format: 'YYYY-MM-DD hh:mm:ss'
+                    format: 'YYYY-MM-DDThh:mm:ss'
                 }
             });
 
@@ -159,7 +159,6 @@
         }
         function appendList(result){
             const wishList = document.getElementById("wishList");
-            console.log(wishList.childElementCount)
             let content = createContent(wishList.childElementCount, result); // wishList에 추가할 부분.
 
             let element= document.createElement("li")
@@ -227,13 +226,6 @@
                         buttonText: '날짜',
                     }
                 },
-                events:[
-                    {
-                        title  : 'event3',
-                        start  : '2024-04-22 12:30:00',
-                        end: '2024-04-22 15:00:00'
-                    }
-                ],
                 select : function(info) {
                     if(confirm("일정을 추가하시겠습니까?")) {
                         openPop();
@@ -268,12 +260,10 @@
         function addEvent(){
             const planForm = document.getElementById("planForm")
             const eventNm = planForm.querySelector("#planNm").value,
-                planPl = planForm.querySelector("#planPl").value,
-                planTm = planForm.querySelector("#planTm").value,
-                planCn = planForm.querySelector("#planCn").value;
+                planTm = planForm.querySelector("#planTm").value;
 
-            let asd = planTm.split("~")
-            s = asd[0].split("+")[0], e = asd[1].split("+")[0]
+            let asd = planTm.split("~"),
+            s = asd[0], e = asd[1]
 
             localCalendar.addEvent({
                 title: eventNm,
