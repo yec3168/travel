@@ -95,6 +95,7 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         let startDate, endDate = "";
+        let localCalendar;
         $(document).ready(function() {
             $("#planner").hide()
             $("#selectDay").show()
@@ -107,7 +108,7 @@
                 }
             });
             $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' ~ ' + picker.endDate.format('YYYY-MM-DD'));
                 startDate = picker.startDate.format('YYYY-MM-DD')
                 endDate = picker.endDate.format('YYYY-MM-DD')
             });
@@ -239,7 +240,7 @@
                         //시간 추가.
                         const planForm = document.getElementById("planForm")
                         let planTm = planForm.querySelector('#planTm')
-                        planTm.value = info.startStr + "-" + info.endStr
+                        planTm.value = info.startStr + "~" + info.endStr
 
                         return true;
                     }
@@ -252,7 +253,8 @@
                 selectable: true,
 
             })
-            calender.render()
+            localCalendar = calender;
+            localCalendar.render()
         }
 
         function setPlan(index){
@@ -265,13 +267,20 @@
 
         function addEvent(){
             const planForm = document.getElementById("planForm")
-            const planNm = planForm.querySelector("#planNm").value,
+            const eventNm = planForm.querySelector("#planNm").value,
                 planPl = planForm.querySelector("#planPl").value,
                 planTm = planForm.querySelector("#planTm").value,
                 planCn = planForm.querySelector("#planCn").value;
 
-            let startTime = planTm.slice("-")[0], endTime= planTm.slice("-")[1];
-            console.log(startTime, endTime, planTm.slice("-"));
+            let asd = planTm.split("~")
+            s = asd[0].split("+")[0], e = asd[1].split("+")[0]
+
+            localCalendar.addEvent({
+                title: eventNm,
+                start : s,
+                end : e
+            });
+            closeSignupPopup();
         }
 
         // pop 띄우기
