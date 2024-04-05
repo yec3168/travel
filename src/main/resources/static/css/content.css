@@ -340,6 +340,6 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
 
 /* 리뷰게시판*/
 #reviewForm{width:100%; margin-top:20px;}
-#reviewForm input{border-bottom: 1px solid lightgrey; height: 40px; font-size: 25px; padding: 30px 20px;  border-top: none; border-left: none; border-right: none; font-family: "맑은 고딕"}
+#reviewForm input[name="subject"]{border-bottom: 1px solid lightgrey; height: 40px; font-size: 25px; padding: 30px 20px;  border-top: none; border-left: none; border-right: none; font-family: "맑은 고딕"}
 #reviewForm input:focus{ outline: none;}
 #reviewForm textarea{width: 100%; height: 1000px}

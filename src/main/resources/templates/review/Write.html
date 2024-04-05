@@ -15,14 +15,32 @@
     <div class="content">
         <section>
            <form id="reviewForm">
-               <div>
-                   <label th:for="subject"></label>
-                   <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요.">
-               </div>
-               <div>
-                   <label th:for="content"></label>
-                   <textarea id="content" name="content" ></textarea>
-               </div>
+               <table class="tb tb_row">
+                   <tr>
+                       <th>
+                           <label th:for="subject">제목</label>
+                       </th>
+                       <td>
+                           <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요.">
+                       </td>
+                   </tr>
+                   <tr>
+                       <th>
+                           <label th:for="subject">썸네일</label>
+                       </th>
+                       <td>
+                           <input type="file" id="thumb" name="thumb">
+                       </td>
+                   </tr>
+                   <tr>
+                       <th>
+                           <label th:for="content">내용</label>
+                       </th>
+                       <td>
+                           <textarea id="content" name="content"></textarea>
+                       </td>
+                   </tr>
+               </table>
            </form>
 
         </section>
@@ -40,10 +58,11 @@
                 return false;
         }
         // 마크 다운에디터
-        var simplemde = new SimpleMDE({
+        let simplemde = new SimpleMDE({
             element:document.getElementById("content"),
             tabSize:5,
             placeholder:"내용을 입력하세요.",
+
             // previewRender: function(plainText, preview) { // Async method
             //     setTimeout(function(){
             //         preview.innerHTML = customMarkdownParser(plainText);
@@ -52,6 +71,7 @@
             //     return "Loading...";
             // },
         });
+
         // function customMarkerParser(plainText){
         //
         // }
