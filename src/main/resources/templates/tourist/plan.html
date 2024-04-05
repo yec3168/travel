@@ -62,7 +62,7 @@
                 <ul id="wishList"></ul>
             </div>
             <div id="write">
-                <div id="planForm">
+                <form id="planForm">
                     <p class="title_p" style="border-bottom: 0px solid #0081a4;"><i class="title_i">일정</i>추가</p>
                     <ul>
                         <label>제목</label>
@@ -85,7 +85,7 @@
                         <button type="button" class="btns btn_st2" onclick="addEvent()">추가</button>
                         <button type="button" class="btns btn_bdr2" onclick="closeSignupPopup();">취소</button>
                     </p>
-                </div>
+                </form>
             </div>
 
             <button type="button" class="btn_close" onclick="closeSignupPopup();"><span><i class="far fa-times-circle"></i></span></button>
@@ -279,6 +279,7 @@
             getWishList();
         }
         function closeSignupPopup(){
+            document.getElementById("planForm").reset()
            layerPopClose()
         }
 
