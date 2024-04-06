@@ -2,7 +2,6 @@ package com.busan.travel.api.controller;
 
 import com.busan.travel.api.dto.KakaoResponseDto;
 import com.busan.travel.api.dto.LinePathDto;
-import com.busan.travel.api.entity.Wish;
 import com.busan.travel.api.service.KakaoKwSearchService;
 import com.busan.travel.api.service.NaviApiService;
 import com.busan.travel.page.entity.Member;
@@ -24,7 +23,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/kakao")
-public class RegionController {
+public class KakaoController {
 
     @Value("${kakao-admin-key}")
     private String kakao_admin_key;
@@ -58,7 +57,7 @@ public class RegionController {
     @PostMapping("/add")
     @ResponseBody
     private KakaoResponseDto addWish(@RequestParam("item") String item,
-                                           Principal principal) throws JsonProcessingException {
+                                     Principal principal) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         KakaoResponseDto kakaoResponseDto = mapper.readValue(item, KakaoResponseDto.class);
 
@@ -70,16 +69,25 @@ public class RegionController {
 
         return  kakaoResponseDto;
     }
-
+    @GetMapping("/remove")
+    public String removeWish(@RequestParam("uid") String uid, Principal principal){
+        if(principal != null){
+            Member member = memberService.getUserByEmail(principal.getName());
+            kakaoKwSearchService.removeWishList(uid, member);
+            return null;
+        }
+        else
+            return null;
+    }
     @GetMapping("/wishes")
     @ResponseBody
     private List<KakaoResponseDto> findWishList(Principal principal){
-       if(principal != null){
-           Member member = memberService.getUserByEmail(principal.getName());
-           List<KakaoResponseDto> wishList=  kakaoKwSearchService.findAllByMember(member);
-           return wishList;
-       }
-       return null;
+        if(principal != null){
+            Member member = memberService.getUserByEmail(principal.getName());
+            List<KakaoResponseDto> wishList=  kakaoKwSearchService.findAllByMember(member);
+            return wishList;
+        }
+        return null;
     }
 
     //길찾기 부분.

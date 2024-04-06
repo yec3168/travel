@@ -239,6 +239,9 @@
                     else
                         return false;
                 },
+                eventClick: function (info){
+                    console.log(info.event.title)
+                },
                 allDaySlot: false, // allday 삭제
                 // locale: 'ko', // 한국어 설정.
                 editable: true, // 수정 가능
@@ -260,7 +263,8 @@
         function addEvent(){
             const planForm = document.getElementById("planForm")
             const eventNm = planForm.querySelector("#planNm").value,
-                planTm = planForm.querySelector("#planTm").value;
+                planTm = planForm.querySelector("#planTm").value,
+                planCn = planForm.querySelector("#planCn").value;
 
             let asd = planTm.split("~"),
             s = asd[0], e = asd[1]
@@ -268,7 +272,9 @@
             localCalendar.addEvent({
                 title: eventNm,
                 start : s,
-                end : e
+                end : e,
+                editable: true,
+                overlap : true, // overriding
             });
             closeSignupPopup();
         }

@@ -15,32 +15,12 @@
     <div class="content">
         <section>
            <form id="reviewForm">
-               <table class="tb tb_row">
-                   <tr>
-                       <th>
-                           <label th:for="subject">제목</label>
-                       </th>
-                       <td>
-                           <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요.">
-                       </td>
-                   </tr>
-                   <tr>
-                       <th>
-                           <label th:for="subject">썸네일</label>
-                       </th>
-                       <td>
-                           <input type="file" id="thumb" name="thumb">
-                       </td>
-                   </tr>
-                   <tr>
-                       <th>
-                           <label th:for="content">내용</label>
-                       </th>
-                       <td>
-                           <textarea id="content" name="content"></textarea>
-                       </td>
-                   </tr>
-               </table>
+               <label th:for="subject"></label>
+               <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요.">
+
+               <label th:for="content"></label>
+               <textarea id="content" name="content"></textarea>
+
            </form>
 
         </section>
@@ -62,6 +42,7 @@
             element:document.getElementById("content"),
             tabSize:5,
             placeholder:"내용을 입력하세요.",
+            height:1000,
 
             // previewRender: function(plainText, preview) { // Async method
             //     setTimeout(function(){

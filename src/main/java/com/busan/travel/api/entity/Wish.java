@@ -16,6 +16,8 @@ public class Wish {
     @Column(name = "wish_id")
     private Long id;
 
+    private String uid;
+
     private String place_name;// 장소이름
 
     private String address_name; // 주소
@@ -41,9 +43,10 @@ public class Wish {
     private Member member; //작성자
 
     @Builder
-    public Wish(String place_name, String  address_name, String road_address_name,
+    public Wish(String uid, String place_name, String  address_name, String road_address_name,
                  String category_group_name, String category_group_code, String distance,
                  String phone, String place_url, String x, String y, Member member){
+        this.uid = uid;
         this.place_name = place_name;
         this.address_name = address_name;
         this.road_address_name = road_address_name;

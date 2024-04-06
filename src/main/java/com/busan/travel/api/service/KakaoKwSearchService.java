@@ -22,6 +22,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KakaoKwSearchService {
@@ -38,6 +39,7 @@ public class KakaoKwSearchService {
     }
     private KakaoResponseDto toDto(JSONObject item){
         KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
+        kakaoResponseDto.setUid((String) item.get("id"));
         kakaoResponseDto.setPlace_name((String) item.get("place_name"));
         kakaoResponseDto.setAddress_name((String) item.get("address_name"));
         kakaoResponseDto.setRoad_address_name((String) item.get("road_address_name"));
@@ -97,6 +99,7 @@ public class KakaoKwSearchService {
     }
     public void addWishList(KakaoResponseDto kakaoResponseDto, Member member){
         Wish wish = Wish.builder()
+                .uid((kakaoResponseDto.getUid()))
                 .place_name(kakaoResponseDto.getPlace_name())
                 .address_name(kakaoResponseDto.getAddress_name())
                 .road_address_name(kakaoResponseDto.getRoad_address_name())
@@ -111,6 +114,11 @@ public class KakaoKwSearchService {
                 .build();
 
         wishRepository.save(wish);
+    }
+
+    public void removeWishList(String uid, Member member){
+        List<Wish> wishList = wishRepository.findByMemberAndUid(member, uid);
+        wishRepository.delete(wishList.get(0));
     }
 
     public List<KakaoResponseDto> findAllByMember(Member member){
