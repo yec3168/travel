@@ -29,10 +29,28 @@
                     </div>
                 </form>
             </div>
-        </section>
 
         <!-- 내용 -->
-        <section>
+           <div th:each="page : ${paging}">
+               <a>
+                   <div class="review_card" style="position:relative;">
+                       <div >
+                           <h1 class="review_title" th:text="*{page.subject}"></h1>
+                           <p class="review_content" th:text="*{page.content}"></p>
+                       </div>
+                       <div>
+                           <i class="far fa-calendar fa-fw me-1"></i>
+                           <em th:text="*{#temporals.format(page.createDate, 'MM.dd.yyyy hh:mm')}"></em>
+                       </div>
+                       <div>
+                           <div  style="position: absolute; right: 0px; height: 100px; width: 100px; border-radius: 5px">
+                                <img src="/images/no_img.gif" style="width: 100px; height: 100px;">
+                           </div>
+                       </div>
+                   </div>
+               </a>
+           </div>
+
 <!--            <div class="btn_set">-->
 <!--                &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
 <!--                <div th:if="${!paging.isEmpty()}">-->

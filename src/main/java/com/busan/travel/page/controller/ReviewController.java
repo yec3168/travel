@@ -7,6 +7,7 @@ import com.busan.travel.page.service.MemberService;
 import com.busan.travel.page.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,9 @@ public class ReviewController {
 
 
     @GetMapping("/list")
-    public String viewList(){
+    public String viewList(Model model, @RequestParam(value = "page", defaultValue = "0")int page){
+        Page<Review> paging = reviewService.findAllByCreateDate(page);
+        model.addAttribute("paging", paging);
         return "review/List";
     }
 
