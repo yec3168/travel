@@ -14,13 +14,60 @@
     </div>
     <div class="content">
         <section>
-           <form id="reviewForm">
-               <label th:for="subject"></label>
-               <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요.">
+           <form id="reviewForm" action="/review/write" method="post" enctype="multipart/form-data" onsubmit="return sumbitListener()" th:object="${reviewFormDto}">
+               <table class="tb tb_row">
+                   <colgroup>
+                       <col style="width:15%;" /><col style="width:35%;" /><col style="width:15%;" /><col style="width:35%;" />
+                   </colgroup>
+                   <tr>
+                       <th>
+                           <label th:for="subject">제목</label>
+                       </th>
+                       <td colspan="3">
+                           <input type="text" th:field="*{subject}" placeholder="제목을 입력하세요.">
+                       </td>
+                   </tr>
+                   <tr>
+                       <th>
+                           <label th:for="star">평점</label>
+                       </th>
+                       <td >
+                           <fieldset>
+                               <span class="text-bold">별점을 선택해주세요</span>
+                               <input type="radio" name="stars" value="5" id="rate1"><label class="star_per"
+                                   for="rate1">★</label>
+                               <input type="radio" name="stars" value="4" id="rate2"><label class="star_per"
+                                   for="rate2">★</label>
+                               <input type="radio" name="stars" value="3" id="rate3"><label class="star_per"
+                                   for="rate3">★</label>
+                               <input type="radio" name="stars" value="2" id="rate4"><label class="star_per"
+                                   for="rate4">★</label>
+                               <input type="radio" name="stars" value="1" id="rate5"><label class="star_per"
+                                   for="rate5">★</label>
+                               <input type="radio" name="stars" value="0" id="rate0" checked hidden="hidden">
+                           </fieldset>
+                       </td>
 
-               <label th:for="content"></label>
-               <textarea id="content" name="content"></textarea>
-
+                       <th >
+                           <label th:for="thumb">썸네일</label>
+                       </th>
+                       <td >
+                           <input type="file" id="thumb" name="thumb" class="form-control">
+                       </td>
+                   </tr>
+                   <tr>
+                       <th >
+                           <label th:for="content">내용</label>
+                       </th>
+                       <td colspan="3">
+                           <textarea th:field="*{content}"></textarea>
+                       </td>
+                   </tr>
+               </table>
+               <p class="btn_set">
+                   <button type="submit" class="btns btn_st3 btn_mid">저장</button>
+                   <button type="button" class="btns btn_bdr3 btn_mid" onclick="location.href='/board/list'">뒤로</button>
+               </p>
            </form>
 
         </section>
@@ -32,10 +79,14 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         function sumbitListener(){
-            if(confirm("게시글을 등록하시겠습니까?"))
-                return true;
-            else
-                return false;
+            if(validationCheck()){
+                if(confirm("게시글을 등록하시겠습니까?")){
+                    return true;
+                }
+                else
+                    return false;
+            }
+            return false;
         }
         // 마크 다운에디터
         let simplemde = new SimpleMDE({
@@ -43,7 +94,6 @@
             tabSize:5,
             placeholder:"내용을 입력하세요.",
             height:1000,
-
             // previewRender: function(plainText, preview) { // Async method
             //     setTimeout(function(){
             //         preview.innerHTML = customMarkdownParser(plainText);
@@ -53,9 +103,22 @@
             // },
         });
 
-        // function customMarkerParser(plainText){
-        //
-        // }
+        function validationCheck(){
+            const reviewForm = document.getElementById("reviewForm");
+            let formInput = reviewForm.querySelectorAll('input:not([type="radio"]):not([type="file"]) ')
+            console.log(formInput);
+
+            for (let i = 0; i < formInput.length; i++){
+                //console.log("value " + formInput[i].value)
+                if(formInput[i].value == ""){
+                    $(formInput[i]).focus();
+                    alert("필수입력 항목을 입력해주세요.")
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
     </script>
 </th:block>

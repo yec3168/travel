@@ -22,7 +22,7 @@ public class FileService {
     }
 
 
-    public static void saveFile(MultipartFile multipartFile, String url) throws Exception{
+    public void saveFile(MultipartFile multipartFile, String url) throws Exception{
         FileOutputStream fos = new FileOutputStream(url);
         fos.write(multipartFile.getBytes());
         fos.close();
