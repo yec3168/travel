@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -25,6 +26,10 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    public Review findReview(Long id){
+        Optional<Review> op = reviewRepository.findById(id);
+        return op.orElse(null);
+    }
     public void saveReview(ReviewFormDto reviewFormDto, Member writer,
                              MultipartFile multipartFile){
         //파일저장.
@@ -70,6 +75,12 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
         return reviewRepository.findByOrderByCreateDate(pageable);
+    }
+
+
+    // 디테일 오른쪽 최신 생성글
+    public List<Review> recently_review(){
+        return  reviewRepository.findByOrderByCreateDate();
     }
 
 }

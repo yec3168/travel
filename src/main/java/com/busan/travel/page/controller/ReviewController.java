@@ -11,10 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -34,6 +31,7 @@ public class ReviewController {
     public String viewList(Model model, @RequestParam(value = "page", defaultValue = "0")int page){
         Page<Review> paging = reviewService.findAllByCreateDate(page);
         model.addAttribute("paging", paging);
+
         return "review/List";
     }
 
@@ -56,8 +54,18 @@ public class ReviewController {
         if(principal != null){
             Member writer = memberService.getUserByEmail(principal.getName());
             reviewService.saveReview(reviewFormDto, writer, multipartFile);
-
         }
         return "redirect:/review/list";
+    }
+
+
+    @GetMapping("/detail/{id}")
+    public String detailReview(@PathVariable("id")Long id, Model model) {
+        Review review = reviewService.findReview(id);
+        model.addAttribute("review", review);
+
+        // div 오른쪽 최신생성글 보여주기.
+        model.addAttribute("recently_review", reviewService.recently_review());
+        return "review/detail";
     }
 }

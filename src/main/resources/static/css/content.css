@@ -359,3 +359,18 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
 .review_dict .review_card .review_info .rv_title{line-height: 1.2; font-family: Lato, "Microsoft Yahei", sans-serif; color: #cccccc; }
 .review_dict .review_card .review_info .rv_content{color: rgb(125, 136, 146); font-size: 1.08rem; overflow-wrap: break-word;overflow: hidden;text-overflow: ellipsis;white-space: normal;line-height: 1.2;text-align: left;word-wrap: break-word;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;height: 40px;}
 .review_dict .review_card .review_date{margin-top: 10px;}
+
+
+.review_detail{ width: 75%; padding-left: 90px}
+.review_detail .dt_subject{font-family: Lato, "Microsoft Yahei", sans-serif; font-size: 1.92rem; margin-top: 3rem; margin-bottom: 1.5rem; color: #cccccc}
+.review_detail .dt_date{color: rgb(125, 136, 146); font-size: .85rem; margin-bottom: 30px;}
+.review_detail .dt_date em{color: rgb(175, 176, 177); font-style: normal;}
+.review_detail .dt_date span+span::before{content: "•";padding-left: .25rem;padding-right: .25rem;}
+.review_detail .dt_date .dt_writer{justify-content: space-between !important}
+.review_detail .dt_content{margin-top: 2rem; overflow-wrap: break-word; font-size: 1.03rem;}
+
+.access { color: rgb(125, 136, 146); flex: 0 0 auto; width: 25%; margin-left: 2rem;}
+.access .panel{transition: top .2s ease-in-out;margin-top: 3rem;margin-bottom: 4rem; border-left: 1px solid rgb(44, 45, 45); padding-left: 1rem; border-radius: 5px;}
+.access .panel .panel-heading{margin-top: 3rem;margin-bottom: 0.4rem; color: #a4a4c2 ;font-size: inherit;font-weight: 600;}
+.access .panel .post_subject{font-size: .9rem; overflow-wrap: break-word; margin-left: .25rem !important;}
+.access .panel .post_subject .text-truncate{overflow: hidden;text-overflow: ellipsis;white-space: nowrap; line-height: 2 !important; display: list-item;text-align: -webkit-match-parent;unicode-bidi: isolate; }
