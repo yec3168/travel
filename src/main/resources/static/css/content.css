@@ -369,8 +369,16 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
 .review_detail .dt_date .dt_writer{justify-content: space-between !important}
 .review_detail .dt_content{margin-top: 2rem; overflow-wrap: break-word; font-size: 1.03rem;}
 
+.review_tail{margin-top: 6rem;border-bottom: 1px double rgb(44, 45, 45);;font-size: .85rem; color: rgb(125, 136, 146) !important;}
+.review_tail .review_meta{font-size: .85rem; margin-bottom: 1rem !important;}
+.review_tail .review_meta a:not(:hover){border-bottom: 1px solid rgb(82, 108, 150);}
+.review_tail .justify_review{padding-bottom: .5rem !important;padding-top: 3rem !important; margin-top: 1rem !important; align-items: center !important; justify-content: space-between !important;}
+
+
+
 .access { color: rgb(125, 136, 146); flex: 0 0 auto; width: 25%; margin-left: 2rem;}
 .access .panel{transition: top .2s ease-in-out;margin-top: 3rem;margin-bottom: 4rem; border-left: 1px solid rgb(44, 45, 45); padding-left: 1rem; border-radius: 5px;}
 .access .panel .panel-heading{margin-top: 3rem;margin-bottom: 0.4rem; color: #a4a4c2 ;font-size: inherit;font-weight: 600;}
 .access .panel .post_subject{font-size: .9rem; overflow-wrap: break-word; margin-left: .25rem !important;}
 .access .panel .post_subject .text-truncate{overflow: hidden;text-overflow: ellipsis;white-space: nowrap; line-height: 2 !important; display: list-item;text-align: -webkit-match-parent;unicode-bidi: isolate; }
+

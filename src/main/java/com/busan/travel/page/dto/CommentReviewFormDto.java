@@ -1,0 +1,10 @@
+package com.busan.travel.page.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CommentReviewFormDto {
+    private String content;
+}

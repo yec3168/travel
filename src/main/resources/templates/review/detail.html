@@ -39,6 +39,117 @@
                 <div class="dt_content">
                     <div th:utext="${@commonUtil.markdown(review.content)}"></div>
                 </div>
+
+                <div class="review_tail">
+                    <div class="review_meta">
+                        <i class="far fa-folder-open fa-fw me-1"></i>
+                        <a th:href="@{|/review/detail/*{id}|}" th:text="*{subject}"></a>
+                    </div>
+
+                    <div class="review_meta">
+                        <i class="fa fa-brands fa-github fa-fw me-1"></i>
+                        <a href="https://github.com/yec3168" >yec3168</a>
+                    </div>
+                    <div class="justify_review">
+                        <div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pb-2">
+                            <div class="license-wrapper">
+                                This post is licensed under
+                                <em  th:text="*{writer.nickName}"></em>
+                                by the author.
+                            </div>
+                            <div class="share-wrapper">
+                                <span class="share-label text-muted me-1">
+                                    Share
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 댓글 부분-->
+                <div class="cm_write">
+                    <div style="position:relative;">
+                        <span th:text="|${#lists.size(board.commentBoardList)}개의 답변이 있습니다.|"></span>
+                        <span style="position:absolute; right: 8px;bottom: 5px;">
+                        <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'createDate')} ? 'active'" th:href="@{|?sort=createDate&page=${paging.number}|}">최신순</a>
+                        <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'vote')} ? 'active'" th:href="@{|?sort=vote&page=${paging.number}|}">추천순</a>
+                    </span>
+
+
+                    </div>
+                    <hr>
+                    <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
+                        <div class="cm_input">
+                            <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="로그인 후 이용해주세요."></textarea>
+                            <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
+                                      sec:authorize="isAuthenticated()"  rows="6"></textarea>
+                            <span>
+                            <i id="counter">0/300</i>
+                            <button type="submit" class="btns">등 록</button>
+                        </span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 내용 부분 -->
+<!--                <div class="cm_list">-->
+<!--                    <div th:if="${#lists.size(board.commentBoardList) == 0}">-->
+<!--                        <p  class="cm_none" >댓글이 없습니다.</p>-->
+<!--                    </div>-->
+
+<!--                    <div th:unless="${#lists.size(board.commentBoardList) == 0}" th:each="comment: ${paging}">-->
+<!--                    <span class="writer_img">-->
+<!--                        <img th:src="${comment.writer.url}" width="30px" height="30px">-->
+<!--                    </span>-->
+<!--                        <p class="writer">-->
+<!--                            <em th:text="${comment.writer.nickName}"></em>-->
+<!--                            <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>-->
+<!--                            <span class="comment_vote">-->
+<!--                            <a href="#" id="commentLike" class="bt bt-outline-secondary"-->
+<!--                               th:data-uri="@{|/comment/like/${comment.id}}|">-->
+<!--                                <i class="fas fa-light fa-thumbs-up" style="padding-right: 5px; font-size: 14px"></i>-->
+<!--                                <span th:utext="${#lists.size(comment.vote)}"></span>-->
+<!--                            </a>-->
+<!--                        </span>-->
+<!--                        </p>-->
+<!--                        <div class="cont">-->
+<!--                            <span class="txt_con" th:text="${comment.content}"></span>-->
+<!--                        </div>-->
+
+<!--                        <p class="func_btns" sec:authorize="isAuthenticated()"-->
+<!--                           th:if="${comment.writer != null and #authentication.getPrincipal().getUsername == comment.writer.email}">-->
+<!--                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|openPop(${comment.id})|">수정</button>-->
+<!--                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|return deleteCommentConfirm(${comment.id})|">삭제</button>-->
+<!--                        </p>-->
+
+<!--                    </div>-->
+<!--                    <div class="btn_set">-->
+<!--                        &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
+<!--                        <div th:if="${!paging.isEmpty()}">-->
+<!--                            <ul class="pagination justify-content-center">-->
+<!--                                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">-->
+<!--                                    <a class="page-link"-->
+<!--                                       th:href="@{|?page=${paging.number-1}|}">-->
+<!--                                        <span>이전</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"-->
+<!--                                    th:if="${page >= paging.number-4 and page <= paging.number+4}"-->
+<!--                                    th:classappend="${page == paging.number+1} ? 'active'"-->
+<!--                                    class="page-item">-->
+<!--                                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page == 1 ? 0 : page - 1}|}"></a>-->
+<!--                                </li>-->
+<!--                                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">-->
+<!--                                    <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
+<!--                                        <span>다음</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="access">
                 <div class="panel">
@@ -52,6 +163,7 @@
                     </ul>
                 </div>
             </div>
+
         </section>
     </div>
 </th:block>
