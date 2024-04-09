@@ -16,6 +16,7 @@ public class Review extends BaseTimeEntity{
     private Long id;
     
     private String subject; // 제목
+    @Column(length = 1000)
     private String content; // 내용
     private int stars; // 평점;
     private String thumbnail; // 썸네일
