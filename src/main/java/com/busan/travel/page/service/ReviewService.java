@@ -1,6 +1,7 @@
 package com.busan.travel.page.service;
 
 import com.busan.travel.page.dto.ReviewFormDto;
+import com.busan.travel.page.entity.Board;
 import com.busan.travel.page.entity.CommentReview;
 import com.busan.travel.page.entity.Member;
 import com.busan.travel.page.entity.Review;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,5 +106,28 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+
+    //검색기능
+    public Page<Review> searchKeyword(int page, String keyword, String searchType) throws UnsupportedEncodingException {
+        Page<Review> result;
+        Pageable pageable = PageRequest.of(page, 10);
+
+        System.out.println(keyword);
+        result = switch (searchType) {
+            case "writer" ->
+                //작성자. (닉네임으로 검색.)
+                    reviewRepository.findByNickname(keyword, pageable);
+            case "subject" ->
+                //제목
+                    reviewRepository.findBySubjectContaining(keyword, pageable);
+            case "content" ->
+                //내용
+                    reviewRepository.findByContentContaining(keyword, pageable);
+            default ->
+                // 전체검색.
+                    reviewRepository.findAllBySubjectOrContentOrWriterContaining(keyword, pageable);
+        };
+        return  result;
+    }
 
 }

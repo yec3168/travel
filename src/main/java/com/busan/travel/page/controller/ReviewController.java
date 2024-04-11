@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 @Controller
@@ -126,5 +127,17 @@ public class ReviewController {
             reviewService.delete(review);
         }
         return "redirect:/review/list";
+    }
+
+
+    @GetMapping("/search")
+    public String searchKeyword(@RequestParam(value = "keyword", defaultValue = "")String keyword,
+                                @RequestParam(value = "searchType", defaultValue = "") String searchType,
+                                @RequestParam(value = "page", defaultValue = "0")int page, Model model) throws UnsupportedEncodingException {
+
+        Page<Review> paging = reviewService.searchKeyword(page, keyword, searchType);
+
+        model.addAttribute("paging",paging);
+        return "review/List";
     }
 }
