@@ -38,6 +38,18 @@
 
                 <div class="dt_content">
                     <div th:utext="${@commonUtil.markdown(review.content)}"></div>
+                    <p class="btn_set">
+                        <a th:href="@{|/review/update/${review.id}|}" class="btns btn_bdr4 btn_mid"
+                           sec:authorize="isAuthenticated()"
+                           th:if="${review.writer != null and  #authentication.getPrincipal().getUsername() == review.writer.email}"
+                           th:text="수정"></a>
+                        <a  th:href="@{|/review/delete/${review.id}|}" class="btns btn_bdr1 btn_mid"
+                            sec:authorize="isAuthenticated()"
+                            th:if="${review.writer != null and  #authentication.getPrincipal().getUsername() == review.writer.email}"
+                            onclick="return deleteConfirm()"
+                            th:text="삭제"></a>
+                        <a th:href="@{/board/list}" class="btns btn_bdr3 btn_mid">뒤로</a>
+                    </p>
                 </div>
 
                 <div class="review_tail">
@@ -212,6 +224,12 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        function deleteConfirm(){
+            if(confirm("정말로 삭제하시겠습니까?"))
+                return true;
+            else
+                return false;
+        }
         function cmCheck(){
             if(confirm("댓글을 등록하시겠습니까?"))
                 return true;

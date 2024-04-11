@@ -10,11 +10,13 @@ import com.busan.travel.page.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -81,5 +83,48 @@ public class ReviewController {
         model.addAttribute("paging", commentReviewService.findList(page, sort, review));
 
         return "review/detail";
+    }
+
+    @GetMapping("/update/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String updateReview(@PathVariable("id") Long id ,Principal principal,
+                               Model model){
+        Review review = reviewService.findReview(id);
+
+        if(!review.getWriter().getEmail().equals(principal.getName())){
+           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다./n 로그인후 이용해주세요.");
+        }
+        else{
+            model.addAttribute("reviewFormDto", reviewService.changeDto(review));
+            return "review/Write";
+        }
+    }
+
+    @PostMapping("/update/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String updateReview(@Valid ReviewFormDto reviewFormDto,
+                               @PathVariable("id")Long id, Principal principal,
+                               @RequestParam("thumb") MultipartFile multipartFile){
+        Review review = reviewService.findReview(id);
+        if(!review.getWriter().getEmail().equals(principal.getName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다./n 로그인후 이용해주세요.");
+        }
+        else{
+            reviewService.updateReview(review, reviewFormDto, multipartFile);
+        }
+        return "redirect:/review/detail/"+ id;
+    }
+    
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteReview(@PathVariable("id")Long id, Principal principal){
+        Review review = reviewService.findReview(id);
+        if(!review.getWriter().getEmail().equals(principal.getName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다./n 로그인후 이용해주세요.");
+        }
+        else{
+            reviewService.delete(review);
+        }
+        return "redirect:/review/list";
     }
 }

@@ -53,8 +53,8 @@ public class ReviewService {
         fileService.makeFile(makeFolder);
 
         //파일 이름, url 생성.
-        String fileName=null;
-        String url =null;
+        String fileName=reviewFormDto.getThumbnail();
+        String url =reviewFormDto.getUrl();
         if (!multipartFile.isEmpty()){
             // uuid 이름 생성.
             fileName = fileService.uuidFileName(multipartFile);
@@ -85,7 +85,24 @@ public class ReviewService {
     }
 
 
+    public ReviewFormDto changeDto(Review review){
+        return ReviewFormDto.toDto(review);
+    }
 
+    // update Review
+    public void updateReview( Review review, ReviewFormDto reviewFormDto,
+                             MultipartFile multipartFile){
+        if(multipartFile != null){
+            saveFile(multipartFile, reviewFormDto);
+        }
+        review.updateContent(reviewFormDto);
+        reviewRepository.save(review);
+    }
+
+    // delete Review
+    public void delete(Review review){
+        reviewRepository.delete(review);
+    }
 
 
 }

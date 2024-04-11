@@ -1,5 +1,6 @@
 package com.busan.travel.page.entity;
 
+import com.busan.travel.page.dto.ReviewFormDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,5 +42,13 @@ public class Review extends BaseTimeEntity{
         this.thumbnail = thumbnail;
         this.url = url;
         this.writer = writer;
+    }
+
+    public void updateContent(ReviewFormDto reviewFormDto){
+        this.subject = reviewFormDto.getSubject();
+        this.content = reviewFormDto.getContent();
+        this.stars = reviewFormDto.getStars();
+        this.thumbnail = reviewFormDto.getThumbnail();
+        this.url = reviewFormDto.getUrl();
     }
 }
