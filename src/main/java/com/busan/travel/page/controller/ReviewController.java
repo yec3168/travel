@@ -1,8 +1,10 @@
 package com.busan.travel.page.controller;
 
+import com.busan.travel.page.dto.CommentReviewFormDto;
 import com.busan.travel.page.dto.ReviewFormDto;
 import com.busan.travel.page.entity.Member;
 import com.busan.travel.page.entity.Review;
+import com.busan.travel.page.service.CommentReviewService;
 import com.busan.travel.page.service.MemberService;
 import com.busan.travel.page.service.ReviewService;
 import jakarta.validation.Valid;
@@ -25,6 +27,9 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private CommentReviewService commentReviewService;
 
 
     @GetMapping("/list")
@@ -60,12 +65,21 @@ public class ReviewController {
 
 
     @GetMapping("/detail/{id}")
-    public String detailReview(@PathVariable("id")Long id, Model model) {
+    public String detailReview(@PathVariable("id")Long id, Model model,
+                               @RequestParam(value = "sort", defaultValue = "")String sort,
+                               @RequestParam(value = "page", defaultValue = "0")int page) {
         Review review = reviewService.findReview(id);
         model.addAttribute("review", review);
 
         // div 오른쪽 최신생성글 보여주기.
         model.addAttribute("recently_review", reviewService.recently_review());
+
+        // review comment
+        model.addAttribute("commnetReviewFormDto", new CommentReviewFormDto());
+
+        // CommentReview List
+        model.addAttribute("paging", commentReviewService.findList(page, sort, review));
+
         return "review/detail";
     }
 }

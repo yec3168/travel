@@ -74,7 +74,7 @@ public class ReviewService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
-        return reviewRepository.findByOrderByCreateDate(pageable);
+        return reviewRepository.findByOrderByCreateDateDesc(pageable);
     }
 
 

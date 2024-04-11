@@ -89,7 +89,7 @@
 
                 </div>
                 <hr>
-                <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
+                <form method="post" th:action="@{|/board/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
                     <div class="cm_input">
                         <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="로그인 후 이용해주세요."></textarea>
                         <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
@@ -117,7 +117,7 @@
                         <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
                         <span class="comment_vote">
                             <a href="#" id="commentLike" class="bt bt-outline-secondary"
-                               th:data-uri="@{|/comment/like/${comment.id}}|">
+                               th:data-uri="@{|/board/comment/like/${comment.id}}|">
                                 <i class="fas fa-light fa-thumbs-up" style="padding-right: 5px; font-size: 14px"></i>
                                 <span th:utext="${#lists.size(comment.vote)}"></span>
                             </a>
@@ -278,7 +278,7 @@
             type:"get",
             async:false,
             dataType:"json",
-            url: '/comment/update/'+id,
+            url: '/board/comment/update/'+id,
             success: function (result){
                 document.getElementById("commentId").value = id;
                 document.getElementById("updateWriter").value = result.nickName;
@@ -304,7 +304,7 @@
         console.log(commentId)
         if(validationCheck(commentUpdateForm)){
             if(confirm("수정하시겠습니까?")) {
-                commentUpdateForm.action = "/comment/update/" + commentId.value;
+                commentUpdateForm.action = "/board/comment/update/" + commentId.value;
                 commentUpdateForm.method = 'POST'
                 commentUpdateForm.submit();
                 return true;
@@ -329,7 +329,7 @@
 
     function deleteCommentConfirm(id){
         if(confirm("댓글을 삭제하시겠습니까?")){
-            location.href = "/comment/delete/"+id;
+            location.href = "/board/comment/delete/"+id;
             return true;
         }
         else

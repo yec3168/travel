@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findById(Long id);
 
     //게시판(리뷰) 최신순
-    Page<Review> findByOrderByCreateDate(Pageable pageable);
+    Page<Review> findByOrderByCreateDateDesc(Pageable pageable);
 
     List<Review> findByOrderByCreateDate();
 }

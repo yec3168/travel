@@ -70,7 +70,7 @@
                 <!-- 댓글 부분-->
                 <div class="cm_write">
                     <div style="position:relative;">
-                        <span th:text="|${#lists.size(board.commentBoardList)}개의 답변이 있습니다.|"></span>
+                        <span th:text="|${#lists.size(review.commentReviewList)}개의 답변이 있습니다.|"></span>
                         <span style="position:absolute; right: 8px;bottom: 5px;">
                         <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'createDate')} ? 'active'" th:href="@{|?sort=createDate&page=${paging.number}|}">최신순</a>
                         <a class="btns btn_bdr3 btn_mid" th:classappend="${#strings.equals(param.sort, 'vote')} ? 'active'" th:href="@{|?sort=vote&page=${paging.number}|}">추천순</a>
@@ -79,7 +79,7 @@
 
                     </div>
                     <hr>
-                    <form method="post" th:action="@{|/comment/create/${board.id}|}"role="form" th:object="${commentBoardFormDto}" onsubmit="return cmCheck()">
+                    <form method="post" th:action="@{|/review/comment/create/${review.id}|}"role="form" th:object="${commnetReviewFormDto}" onsubmit="return cmCheck()">
                         <div class="cm_input">
                             <textarea sec:authorize="isAnonymous()" readonly rows="6" placeholder="로그인 후 이용해주세요."></textarea>
                             <textarea id="textBox" maxlength="300" th:field="*{content}" placeholder="내용을 입력해주세요."
@@ -93,63 +93,64 @@
                 </div>
 
                 <!-- 내용 부분 -->
-<!--                <div class="cm_list">-->
-<!--                    <div th:if="${#lists.size(board.commentBoardList) == 0}">-->
-<!--                        <p  class="cm_none" >댓글이 없습니다.</p>-->
-<!--                    </div>-->
+                <div class="cm_list">
+                    <div th:if="${#lists.size(review.commentReviewList) == 0}">
+                        <p  class="cm_none" >댓글이 없습니다.</p>
+                    </div>
 
-<!--                    <div th:unless="${#lists.size(board.commentBoardList) == 0}" th:each="comment: ${paging}">-->
-<!--                    <span class="writer_img">-->
-<!--                        <img th:src="${comment.writer.url}" width="30px" height="30px">-->
-<!--                    </span>-->
-<!--                        <p class="writer">-->
-<!--                            <em th:text="${comment.writer.nickName}"></em>-->
-<!--                            <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>-->
-<!--                            <span class="comment_vote">-->
-<!--                            <a href="#" id="commentLike" class="bt bt-outline-secondary"-->
-<!--                               th:data-uri="@{|/comment/like/${comment.id}}|">-->
-<!--                                <i class="fas fa-light fa-thumbs-up" style="padding-right: 5px; font-size: 14px"></i>-->
-<!--                                <span th:utext="${#lists.size(comment.vote)}"></span>-->
-<!--                            </a>-->
-<!--                        </span>-->
-<!--                        </p>-->
-<!--                        <div class="cont">-->
-<!--                            <span class="txt_con" th:text="${comment.content}"></span>-->
-<!--                        </div>-->
+                    <div th:unless="${#lists.size(review.commentReviewList) == 0}" th:each="comment: ${paging}">
+                    <span class="writer_img">
+                        <img th:src="${comment.writer.url}" width="30px" height="30px">
+                    </span>
+                        <p class="writer">
+                            <em th:text="${comment.writer.nickName}"></em>
+                            <span class="date" th:text="${#temporals.format(comment.updateDate, 'yyyy-MM-dd HH:mm') }"></span>
+                            <span class="comment_vote">
+                            <a href="#" id="commentLike" class="bt bt-outline-secondary"
+                               th:data-uri="@{|/review/comment/like/${comment.id}}|">
+                                <i class="fas fa-light fa-thumbs-up" style="padding-right: 5px; font-size: 14px"></i>
+                                <span th:utext="${#lists.size(comment.vote)}"></span>
+                            </a>
+                        </span>
+                        </p>
+                        <div class="cont">
+                            <span class="txt_con" th:text="${comment.content}"></span>
+                        </div>
 
-<!--                        <p class="func_btns" sec:authorize="isAuthenticated()"-->
-<!--                           th:if="${comment.writer != null and #authentication.getPrincipal().getUsername == comment.writer.email}">-->
-<!--                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|openPop(${comment.id})|">수정</button>-->
-<!--                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|return deleteCommentConfirm(${comment.id})|">삭제</button>-->
-<!--                        </p>-->
+                        <p class="func_btns" sec:authorize="isAuthenticated()"
+                           th:if="${comment.writer != null and #authentication.getPrincipal().getUsername == comment.writer.email}">
+                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|openPop(${comment.id})|">수정</button>
+                            <button type="button" class="btns btn_bdr4 btn_mid" th:onclick="|return deleteCommentConfirm(${comment.id})|">삭제</button>
+                        </p>
 
-<!--                    </div>-->
-<!--                    <div class="btn_set">-->
-<!--                        &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
-<!--                        <div th:if="${!paging.isEmpty()}">-->
-<!--                            <ul class="pagination justify-content-center">-->
-<!--                                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">-->
-<!--                                    <a class="page-link"-->
-<!--                                       th:href="@{|?page=${paging.number-1}|}">-->
-<!--                                        <span>이전</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"-->
-<!--                                    th:if="${page >= paging.number-4 and page <= paging.number+4}"-->
-<!--                                    th:classappend="${page == paging.number+1} ? 'active'"-->
-<!--                                    class="page-item">-->
-<!--                                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page == 1 ? 0 : page - 1}|}"></a>-->
-<!--                                </li>-->
-<!--                                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">-->
-<!--                                    <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
-<!--                                        <span>다음</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
-<!--                    </div>-->
-<!--                </div>-->
+                    </div>
+                    <div class="btn_set">
+                        <!-- 페이징처리 시작 -->
+                        <div th:if="${!paging.isEmpty()}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{|?page=${paging.number-1}|}">
+                                        <span>이전</span>
+                                    </a>
+                                </li>
+                                <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
+                                    th:if="${page >= paging.number-4 and page <= paging.number+4}"
+                                    th:classappend="${page == paging.number+1} ? 'active'"
+                                    class="page-item">
+                                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page == 1 ? 0 : page - 1}|}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                                    <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                                        <span>다음</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 페이징처리 끝 -->
+                    </div>
+
+                </div>
             </div>
             <div class="access">
                 <div class="panel">
@@ -163,9 +164,47 @@
                     </ul>
                 </div>
             </div>
-
         </section>
     </div>
+
+    <!-- 댓글 수정 팝업창.  -->
+    <div id="commentPop" class="popLayer">
+        <h3>수정</h3>
+        <div id="popup_wrap">
+            <div class="pop_container">
+                <form id="commentUpdateForm" onsubmit="return commentCheck();">
+                    <input type="hidden" id="commentId">
+                    <table class="tb tb_row">
+                        <colgroup>
+                            <col style="width:30%;" /> <col style="width:70%;" />
+                        </colgroup>
+                        <tr>
+                            <th>작성자</th>
+                            <td>
+                                <input type="text" id="updateWriter" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td>
+                                <div class="scroll_cont" >
+                                    <textarea id="updateContent" name="updateContent"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="btn_set">
+                        <button type="submit" class="btns btn_bdr4 btn_mid" sec:authorize="isAuthenticated()"
+                                th:if="${review.writer != null and  #authentication.getPrincipal().getUsername() == review.writer.email}"
+                                th:text="수정">
+                        </button>
+                        <button class="btns btn_bdr3 btn_mid" onclick="closeSignupPopup()">취소</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <button type="button" class="btn_close" onclick="closeSignupPopup();"><span><i class="far fa-times-circle"></i></span></button>
+    </div> <!-- 댓글 수정 -->
 </th:block>
 </html>
 </th:block>
@@ -173,7 +212,96 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        function cmCheck(){
+            if(confirm("댓글을 등록하시겠습니까?"))
+                return true;
+            else
+                return false;
+        }
 
+        $("#textBox").keyup( function (e){
+            const content = $(this).val();
+
+            const counter = document.getElementById("counter");
+            counter.value = content.length+"/300";
+            counter.innerHTML = content.length+"/300";
+
+        })
+
+
+        /* 댓글 수정 팝업 창*/
+        function openPop(id){
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url: '/review/comment/update/'+id,
+                success: function (result){
+                    document.getElementById("commentId").value = id;
+                    document.getElementById("updateWriter").value = result.nickName;
+                    document.getElementById("updateContent").value = result.content;
+                    layerPop("commentPop");
+                },
+                error: function (request, status, error){
+                    console.log(request)
+                    console.log(status)
+                    console.log(error)
+                }
+            })
+        }
+        /* 수정창 닫기*/
+        function closeSignupPopup(){
+            document.getElementById("commentUpdateForm").reset()
+            layerPopClose();
+        }
+
+        function commentCheck(){
+            const commentUpdateForm = document.getElementById("commentUpdateForm");
+            const commentId = document.getElementById("commentId");
+            console.log(commentId)
+            if(validationCheck(commentUpdateForm)){
+                if(confirm("수정하시겠습니까?")) {
+                    commentUpdateForm.action = "/review/comment/update/" + commentId.value;
+                    commentUpdateForm.method = 'POST'
+                    commentUpdateForm.submit();
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        /* 댓글 validation */
+        function validationCheck(form) {
+            let formInput = form.querySelector('textarea')
+            if(formInput.value == ""){
+                $(formInput).focus();
+                alert("필수입력 항목을 입력해주세요.")
+                return false;
+            }
+            else
+                return true;
+        }
+
+        function deleteCommentConfirm(id){
+            if(confirm("댓글을 삭제하시겠습니까?")){
+                location.href = "/review/comment/delete/"+id;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /* 댓글 추천 기능 */
+        const commentLike = document.getElementsByClassName("bt")
+        Array.from(commentLike).forEach(function (element){
+            element.addEventListener("click", function (){
+                if(confirm("추천하시겠습니까?"))
+                    location.href=this.dataset.uri;
+                else
+                    return false;
+            })
+        })
     </script>
 </th:block>
 </html>

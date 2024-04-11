@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -25,6 +28,9 @@ public class Review extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member writer; // 작성자
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch =  FetchType.LAZY)
+    List<CommentReview> commentReviewList;
 
     @Builder
     private Review(String subject, String content, int stars,

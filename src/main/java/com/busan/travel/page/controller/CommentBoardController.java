@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/comment")
+@RequestMapping("/board/comment")
 public class CommentBoardController {
     @Autowired
     private MemberService memberService;

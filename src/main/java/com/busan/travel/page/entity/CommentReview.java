@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -26,10 +28,17 @@ public class CommentReview extends BaseTimeEntity{
     @JoinColumn(name = "review_id")
     private Review review;
 
+    @ManyToMany
+    private Set<Member> vote;
+
     @Builder
     public CommentReview(String content, Member writer, Review review){
         this.content = content;
         this.writer =writer;
         this.review = review;
+    }
+
+    public void updateContent(String content){
+        this.content = content;
     }
 }

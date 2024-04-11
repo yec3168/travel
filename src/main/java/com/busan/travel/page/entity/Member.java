@@ -53,6 +53,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wish> wishList;
 
+
     @Builder
     public Member(String email, String password ,String name,
                  String nickName, String address, Gender gender,
