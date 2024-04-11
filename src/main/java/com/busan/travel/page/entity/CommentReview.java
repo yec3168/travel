@@ -28,7 +28,7 @@ public class CommentReview extends BaseTimeEntity{
     @JoinColumn(name = "review_id")
     private Review review;
 
-    @ManyToMany
+    @ManyToMany()
     private Set<Member> vote;
 
     @Builder

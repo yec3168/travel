@@ -1,6 +1,7 @@
 package com.busan.travel.page.service;
 
 import com.busan.travel.page.dto.ReviewFormDto;
+import com.busan.travel.page.entity.CommentReview;
 import com.busan.travel.page.entity.Member;
 import com.busan.travel.page.entity.Review;
 import com.busan.travel.page.repository.ReviewRepository;
@@ -78,9 +79,13 @@ public class ReviewService {
     }
 
 
-    // 디테일 오른쪽 최신 생성글
+    // 상세정보 오른쪽 최신 생성글
     public List<Review> recently_review(){
         return  reviewRepository.findByOrderByCreateDate();
     }
+
+
+
+
 
 }

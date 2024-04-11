@@ -42,7 +42,7 @@ public class CommentReviewService {
         if(sort.equals("createDate") || sort.equals(""))
             return commentReviewRepository.findAllByOrderByCreateDateDesc(review, pageable);
         else
-            return commentReviewRepository.findAllByOOrderByVoteD(review, pageable);
+            return commentReviewRepository.findAllByOOrderByVoteDesc(review, pageable);
     }
 
 
@@ -54,5 +54,14 @@ public class CommentReviewService {
     // content delete
     public void deleteComment(CommentReview commentReview){
         commentReviewRepository.delete(commentReview);
+    }
+
+    //좋아요 기능 추가.
+    public void likeCount(Member user, CommentReview commentReview) throws Exception{
+        if(commentReview.getVote().contains(user))
+            commentReview.getVote().remove(user);
+        else
+            commentReview.getVote().add(user);
+        commentReviewRepository.save(commentReview);
     }
 }

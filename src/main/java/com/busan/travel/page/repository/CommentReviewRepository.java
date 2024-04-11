@@ -25,6 +25,6 @@ public interface CommentReviewRepository extends JpaRepository<CommentReview, Lo
             "from CommentReview as c " +
             "where c.review = :review "+
             "order by SIZE(c.vote) desc, c.createDate ")
-    Page<CommentReview> findAllByOOrderByVoteD(Review review, Pageable pageable);
+    Page<CommentReview> findAllByOOrderByVoteDesc(Review review, Pageable pageable);
 
 }

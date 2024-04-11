@@ -99,4 +99,19 @@ public class CommentReviewController {
 
         return "redirect:/review/detail/"+ commentReview.getReview().getId();
     }
+
+
+    // like
+    @GetMapping("/like/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String likeCount(@PathVariable("id") Long id, Principal principal) throws Exception {
+        CommentReview commentReview = commentReviewService.findComment(id);
+
+        if(principal != null){
+            Member user = memberService.getUserByEmail(principal.getName());
+            commentReviewService.likeCount(user, commentReview);
+        }
+        return "redirect:/review/detail/"+commentReview.getReview().getId();
+    }
+
 }
